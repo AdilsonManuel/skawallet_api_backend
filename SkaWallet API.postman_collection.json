@@ -1,0 +1,988 @@
+{
+	"info": {
+		"_postman_id": "92bfd3ad-f59f-464a-b90f-8fb560451019",
+		"name": "SkaWallet API",
+		"description": "#### **Descrição Geral**\n\nA **SkaWallet API** é uma solução poderosa para gerenciar contas bancárias, autenticação de usuários e operações financeiras. Esta API suporta autenticação baseada em **JWT (JSON Web Tokens)** e integração com **OAuth2**, além de funcionalidades robustas para gerenciamento de transações, notificações e promoções.\n\nEsta documentação é projectada para uso com o **Postman**, permitindo testar endpoints de forma simples e eficiente.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "14833110"
+	},
+	"item": [
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "List Users",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJBRE1JTiJdLCJzdWIiOiJMdWNpbmRhIFp1bWJhIiwiaWF0IjoxNzMzNDE5MjM2LCJleHAiOjE3MzM0MjI4MzZ9.VJ-jyO4kw9towUgZ2Jv-_K4AyEcjt9nP2SWGv-oFu8w",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/users/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"users",
+								""
+							]
+						},
+						"description": "Este endpoint é utilizado para recuperar uma lista de todos os usuários registrados na **SkaWallet API**. Ele está disponível apenas para administradores autenticados."
+					},
+					"response": []
+				},
+				{
+					"name": "List By PK",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJVU0VSIl0sInN1YiI6IkxpZGlhbnkgWnVtYmEiLCJpYXQiOjE3MzMxOTEyMzcsImV4cCI6MTczMzE5NDgzN30.PX3TRdQw8lJzkCV8laDIt2LJrOTtuhgdqtr0Vp3QzRM",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/users/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"2"
+							]
+						},
+						"description": "Endpoint para recuperar detalhes do perfil do usuário autenticado.\n\n- **URL:** `GET /api/v1/users/me`\n    \n- **Método:** GET\n    \n- **Headers:**\n    \n    - `Authorization: Bearer {token}`\n        \n- **Descrição:** Retorna informações do perfil do usuário autenticado.\n    \n    {  \n    \"id\": 1,  \n    \"name\": \"John Doe\",  \n    \"email\": \"[john.doe@example.com](https://mailto:john.doe@example.com)\",  \n    \"type\": \"USER\",  \n    \"createdAt\": \"2024-11-18T12:00:00\"  \n    }"
+					},
+					"response": []
+				},
+				{
+					"name": "Insert Users",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"admin12\",\n  \"email\": \"ad122u@example.com\",\n  \"password\": \"pasword9123\",\n  \"phone\":\"+244945369825\",\n  \"type\": \"ADMIN\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/users/registration",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"registration"
+							]
+						},
+						"description": "#### **1\\. Registro de Usuário**\n\nEndpoint para criar um novo usuário na plataforma.\n\n- **URL:** `POST /api/v1/auth/register`\n    \n- **Método:** POST\n    \n- **Descrição:** Registra um novo usuário com suas informações básicas."
+					},
+					"response": []
+				},
+				{
+					"name": "Update Users",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\"phone\":\"+244924589123\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/auth/register/users/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"register",
+								"users",
+								"1"
+							]
+						},
+						"description": "Endpoint para atualizar os dados do usuário.\n\n- **URL:** `PUT /api/v1/users/{id}`\n    \n- **Método:** PUT\n    \n- **Headers:**\n    \n    - `Authorization: Bearer {token}`\n        \n- **Descrição:** Permite ao usuário atualizar seu perfil, como nome e senha."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Users",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/registration/8",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"registration",
+								"8"
+							]
+						},
+						"description": "#### **5\\. Excluir Conta do Usuário**\n\nEndpoint para deletar permanentemente a conta do usuário.\n\n- **URL:** `DELETE /api/v1/users/{id}`\n    \n- **Método:** DELETE\n    \n- **Headers:**\n    \n    - `Authorization: Bearer {token}`\n        \n- **Descrição:** Remove a conta do usuário e todos os dados associados."
+					},
+					"response": []
+				}
+			],
+			"description": "A **User** é destinada a gerenciar todas as operações relacionadas aos usuários na **SkaWallet API**. Esta pasta inclui endpoints para autenticação, registro, gerenciamento de perfis, e recuperação de informações do usuário."
+		},
+		{
+			"name": "Token",
+			"item": [
+				{
+					"name": "Generate Token",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"identifier\": \"admin12\",\n    \"password\": \"pasword9123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/auth/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"login"
+							]
+						},
+						"description": "Endpoint para autenticação do usuário e obtenção de token JWT.\n\n- **URL:** `POST /api/v1/auth/login`\n    \n- **Método:** POST\n    \n- **Descrição:** Autentica um usuário registrado e retorna um token JWT.\n    \n    {  \n    \"email\": \"[john.doe@example.com](https://mailto:john.doe@example.com)\",  \n    \"password\": \"123456\"  \n    }"
+					},
+					"response": []
+				},
+				{
+					"name": "Renovar Token",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"identifier\": \"Lidiany Zumba\",\n    \"password\": \"pasword9123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/auth/refresh-token",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"refresh-token"
+							]
+						},
+						"description": "Endpoint para autenticação do usuário e obtenção de token JWT.\n\n- **URL:** `POST /api/v1/auth/login`\n    \n- **Método:** POST\n    \n- **Descrição:** Autentica um usuário registrado e retorna um token JWT.\n    \n    {  \n    \"email\": \"[john.doe@example.com](https://mailto:john.doe@example.com)\",  \n    \"password\": \"123456\"  \n    }"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "OAUTH2",
+			"item": [
+				{
+					"name": "Login2",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/oauth2/authorization/github",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"oauth2",
+								"authorization",
+								"github"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Banks",
+			"item": [
+				{
+					"name": "Add Banks",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Banco de Angola\",\n  \"code\": \"011\",\n  \"createdDate\": \"2024-08-29\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/banks/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"banks",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Banks",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/banks/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"banks",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Bank Accounts",
+			"item": [
+				{
+					"name": "List Banks Account",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/bank-accounts/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"bank-accounts",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List By Banks Account",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/bank-accounts/10101010",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"bank-accounts",
+								"10101010"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Banks Account By User",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/bank-accounts/user/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"bank-accounts",
+								"user",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Creating Bank Account",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"accountNumber\":\"159753\",\n    \"balance\":183000.00,\n    \"pk_users\": 3,\n    \"pk_banks\": 4\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/bank-accounts/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"bank-accounts",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Transactions",
+			"item": [
+				{
+					"name": "Check Balance",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/transactions/balance/159753",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"transactions",
+								"balance",
+								"159753"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Transfer Transaction",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"sourceAccount\": \"159753\",\n    \"destinationAccount\": \"3014567890\",\n    \"amount\": 293100.00,\n    \"transactionType\": \"TRANSFER\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/transactions/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"transactions",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Deposit Transaction",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJVU0VSIl0sInN1YiI6IkxpZGlhbnkgWnVtYmEiLCJpYXQiOjE3MzMyMjk2MjgsImV4cCI6MTczMzIzMzIyOH0.c41A7-q_249mylrGVyVDDWhJtsgZ8-RlV270ZBfI2JA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"sourceAccount\": \"159753\",\n    \"amount\": 1000000.00,\n    \"transactionType\": \"DEPOSIT\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/transactions/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"transactions",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Withdrawal Transaction",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"sourceAccount\": \"159753\",\n    \"amount\": 10000.00,\n    \"transactionType\": \"WITHDRAWAL\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/transactions/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"transactions",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Transaction History",
+			"item": [
+				{
+					"name": "List All Transaction History",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/transaction-history/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"transaction-history",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Transaction History By PK",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/transaction-history/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"transaction-history",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Payments",
+			"item": [
+				{
+					"name": "Iniciar Pagamento",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"amount\": 150000,\n  \"currency\": \"usd\",\n  \"paymentMethodId\": \"pm_card_visa\",\n  \"description\": \"Test payment\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/payments/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"payments",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Consultar Status",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/payments/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"payments",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Product",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJBRE1JTiJdLCJzdWIiOiJMdWNpbmRhIFp1bWJhIiwiaWF0IjoxNzMzNDAxNjIxLCJleHAiOjE3MzM0MDUyMjF9.MK8KIBDj5Y7WgU7hCWJ2R4HLapUTU4M8QW-YkyiMdR4",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"productName\": \"Awesome Product\",\n  \"productDescription\": \"This is a description of the awesome product.\",\n  \"price\": 29.99,\n  \"currency\": \"USD\",\n  \"billingType\": \"recurring\",\n  \"frequency\": \"monthly\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/payments/products",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"payments",
+								"products"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Render",
+			"item": [
+				{
+					"name": "Users",
+					"item": [
+						{
+							"name": "Insert Users Copy",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"name\": \"Teste Today\",\n  \"email\": \"teste.te@example.com\",\n  \"password\": \"senha123\",\n  \"type\": \"ADMIN\"\n}\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://skawallet-backend-api.onrender.com/api/v1/registration/",
+									"protocol": "https",
+									"host": [
+										"skawallet-backend-api",
+										"onrender",
+										"com"
+									],
+									"path": [
+										"api",
+										"v1",
+										"registration",
+										""
+									]
+								},
+								"description": "#### **1\\. Registro de Usuário**\n\nEndpoint para criar um novo usuário na plataforma.\n\n- **URL:** `POST /api/v1/auth/register`\n    \n- **Método:** POST\n    \n- **Descrição:** Registra um novo usuário com suas informações básicas."
+							},
+							"response": []
+						},
+						{
+							"name": "List Users Copy",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://skawallet-backend-api.onrender.com/api/v1/registration/",
+									"protocol": "https",
+									"host": [
+										"skawallet-backend-api",
+										"onrender",
+										"com"
+									],
+									"path": [
+										"api",
+										"v1",
+										"registration",
+										""
+									]
+								},
+								"description": "Este endpoint é utilizado para recuperar uma lista de todos os usuários registrados na **SkaWallet API**. Ele está disponível apenas para administradores autenticados."
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Banks",
+					"item": [
+						{
+							"name": "Add Banks Copy",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"Banco Sol \",\n    \"code\": \"140\",\n    \"createdDate\": \"2024-11-14\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://skawallet-backend-api.onrender.com/api/v1/banks/",
+									"protocol": "https",
+									"host": [
+										"skawallet-backend-api",
+										"onrender",
+										"com"
+									],
+									"path": [
+										"api",
+										"v1",
+										"banks",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "List Banks Copy",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://skawallet-backend-api.onrender.com/api/v1/banks/",
+									"protocol": "https",
+									"host": [
+										"skawallet-backend-api",
+										"onrender",
+										"com"
+									],
+									"path": [
+										"api",
+										"v1",
+										"banks",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Banks Copy",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"Banco de Poupança e Crédito\",\n    \"code\": \"004\",\n    \"createdDate\": \"2024-01-01\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/v1/banks/",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"v1",
+										"banks",
+										""
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Kafka",
+			"item": [
+				{
+					"name": "Producer Transaction",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"transactionId\": \"12345\",\n  \"amount\": 150.00,\n  \"currency\": \"USD\",\n  \"status\": \"COMPLETED\",\n  \"timestamp\": \"2024-12-04T15:30:00\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/kafka/publish",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"kafka",
+								"publish"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Consumer Transaction",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/kafka/status",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"kafka",
+								"status"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Process Transaction History",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"pk_transactions\": \"12345\",\n  \"amount\": 150.00,\n  \"currency\": \"USD\",\n  \"status\": \"COMPLETED\",\n  \"timestamp\": \"2024-12-04T15:30:00\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/kafka/process",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"kafka",
+								"process"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "History Transaction",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/kafka/history",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"kafka",
+								"history"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
