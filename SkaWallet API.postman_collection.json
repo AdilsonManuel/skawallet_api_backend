@@ -16,16 +16,6 @@
 						"disableBodyPruning": true
 					},
 					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJBRE1JTiJdLCJzdWIiOiJMdWNpbmRhIFp1bWJhIiwiaWF0IjoxNzMzNDE5MjM2LCJleHAiOjE3MzM0MjI4MzZ9.VJ-jyO4kw9towUgZ2Jv-_K4AyEcjt9nP2SWGv-oFu8w",
-									"type": "string"
-								}
-							]
-						},
 						"method": "GET",
 						"header": [],
 						"body": {
@@ -63,7 +53,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJVU0VSIl0sInN1YiI6IkxpZGlhbnkgWnVtYmEiLCJpYXQiOjE3MzMxOTEyMzcsImV4cCI6MTczMzE5NDgzN30.PX3TRdQw8lJzkCV8laDIt2LJrOTtuhgdqtr0Vp3QzRM",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJBRE1JTiJdLCJzdWIiOiJhZG1pbjEyIiwiaWF0IjoxNzM1NTkyMzQ2LCJleHAiOjE3MzU1OTU5NDZ9.UnR-cif_CuOd15ctzWVeGbWvrCOG0ZesWQTQUSoFxPM",
 									"type": "string"
 								}
 							]
@@ -95,7 +85,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"name\": \"admin12\",\n  \"email\": \"ad122u@example.com\",\n  \"password\": \"pasword9123\",\n  \"phone\":\"+244945369825\",\n  \"type\": \"ADMIN\"\n}\n",
+							"raw": "{\n  \"name\": \"Teste Today\",\n  \"email\": \"teste.te@example.com\",\n  \"password\": \"senha123\",\n  \"phone\":\"+244963852741\",  \n  \"type\": \"ADMIN\"\n}\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -127,7 +117,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\"phone\":\"+244924589123\"\n}\n",
+							"raw": "{\n    \"type\":\"USER\"\n}\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -135,7 +125,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/api/v1/auth/register/users/1",
+							"raw": "http://localhost:8080/api/v1/users/2",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -144,10 +134,8 @@
 							"path": [
 								"api",
 								"v1",
-								"auth",
-								"register",
 								"users",
-								"1"
+								"2"
 							]
 						},
 						"description": "Endpoint para atualizar os dados do usuário.\n\n- **URL:** `PUT /api/v1/users/{id}`\n    \n- **Método:** PUT\n    \n- **Headers:**\n    \n    - `Authorization: Bearer {token}`\n        \n- **Descrição:** Permite ao usuário atualizar seu perfil, como nome e senha."
@@ -181,6 +169,157 @@
 			"description": "A **User** é destinada a gerenciar todas as operações relacionadas aos usuários na **SkaWallet API**. Esta pasta inclui endpoints para autenticação, registro, gerenciamento de perfis, e recuperação de informações do usuário."
 		},
 		{
+			"name": "Partners",
+			"item": [
+				{
+					"name": "List Partners",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/partners/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"partners",
+								""
+							]
+						},
+						"description": "Este endpoint é utilizado para recuperar uma lista de todos os usuários registrados na **SkaWallet API**. Ele está disponível apenas para administradores autenticados."
+					},
+					"response": []
+				},
+				{
+					"name": "List By PK",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/partners/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"partners",
+								"2"
+							]
+						},
+						"description": "Endpoint para recuperar detalhes do perfil do usuário autenticado.\n\n- **URL:** `GET /api/v1/users/me`\n    \n- **Método:** GET\n    \n- **Headers:**\n    \n    - `Authorization: Bearer {token}`\n        \n- **Descrição:** Retorna informações do perfil do usuário autenticado.\n    \n    {  \n    \"id\": 1,  \n    \"name\": \"John Doe\",  \n    \"email\": \"[john.doe@example.com](https://mailto:john.doe@example.com)\",  \n    \"type\": \"USER\",  \n    \"createdAt\": \"2024-11-18T12:00:00\"  \n    }"
+					},
+					"response": []
+				},
+				{
+					"name": "Insert Users",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Parceiro Comercial A\",\n  \"description\": \"Fornece serviços de pagamento\",\n  \"contactEmail\": \"contato@parceiro.com\",\n  \"contactPhone\": \"123456789\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/partners/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"partners",
+								""
+							]
+						},
+						"description": "#### **1\\. Registro de Usuário**\n\nEndpoint para criar um novo usuário na plataforma.\n\n- **URL:** `POST /api/v1/auth/register`\n    \n- **Método:** POST\n    \n- **Descrição:** Registra um novo usuário com suas informações básicas."
+					},
+					"response": []
+				},
+				{
+					"name": "Update Users",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\"phone\":\"+244924589123\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/partners/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"partners",
+								"1"
+							]
+						},
+						"description": "Endpoint para atualizar os dados do usuário.\n\n- **URL:** `PUT /api/v1/users/{id}`\n    \n- **Método:** PUT\n    \n- **Headers:**\n    \n    - `Authorization: Bearer {token}`\n        \n- **Descrição:** Permite ao usuário atualizar seu perfil, como nome e senha."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Users",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/registration/8",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"registration",
+								"8"
+							]
+						},
+						"description": "#### **5\\. Excluir Conta do Usuário**\n\nEndpoint para deletar permanentemente a conta do usuário.\n\n- **URL:** `DELETE /api/v1/users/{id}`\n    \n- **Método:** DELETE\n    \n- **Headers:**\n    \n    - `Authorization: Bearer {token}`\n        \n- **Descrição:** Remove a conta do usuário e todos os dados associados."
+					},
+					"response": []
+				}
+			],
+			"description": "O objectivo dete endpoint gerencia os parceiros comerciais, permitindo que o sistema armazene informações como nome, descrição, e dados de contato."
+		},
+		{
 			"name": "Token",
 			"item": [
 				{
@@ -190,7 +329,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"identifier\": \"admin12\",\n    \"password\": \"pasword9123\"\n}",
+							"raw": "{\n    \"identifier\": \"Teste Today\",\n    \"password\": \"senha123\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -463,13 +602,98 @@
 					"response": []
 				},
 				{
-					"name": "Transfer Transaction",
+					"name": "List Transactions By Wallet",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var template = `",
+									"<style type=\"text/css\">",
+									"    .tftable {font-size:14px;color:#333333;width:100%;border-width: 1px;border-color: #87ceeb;border-collapse: collapse;}",
+									"    .tftable th {font-size:18px;background-color:#87ceeb;border-width: 1px;padding: 8px;border-style: solid;border-color: #87ceeb;text-align:left;}",
+									"    .tftable tr {background-color:#ffffff;}",
+									"    .tftable td {font-size:14px;border-width: 1px;padding: 8px;border-style: solid;border-color: #87ceeb;}",
+									"    .tftable tr:hover {background-color:#e0ffff;}",
+									"</style>",
+									"",
+									"<table class=\"tftable\" border=\"1\">",
+									"    <tr>",
+									"        <th>Status</th>",
+									"        <th>Amount</th>",
+									"        <th>Source Account</th>",
+									"        <th>Transaction Type</th>",
+									"        <th>Destination Account</th>",
+									"        <th>PK Transactions</th>",
+									"        <th>Created At</th>",
+									"        <th>Name</th>",
+									"    </tr>",
+									"    ",
+									"    {{#each response}}",
+									"        <tr>",
+									"            <td>{{status}}</td>",
+									"            <td>{{amount}}</td>",
+									"            <td>{{sourceAccount}}</td>",
+									"            <td>{{transactionType}}</td>",
+									"            <td>{{destinationAccount}}</td>",
+									"            <td>{{pk_transactions}}</td>",
+									"            <td>{{created_at}}</td>",
+									"            <td>{{name}}</td>",
+									"        </tr>",
+									"    {{/each}}",
+									"</table>",
+									"`;",
+									"",
+									"function constructVisualizerPayload() {",
+									"    return {response: pm.response.json()}",
+									"}",
+									"",
+									"pm.visualizer.set(template, constructVisualizerPayload());"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/transactions/user/4",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"transactions",
+								"user",
+								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Transfer Transactions",
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"sourceAccount\": \"159753\",\n    \"destinationAccount\": \"3014567890\",\n    \"amount\": 293100.00,\n    \"transactionType\": \"TRANSFER\"\n}",
+							"raw": "{\n  \"amount\": 500.00,\n  \"transactionType\": \"TRANSFER\",\n  \"paymentMethod\": \"DIGITAL_WALLET\",\n  \"description\": \"Transferência entre carteiras\",\n  \"sourceWalletId\": 2,\n  \"destinationWalletId\": 3\n}\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -494,23 +718,13 @@
 					"response": []
 				},
 				{
-					"name": "Deposit Transaction",
+					"name": "Payment Transactions",
 					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJVU0VSIl0sInN1YiI6IkxpZGlhbnkgWnVtYmEiLCJpYXQiOjE3MzMyMjk2MjgsImV4cCI6MTczMzIzMzIyOH0.c41A7-q_249mylrGVyVDDWhJtsgZ8-RlV270ZBfI2JA",
-									"type": "string"
-								}
-							]
-						},
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"sourceAccount\": \"159753\",\n    \"amount\": 1000000.00,\n    \"transactionType\": \"DEPOSIT\"\n}",
+							"raw": "{\n  \"amount\": 300.00,\n  \"transactionType\": \"PAYMENT\",\n  \"paymentMethod\": \"CARD\",\n  \"description\": \"Pagamento de compra\",\n  \"sourceWalletId\": 2\n}\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -535,13 +749,44 @@
 					"response": []
 				},
 				{
-					"name": "Withdrawal Transaction",
+					"name": "Deposit Transactions",
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"sourceAccount\": \"159753\",\n    \"amount\": 10000.00,\n    \"transactionType\": \"WITHDRAWAL\"\n}",
+							"raw": "{\n  \"amount\": 500.00,\n  \"transactionType\": \"TRANSFER\",\n  \"paymentMethod\": \"DIGITAL_WALLET\",\n  \"description\": \"Transferência entre carteiras\",\n  \"sourceWalletId\": 2,\n  \"destinationWalletId\": 3\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/transactions/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"transactions",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "WITHDRAWAL Transactions",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"amount\": 500.00,\n  \"transactionType\": \"TRANSFER\",\n  \"paymentMethod\": \"DIGITAL_WALLET\",\n  \"description\": \"Transferência entre carteiras\",\n  \"sourceWalletId\": 2,\n  \"destinationWalletId\": 3\n}\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -576,7 +821,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/api/v1/transaction-history/",
+							"raw": "http://localhost:8080/api/v1/transactions/",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -585,7 +830,7 @@
 							"path": [
 								"api",
 								"v1",
-								"transaction-history",
+								"transactions",
 								""
 							]
 						}
@@ -613,6 +858,52 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "List Transaction History By User Pk",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/transaction-history/user/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"transaction-history",
+								"user",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Transactions History By User",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/transactions/history/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"transactions",
+								"history",
+								"2"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -620,7 +911,7 @@
 			"name": "Payments",
 			"item": [
 				{
-					"name": "Iniciar Pagamento",
+					"name": "Pagamento",
 					"request": {
 						"method": "POST",
 						"header": [],
@@ -649,69 +940,6 @@
 						}
 					},
 					"response": []
-				},
-				{
-					"name": "Consultar Status",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8080/api/v1/payments/",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"api",
-								"v1",
-								"payments",
-								""
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Create Product",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJBRE1JTiJdLCJzdWIiOiJMdWNpbmRhIFp1bWJhIiwiaWF0IjoxNzMzNDAxNjIxLCJleHAiOjE3MzM0MDUyMjF9.MK8KIBDj5Y7WgU7hCWJ2R4HLapUTU4M8QW-YkyiMdR4",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"productName\": \"Awesome Product\",\n  \"productDescription\": \"This is a description of the awesome product.\",\n  \"price\": 29.99,\n  \"currency\": \"USD\",\n  \"billingType\": \"recurring\",\n  \"frequency\": \"monthly\"\n}\n",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8080/api/v1/payments/products",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"api",
-								"v1",
-								"payments",
-								"products"
-							]
-						}
-					},
-					"response": []
 				}
 			]
 		},
@@ -728,7 +956,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n  \"name\": \"Teste Today\",\n  \"email\": \"teste.te@example.com\",\n  \"password\": \"senha123\",\n  \"type\": \"ADMIN\"\n}\n",
+									"raw": "{\n  \"name\": \"Teste\",\n  \"email\": \"teste@example.com\",\n  \"password\": \"senha123\",\n  \"phone\":\"+244923345678\",  \n  \"type\": \"ADMIN\"\n}\n",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -736,7 +964,7 @@
 									}
 								},
 								"url": {
-									"raw": "https://skawallet-backend-api.onrender.com/api/v1/registration/",
+									"raw": "https://skawallet-backend-api.onrender.com/api/v1/users/registration",
 									"protocol": "https",
 									"host": [
 										"skawallet-backend-api",
@@ -746,8 +974,8 @@
 									"path": [
 										"api",
 										"v1",
-										"registration",
-										""
+										"users",
+										"registration"
 									]
 								},
 								"description": "#### **1\\. Registro de Usuário**\n\nEndpoint para criar um novo usuário na plataforma.\n\n- **URL:** `POST /api/v1/auth/register`\n    \n- **Método:** POST\n    \n- **Descrição:** Registra um novo usuário com suas informações básicas."
@@ -760,7 +988,7 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "https://skawallet-backend-api.onrender.com/api/v1/registration/",
+									"raw": "https://skawallet-backend-api.onrender.com/api/v1/users/",
 									"protocol": "https",
 									"host": [
 										"skawallet-backend-api",
@@ -770,7 +998,7 @@
 									"path": [
 										"api",
 										"v1",
-										"registration",
+										"users",
 										""
 									]
 								},
@@ -870,6 +1098,390 @@
 							"response": []
 						}
 					]
+				},
+				{
+					"name": "Payments",
+					"item": [
+						{
+							"name": "Iniciar Pagamento",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"amount\": 150000,\n  \"currency\": \"usd\",\n  \"paymentMethodId\": \"pm_card_visa\",\n  \"description\": \"Test payment\"\n}\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://skawallet-backend-api.onrender.com/api/v1/payments/",
+									"protocol": "https",
+									"host": [
+										"skawallet-backend-api",
+										"onrender",
+										"com"
+									],
+									"path": [
+										"api",
+										"v1",
+										"payments",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Consultar Status",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://skawallet-backend-api.onrender.com/api/v1/payments/pi_3Qd7kWAZln8OhRF60iC5RHap",
+									"protocol": "https",
+									"host": [
+										"skawallet-backend-api",
+										"onrender",
+										"com"
+									],
+									"path": [
+										"api",
+										"v1",
+										"payments",
+										"pi_3Qd7kWAZln8OhRF60iC5RHap"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create Product",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"productName\": \"Awesome Product\",\n  \"productDescription\": \"This is a description of the awesome product.\",\n  \"price\": 29.99,\n  \"currency\": \"USD\",\n  \"billingType\": \"recurring\",\n  \"frequency\": \"month\"\n}\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://skawallet-backend-api.onrender.com/api/v1/payments/products",
+									"protocol": "https",
+									"host": [
+										"skawallet-backend-api",
+										"onrender",
+										"com"
+									],
+									"path": [
+										"api",
+										"v1",
+										"payments",
+										"products"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Token",
+					"item": [
+						{
+							"name": "Generate Token",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"identifier\": \"teste@example.com\",\n    \"password\": \"senha123\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://skawallet-backend-api.onrender.com/api/v1/auth/login",
+									"protocol": "https",
+									"host": [
+										"skawallet-backend-api",
+										"onrender",
+										"com"
+									],
+									"path": [
+										"api",
+										"v1",
+										"auth",
+										"login"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Transaction History",
+					"item": [
+						{
+							"name": "List All Transaction History",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://skawallet-backend-api.onrender.com/api/v1/transaction-history/",
+									"protocol": "https",
+									"host": [
+										"skawallet-backend-api",
+										"onrender",
+										"com"
+									],
+									"path": [
+										"api",
+										"v1",
+										"transaction-history",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "List Transaction History By PK",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://skawallet-backend-api.onrender.com/api/v1/transaction-history/1",
+									"protocol": "https",
+									"host": [
+										"skawallet-backend-api",
+										"onrender",
+										"com"
+									],
+									"path": [
+										"api",
+										"v1",
+										"transaction-history",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Transactions",
+					"item": [
+						{
+							"name": "Transfer",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"sourceAccount\": \"159753\",\n    \"destinationAccount\": \"159755\",\n    \"amount\": 900.00,\n    \"transactionType\": \"TRANSFER\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://skawallet-backend-api.onrender.com/api/v1/transactions/",
+									"protocol": "https",
+									"host": [
+										"skawallet-backend-api",
+										"onrender",
+										"com"
+									],
+									"path": [
+										"api",
+										"v1",
+										"transactions",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Check Balance",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://skawallet-backend-api.onrender.com/api/v1/transactions/balance/159753",
+									"protocol": "https",
+									"host": [
+										"skawallet-backend-api",
+										"onrender",
+										"com"
+									],
+									"path": [
+										"api",
+										"v1",
+										"transactions",
+										"balance",
+										"159753"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "List Transactions By User",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://skawallet-backend-api.onrender.com/api/v1/transactions/user/20",
+									"protocol": "https",
+									"host": [
+										"skawallet-backend-api",
+										"onrender",
+										"com"
+									],
+									"path": [
+										"api",
+										"v1",
+										"transactions",
+										"user",
+										"20"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Deposit",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"sourceAccount\": \"159753\",\n    \"amount\": 1000000.00,\n    \"transactionType\": \"DEPOSIT\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://skawallet-backend-api.onrender.com/api/v1/transactions/",
+									"protocol": "https",
+									"host": [
+										"skawallet-backend-api",
+										"onrender",
+										"com"
+									],
+									"path": [
+										"api",
+										"v1",
+										"transactions",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Withdrawal",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"sourceAccount\": \"159753\",\n    \"amount\": 10000.00,\n    \"transactionType\": \"WITHDRAWAL\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://skawallet-backend-api.onrender.com/api/v1/transactions/",
+									"protocol": "https",
+									"host": [
+										"skawallet-backend-api",
+										"onrender",
+										"com"
+									],
+									"path": [
+										"api",
+										"v1",
+										"transactions",
+										""
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Bank Account",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"accountNumber\":\"159755\",\r\n    \"balance\":183000.00,\r\n    \"pk_users\": 3,\r\n    \"pk_banks\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://skawallet-backend-api.onrender.com/api/v1/bank-accounts/",
+							"protocol": "https",
+							"host": [
+								"skawallet-backend-api",
+								"onrender",
+								"com"
+							],
+							"path": [
+								"api",
+								"v1",
+								"bank-accounts",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Bank Accounts",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://skawallet-backend-api.onrender.com/api/v1/bank-accounts/",
+							"protocol": "https",
+							"host": [
+								"skawallet-backend-api",
+								"onrender",
+								"com"
+							],
+							"path": [
+								"api",
+								"v1",
+								"bank-accounts",
+								""
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -936,7 +1548,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"pk_transactions\": \"12345\",\n  \"amount\": 150.00,\n  \"currency\": \"USD\",\n  \"status\": \"COMPLETED\",\n  \"timestamp\": \"2024-12-04T15:30:00\"\n}\n",
+							"raw": "{\n  \"pk_transactions\": \"1\",\n  \"amount\": 150.00,\n  \"currency\": \"USD\",\n  \"status\": \"COMPLETED\",\n  \"timestamp\": \"2024-12-04T15:30:00\"\n}\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -977,6 +1589,308 @@
 								"v1",
 								"kafka",
 								"history"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Notifications",
+			"item": [
+				{
+					"name": "Notications Post",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "\"Esta é uma notificação enviada do backend\"\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/notifications/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"notifications",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Send Notifications",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/notifications/send?title=Nova Transação&body=Você recebeu R$100 na sua conta digital.&token=O token do dispositivo Firebase.",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"notifications",
+								"send"
+							],
+							"query": [
+								{
+									"key": "title",
+									"value": "Nova Transação"
+								},
+								{
+									"key": "body",
+									"value": "Você recebeu R$100 na sua conta digital."
+								},
+								{
+									"key": "token",
+									"value": "O token do dispositivo Firebase."
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Notifications",
+			"item": [
+				{
+					"name": "WebSocket",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/events/websocket?message=Uma nova transação foi realizada",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"events",
+								"websocket"
+							],
+							"query": [
+								{
+									"key": "message",
+									"value": "Uma nova transação foi realizada"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "FCM",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "title",
+									"value": "Nova Transação",
+									"type": "text"
+								},
+								{
+									"key": "body",
+									"value": "Você recebeu $100",
+									"type": "text"
+								},
+								{
+									"key": "token",
+									"value": "device_token_placeholder",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/events/push",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"events",
+								"push"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Wallets",
+			"item": [
+				{
+					"name": "List All Wallets by User",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/wallets/user/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"wallets",
+								"user",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Wallets By ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/wallets/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"wallets",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Wallets",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"walletName\": \"Carteira Negócios\",\n  \"walletType\": \"MERCHANT\",\n  \"balance\": 1000.00,\n  \"currency\": \"AKZ\",\n  \"isDefault\": true,\n  \"userId\": 1\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/wallets/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"wallets",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Wallet",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"walletName\": \"Carteira Atualizada\",\n  \"currency\": \"EUR\",\n  \"isDefault\": false\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/wallets/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"wallets",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Wallets",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/wallets/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"wallets",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Check Balance",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/wallets/balance/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"wallets",
+								"balance",
+								"2"
 							]
 						}
 					},
