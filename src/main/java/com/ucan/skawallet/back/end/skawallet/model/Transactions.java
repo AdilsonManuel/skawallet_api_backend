@@ -4,11 +4,10 @@
  */
 package com.ucan.skawallet.back.end.skawallet.model;
 
-import lombok.Data;
-
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import lombok.Data;
 
 @Entity
 @Table(name = "transactions")
@@ -49,5 +48,4 @@ public class Transactions
 
     private String description; // description
 
-    // Getters e Setters
 }
