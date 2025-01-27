@@ -10,13 +10,13 @@ import com.ucan.skawallet.back.end.skawallet.model.Transactions;
 import com.ucan.skawallet.back.end.skawallet.service.TransactionService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -28,7 +28,7 @@ public class TransactionController
     private final TransactionService transactionService;
 
     @GetMapping("/")
-    public ResponseEntity<List<Transactions>> getAllUsers()
+    public ResponseEntity<List<Transactions>> getAllUsers ()
     {
         List<Transactions> transactionses = transactionService.ListTransactions();
 
@@ -37,7 +37,7 @@ public class TransactionController
 
     // Criar uma nova transação
     @PostMapping("/")
-    public ResponseEntity<Transactions> createTransaction(@RequestBody TransactionDTO transactionDTO)
+    public ResponseEntity<Transactions> createTransaction (@RequestBody TransactionDTO transactionDTO)
     {
         Transactions transaction = transactionService.createTransaction(transactionDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(transaction);
@@ -45,7 +45,7 @@ public class TransactionController
 
     // Obter todas as transações por carteira
     @GetMapping("/wallet/{walletId}")
-    public ResponseEntity<List<Transactions>> getTransactionsByWallet(@PathVariable Long walletId)
+    public ResponseEntity<List<Transactions>> getTransactionsByWallet (@PathVariable Long walletId)
     {
         List<Transactions> transactions = transactionService.getTransactionsByWallet(walletId);
         return ResponseEntity.ok(transactions);
@@ -53,16 +53,17 @@ public class TransactionController
 
     // Obter detalhes de uma transação específica
     @GetMapping("/{transactionId}")
-    public ResponseEntity<Transactions> getTransactionById(@PathVariable Long transactionId)
+    public ResponseEntity<Transactions> getTransactionById (@PathVariable Long transactionId)
     {
         Transactions transaction = transactionService.getTransactionById(transactionId);
         return ResponseEntity.ok(transaction);
     }
 
     @GetMapping("/history/{userId}")
-    public ResponseEntity<List<TransactionResponseDTO>> getUserTransactionHistory(@PathVariable Long userId)
+    public ResponseEntity<List<TransactionResponseDTO>> getUserTransactionHistory (@PathVariable Long userId)
     {
         List<TransactionResponseDTO> transactions = transactionService.getTransactionsByUserId(userId);
         return ResponseEntity.ok(transactions);
     }
+
 }

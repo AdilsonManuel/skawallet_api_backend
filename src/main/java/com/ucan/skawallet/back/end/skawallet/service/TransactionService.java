@@ -7,19 +7,22 @@ package com.ucan.skawallet.back.end.skawallet.service;
 import com.ucan.skawallet.back.end.skawallet.dto.TransactionDTO;
 import com.ucan.skawallet.back.end.skawallet.dto.TransactionResponseDTO;
 import com.ucan.skawallet.back.end.skawallet.model.DigitalWallets;
+import com.ucan.skawallet.back.end.skawallet.model.EventType;
 import com.ucan.skawallet.back.end.skawallet.model.PaymentMethod;
+import com.ucan.skawallet.back.end.skawallet.model.TransactionHistory;
 import com.ucan.skawallet.back.end.skawallet.model.TransactionStatus;
 import com.ucan.skawallet.back.end.skawallet.model.TransactionType;
 import com.ucan.skawallet.back.end.skawallet.model.Transactions;
 import com.ucan.skawallet.back.end.skawallet.repository.DigitalWalletRepository;
 import com.ucan.skawallet.back.end.skawallet.repository.TransactionRepository;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -28,14 +31,15 @@ public class TransactionService
 
     private final TransactionRepository transactionRepository;
     private final DigitalWalletRepository digitalWalletRepository;
+    private final TransactionHistoryService transactionHistoryService;
 
-    public List<Transactions> ListTransactions()
+    public List<Transactions> ListTransactions ()
     {
         return transactionRepository.findAll();
     }
 
     // Criar uma nova transação
-    public Transactions createTransaction(TransactionDTO transactionDTO)
+    public Transactions createTransaction (TransactionDTO transactionDTO)
     {
         // Validar e buscar carteiras de origem e destino
         DigitalWallets sourceWallet = transactionDTO.getSourceWalletId() != null
@@ -100,7 +104,7 @@ public class TransactionService
     }
 
     // Obter transações por carteira
-    public List<Transactions> getTransactionsByWallet(Long walletId)
+    public List<Transactions> getTransactionsByWallet (Long walletId)
     {
         DigitalWallets wallet = digitalWalletRepository.findById(walletId)
                 .orElseThrow(() -> new RuntimeException("Carteira não encontrada."));
@@ -108,13 +112,13 @@ public class TransactionService
     }
 
     // Obter transação por ID
-    public Transactions getTransactionById(Long transactionId)
+    public Transactions getTransactionById (Long transactionId)
     {
         return transactionRepository.findById(transactionId)
                 .orElseThrow(() -> new RuntimeException("Transação não encontrada."));
     }
 
-    public List<TransactionResponseDTO> getTransactionsByUserId(Long userId)
+    public List<TransactionResponseDTO> getTransactionsByUserId (Long userId)
     {
         return transactionRepository.findTransactionsByUserId(userId).stream()
                 .map(result -> new TransactionResponseDTO(
@@ -131,4 +135,22 @@ public class TransactionService
         ))
                 .collect(Collectors.toList());
     }
+
+    @Transactional
+    public Transactions createTransaction (Transactions transaction)
+    {
+        // Salva a transação
+        Transactions savedTransaction = transactionRepository.save(transaction);
+
+        // Cria o histórico associado
+        TransactionHistory history = TransactionHistory.builder()
+                .transaction(savedTransaction)
+                .eventType(EventType.CREATED)
+                .timestamp(LocalDateTime.now())
+                .build();
+        transactionHistoryService.save(history);
+
+        return savedTransaction;
+    }
+
 }

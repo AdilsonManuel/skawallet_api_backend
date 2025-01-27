@@ -29,4 +29,5 @@ public class TransactionResponseDTO
     private String destinationWalletName; // Nome da carteira de destino
     private PaymentMethod paymentMethod = PaymentMethod.DIGITAL_WALLET; // Método de pagamento
     private String description;         // Descrição da transação
+//      private String userName;
 }

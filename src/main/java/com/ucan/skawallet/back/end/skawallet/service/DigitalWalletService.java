@@ -24,7 +24,7 @@ public class DigitalWalletService
     private final UserRepository userRepository;
 
     // Criar uma nova carteira digital
-    public DigitalWallets createWallet(DigitalWalletDTO walletDTO)
+    public DigitalWallets createWallet (DigitalWalletDTO walletDTO)
     {
 //        System.err.println("wallet DTO: " + walletDTO);
         Users user = userRepository.findById(walletDTO.getUserId())
@@ -44,7 +44,7 @@ public class DigitalWalletService
     }
 
     // Obter todas as carteiras de um usuário
-    public List<DigitalWallets> getWalletsByUser(Long userId)
+    public List<DigitalWallets> getWalletsByUser (Long userId)
     {
         Users user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado."));
@@ -52,14 +52,14 @@ public class DigitalWalletService
     }
 
     // Obter carteira por ID
-    public DigitalWallets findById(Long walletId)
+    public DigitalWallets findById (Long walletId)
     {
         return digitalWalletRepository.findById(walletId)
                 .orElseThrow(() -> new RuntimeException("Carteira não encontrada."));
     }
 
     // Atualizar parcialmente uma carteira
-    public DigitalWallets updateWallet(Long walletId, DigitalWalletDTO walletDTO)
+    public DigitalWallets updateWallet (Long walletId, DigitalWalletDTO walletDTO)
     {
         DigitalWallets wallet = findById(walletId);
 
@@ -85,7 +85,7 @@ public class DigitalWalletService
     }
 
     // Deletar uma carteira
-    public void deleteWallet(Long walletId)
+    public void deleteWallet (Long walletId)
     {
         DigitalWallets wallet = findById(walletId);
         digitalWalletRepository.delete(wallet);
@@ -98,13 +98,13 @@ public class DigitalWalletService
      * @param userId ID do usuário.
      * @return Saldo da carteira.
      */
-    public BigDecimal getWalletBalance(Long walletId, Long userId)
+    public BigDecimal getWalletBalance (Long walletId, Long userId)
     {
         // Verificar se a carteira pertence ao usuário
         DigitalWallets wallet = digitalWalletRepository.findByIdAndUserId(walletId, userId)
                 .orElseThrow(() -> new RuntimeException("Carteira não encontrada ou não pertence ao usuário."));
 
         // Retornar o saldo
-        return wallet.getBalance(); 
+        return wallet.getBalance();
     }
 }
