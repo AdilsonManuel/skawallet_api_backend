@@ -4,8 +4,11 @@
  */
 package com.ucan.skawallet.back.end.skawallet.service;
 
+import com.ucan.skawallet.back.end.skawallet.model.EventType;
 import com.ucan.skawallet.back.end.skawallet.model.TransactionHistory;
+import com.ucan.skawallet.back.end.skawallet.model.Transactions;
 import com.ucan.skawallet.back.end.skawallet.repository.TransactionHistoryRepository;
+import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -32,5 +35,17 @@ public class TransactionHistoryService
     public List<TransactionHistory> getHistoryByTransactionPk (Long transactionId)
     {
         return repository.findByTransactionPkTransactions(transactionId);
+    }
+
+    public void saveHistory (Transactions transaction, EventType eventType)
+    {
+        System.err.println("com.ucan.skawallet.back.end.skawallet.service.TransactionHistoryService.saveHistory()" + transaction);
+        TransactionHistory history = TransactionHistory.builder()
+                .transaction(transaction)
+                .eventType(eventType)
+                .timestamp(LocalDateTime.now())
+                .build();
+
+        repository.save(history);
     }
 }

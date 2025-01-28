@@ -9,7 +9,6 @@ import com.ucan.skawallet.back.end.skawallet.dto.TransactionResponseDTO;
 import com.ucan.skawallet.back.end.skawallet.model.DigitalWallets;
 import com.ucan.skawallet.back.end.skawallet.model.EventType;
 import com.ucan.skawallet.back.end.skawallet.model.PaymentMethod;
-import com.ucan.skawallet.back.end.skawallet.model.TransactionHistory;
 import com.ucan.skawallet.back.end.skawallet.model.TransactionStatus;
 import com.ucan.skawallet.back.end.skawallet.model.TransactionType;
 import com.ucan.skawallet.back.end.skawallet.model.Transactions;
@@ -17,7 +16,6 @@ import com.ucan.skawallet.back.end.skawallet.repository.DigitalWalletRepository;
 import com.ucan.skawallet.back.end.skawallet.repository.TransactionRepository;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -39,6 +37,7 @@ public class TransactionService
     }
 
     // Criar uma nova transação
+    @Transactional
     public Transactions createTransaction (TransactionDTO transactionDTO)
     {
         // Validar e buscar carteiras de origem e destino
@@ -100,7 +99,10 @@ public class TransactionService
         transaction.setDescription(transactionDTO.getDescription());
         transaction.setSourceWallet(sourceWallet);
         transaction.setDestinationWallet(destinationWallet);
-        return transactionRepository.save(transaction);
+        transactionRepository.save(transaction);
+
+        transactionHistoryService.saveHistory(transaction, EventType.CREATED);
+        return transaction;
     }
 
     // Obter transações por carteira
@@ -136,21 +138,26 @@ public class TransactionService
                 .collect(Collectors.toList());
     }
 
-    @Transactional
-    public Transactions createTransaction (Transactions transaction)
+    public Transactions updateTransaction (Transactions transaction)
     {
-        // Salva a transação
-        Transactions savedTransaction = transactionRepository.save(transaction);
+        // Atualizar a transação no banco de dados
+        Transactions updatedTransaction = transactionRepository.save(transaction);
 
-        // Cria o histórico associado
-        TransactionHistory history = TransactionHistory.builder()
-                .transaction(savedTransaction)
-                .eventType(EventType.CREATED)
-                .timestamp(LocalDateTime.now())
-                .build();
-        transactionHistoryService.save(history);
+        // Registrar o histórico com o evento "UPDATED"
+        transactionHistoryService.saveHistory(updatedTransaction, EventType.UPDATED);
 
-        return savedTransaction;
+        return updatedTransaction;
+    }
+
+    public void deleteTransaction (Long transactionId)
+    {
+        // Encontrar e deletar a transação
+        Transactions transaction = transactionRepository.findById(transactionId)
+                .orElseThrow(() -> new RuntimeException("Transação não encontrada"));
+        transactionRepository.delete(transaction);
+
+        // Registrar o histórico com o evento "DELETED"
+        transactionHistoryService.saveHistory(transaction, EventType.DELETED);
     }
 
 }

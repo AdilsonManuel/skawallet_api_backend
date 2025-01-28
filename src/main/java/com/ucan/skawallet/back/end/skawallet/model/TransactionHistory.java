@@ -45,7 +45,7 @@ public class TransactionHistory
     private Transactions transaction;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "eventType", nullable = false)
+    @Column(name = "event_type", nullable = false)
     private EventType eventType;
 
     @Builder.Default
