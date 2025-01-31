@@ -15,10 +15,12 @@ import lombok.Data;
  */
 @Data
 @AllArgsConstructor
-public class TransactionHistoryDTO {
+public class TransactionHistoryDTO
+{
+
     private Long transactionId;           // Transaction ID
     private String transactionType;       // Tipo de transação
     private BigDecimal amount;            // Valor da transação
     private String status;                // Status da transação
-    private LocalDateTime   timestamp;      // Timestamp da transação
+    private LocalDateTime timestamp;      // Timestamp da transação
 }
