@@ -43,6 +43,18 @@ CREATE TABLE transactions (
     FOREIGN KEY (fk_destination_wallet) REFERENCES digital_wallets (pk_digital_wallets) ON DELETE SET NULL
 );
 
+-- Criando o tipo ENUM para event_type
+CREATE TYPE event_type AS ENUM ('CREATED', 'UPDATED', 'DELETED');
+
+-- Criando a tabela transaction_history
+CREATE TABLE transaction_history (
+    pk_transaction_history SERIAL PRIMARY KEY,
+    fk_transactions INT,
+    event_type CHARACTER VARYING NOT NULL,  -- Usando o tipo ENUM criado
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (fk_transactions) REFERENCES transactions(pk_transactions) ON DELETE CASCADE
+);
+
 CREATE TYPE category_type AS ENUM ('BANK', 'MERCHANT');
 
 CREATE TABLE partners (
