@@ -40,8 +40,7 @@ public class TransactionService
     @Transactional
     public Transactions createTransaction (TransactionDTO transactionDTO)
     {
-
-        // Buscar carteiras de origem e destino
+        // Validar e buscar carteiras de origem e destino
         DigitalWallets sourceWallet = transactionDTO.getSourceWalletId() != null
                 ? digitalWalletRepository.findById(transactionDTO.getSourceWalletId())
                         .orElseThrow(() -> new RuntimeException("Carteira de origem não encontrada."))
@@ -52,46 +51,56 @@ public class TransactionService
                         .orElseThrow(() -> new RuntimeException("Carteira de destino não encontrada."))
                 : null;
 
-        // Validar saldo para pagamentos, retiradas ou transferências
+        // Validar saldo para retirada ou transferência
         if (transactionDTO.getTransactionType() == TransactionType.WITHDRAWAL
                 || transactionDTO.getTransactionType() == TransactionType.TRANSFER
                 || transactionDTO.getTransactionType() == TransactionType.PAYMENT)
         {
-
             if (sourceWallet == null || sourceWallet.getBalance().compareTo(transactionDTO.getAmount()) < 0)
             {
                 throw new RuntimeException("Saldo insuficiente na carteira de origem.");
             }
         }
 
-        // Atualizar saldos dependendo do tipo de transação
-        switch (transactionDTO.getTransactionType())
+        if (null != transactionDTO.getTransactionType())
+        // Atualizar saldos das carteiras
         {
-            case TRANSFER ->
+            switch (transactionDTO.getTransactionType())
             {
-                sourceWallet.setBalance(sourceWallet.getBalance().subtract(transactionDTO.getAmount()));
-                destinationWallet.setBalance(destinationWallet.getBalance().add(transactionDTO.getAmount()));
-            }
-            case DEPOSIT ->
-                destinationWallet.setBalance(destinationWallet.getBalance().add(transactionDTO.getAmount()));
-            case WITHDRAWAL ->
-                sourceWallet.setBalance(sourceWallet.getBalance().subtract(transactionDTO.getAmount()));
-            case PAYMENT ->
-            {
-                if (destinationWallet == null)
+                case TRANSFER ->
                 {
-                    throw new RuntimeException("Carteira do comerciante não encontrada.");
+                    sourceWallet.setBalance(sourceWallet.getBalance().subtract(transactionDTO.getAmount()));
+                    destinationWallet.setBalance(destinationWallet.getBalance().add(transactionDTO.getAmount()));
                 }
-                sourceWallet.setBalance(sourceWallet.getBalance().subtract(transactionDTO.getAmount()));
-                destinationWallet.setBalance(destinationWallet.getBalance().add(transactionDTO.getAmount()));
+                case DEPOSIT ->
+                    destinationWallet.setBalance(destinationWallet.getBalance().add(transactionDTO.getAmount()));
+                case WITHDRAWAL ->
+                    sourceWallet.setBalance(sourceWallet.getBalance().subtract(transactionDTO.getAmount()));
+
+                case PAYMENT ->
+                {
+                    if (destinationWallet == null)
+                    {
+                        throw new RuntimeException("Carteira do comerciante não encontrada.");
+                    }
+                    sourceWallet.setBalance(sourceWallet.getBalance().subtract(transactionDTO.getAmount()));
+                    destinationWallet.setBalance(destinationWallet.getBalance().add(transactionDTO.getAmount()));
+                }
+                default ->
+                {
+                }
             }
-            default ->
-                throw new RuntimeException("Tipo de transação inválido.");
         }
 
         // Persistir alterações nas carteiras
-        digitalWalletRepository.save(sourceWallet);
-        digitalWalletRepository.save(destinationWallet);
+        if (sourceWallet != null)
+        {
+            digitalWalletRepository.save(sourceWallet);
+        }
+        if (destinationWallet != null)
+        {
+            digitalWalletRepository.save(destinationWallet);
+        }
 
         // Criar e salvar a transação
         Transactions transaction = new Transactions();
@@ -103,9 +112,7 @@ public class TransactionService
         transaction.setDestinationWallet(destinationWallet);
         transactionRepository.save(transaction);
 
-        // Registrar histórico da transação
         transactionHistoryService.saveHistory(transaction, EventType.CREATED);
-
         return transaction;
     }
 
