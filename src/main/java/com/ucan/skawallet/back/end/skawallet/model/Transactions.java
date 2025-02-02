@@ -4,6 +4,9 @@
  */
 package com.ucan.skawallet.back.end.skawallet.model;
 
+import com.ucan.skawallet.back.end.skawallet.enums.TransactionType;
+import com.ucan.skawallet.back.end.skawallet.enums.TransactionStatus;
+import com.ucan.skawallet.back.end.skawallet.enums.PaymentMethod;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

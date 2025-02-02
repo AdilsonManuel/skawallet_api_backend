@@ -4,6 +4,7 @@
  */
 package com.ucan.skawallet.back.end.skawallet.model;
 
+import com.ucan.skawallet.back.end.skawallet.enums.UserType;
 import java.time.LocalDateTime;
 import jakarta.persistence.*;
 import java.util.Collection;

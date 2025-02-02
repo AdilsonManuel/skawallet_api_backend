@@ -6,11 +6,11 @@ package com.ucan.skawallet.back.end.skawallet.service;
 
 import com.ucan.skawallet.back.end.skawallet.dto.TransactionDTO;
 import com.ucan.skawallet.back.end.skawallet.dto.TransactionResponseDTO;
+import com.ucan.skawallet.back.end.skawallet.enums.EventType;
+import com.ucan.skawallet.back.end.skawallet.enums.PaymentMethod;
+import com.ucan.skawallet.back.end.skawallet.enums.TransactionStatus;
+import com.ucan.skawallet.back.end.skawallet.enums.TransactionType;
 import com.ucan.skawallet.back.end.skawallet.model.DigitalWallets;
-import com.ucan.skawallet.back.end.skawallet.model.EventType;
-import com.ucan.skawallet.back.end.skawallet.model.PaymentMethod;
-import com.ucan.skawallet.back.end.skawallet.model.TransactionStatus;
-import com.ucan.skawallet.back.end.skawallet.model.TransactionType;
 import com.ucan.skawallet.back.end.skawallet.model.Transactions;
 import com.ucan.skawallet.back.end.skawallet.repository.DigitalWalletRepository;
 import com.ucan.skawallet.back.end.skawallet.repository.TransactionRepository;

@@ -12,6 +12,7 @@ import com.ucan.skawallet.back.end.skawallet.repository.UserRepository;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -38,9 +39,15 @@ public class DigitalWalletService
         wallet.setIsDefault(walletDTO.getIsDefault() != null ? walletDTO.getIsDefault() : false);
         wallet.setUser(user);
 
-//        System.err.println("wallet: " + wallet);
+        // Gerar código único
+        wallet.setWalletCode(generateUniqueWalletCode(user.getPkUsers()));
+
         return digitalWalletRepository.save(wallet);
-//        return null;s
+    }
+
+    private String generateUniqueWalletCode (Long userId)
+    {
+        return "SKA-" + userId + "-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
     }
 
     // Obter todas as carteiras de um usuário
@@ -106,5 +113,11 @@ public class DigitalWalletService
 
         // Retornar o saldo
         return wallet.getBalance();
+    }
+
+    public DigitalWallets getWalletByCode (String walletCode)
+    {
+        return digitalWalletRepository.getWalletByCode(walletCode)
+                .orElseThrow(() -> new RuntimeException("Carteira não encontrada com o código: " + walletCode));
     }
 }
