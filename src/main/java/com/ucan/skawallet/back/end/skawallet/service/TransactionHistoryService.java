@@ -4,7 +4,7 @@
  */
 package com.ucan.skawallet.back.end.skawallet.service;
 
-import com.ucan.skawallet.back.end.skawallet.model.EventType;
+import com.ucan.skawallet.back.end.skawallet.enums.EventType;
 import com.ucan.skawallet.back.end.skawallet.model.TransactionHistory;
 import com.ucan.skawallet.back.end.skawallet.model.Transactions;
 import com.ucan.skawallet.back.end.skawallet.repository.TransactionHistoryRepository;

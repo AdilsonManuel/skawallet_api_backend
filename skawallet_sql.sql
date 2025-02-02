@@ -22,6 +22,7 @@ CREATE TABLE digital_wallets (
     fk_users INTEGER NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP,
+    wallet_code CHARACTER VARYING
     is_default BOOLEAN DEFAULT FALSE, -- Indica a carteira padrão do usuário
     CONSTRAINT digital_wallets_fk_users FOREIGN KEY (fk_users)
         REFERENCES users (pk_users) ON UPDATE CASCADE ON DELETE CASCADE
@@ -55,15 +56,19 @@ CREATE TABLE transaction_history (
     FOREIGN KEY (fk_transactions) REFERENCES transactions(pk_transactions) ON DELETE CASCADE
 );
 
-CREATE TYPE category_type AS ENUM ('BANK', 'MERCHANT');
+CREATE TYPE category_type AS ENUM ('TELECOM', 'ENERGY', 'GOVERNMENT', 'FINANCE', 'RETAIL');
 
 CREATE TABLE partners (
     pk_partners SERIAL PRIMARY KEY,
-    name CHARACTER VARYING NOT NULL,
-    description TEXT,
-    category CHARACTER VARYING , -- Categoria do parceiro (e.g., "BANK", "MERCHANT")
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    partner_code CHARACTER VARYING UNIQUE NOT NULL, -- Código único do parceiro (e.g., "UNITEL")
+    name CHARACTER VARYING NOT NULL, -- Nome da entidade
+    description TEXT, -- Descrição do parceiro
+    category CHARACTER VARYING CHECK (category IN ('TELECOM', 'ENERGY', 'GOVERNMENT', 'FINANCE', 'RETAIL')), -- Tipo de entidade
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Data de criação
+    payment_supported BOOLEAN DEFAULT TRUE, -- Indica se aceita pagamentos via carteira digital
+    contact_info CHARACTER VARYING -- Informações de contato (telefone, email, etc.)
 );
+
 
 CREATE TABLE cards (
     pk_cards SERIAL PRIMARY KEY,

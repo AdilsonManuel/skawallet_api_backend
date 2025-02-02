@@ -4,11 +4,12 @@
  */
 package com.ucan.skawallet.back.end.skawallet.model;
 
-import lombok.Data;
-
+import com.ucan.skawallet.back.end.skawallet.enums.WalletType;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.UUID;
+import lombok.Data;
 
 @Entity
 @Table(name = "digital_wallets")
@@ -28,6 +29,9 @@ public class DigitalWallets
     @Column(nullable = false)
     private WalletType walletType; // Enum PERSONAL, MERCHANT, SAVINGS
 
+    @Column(nullable = false, unique = true, updatable = false)
+    private String walletCode; // Código único da carteira
+
     @Column(nullable = false)
     private BigDecimal balance = BigDecimal.ZERO;
 
@@ -37,7 +41,7 @@ public class DigitalWallets
     @ManyToOne
     @JoinColumn(name = "fk_users", nullable = false)
     private Users user;
-    
+
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
@@ -46,5 +50,17 @@ public class DigitalWallets
 
     private Boolean isDefault = false;
 
-    // Getters e Setters
+    @PrePersist
+    public void generateWalletCode ()
+    {
+        if (this.walletCode == null)
+        {
+            this.walletCode = generateUniqueCode();
+        }
+    }
+
+    private String generateUniqueCode ()
+    {
+        return "SKA-" + user.getPkUsers() + "-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
+    }
 }

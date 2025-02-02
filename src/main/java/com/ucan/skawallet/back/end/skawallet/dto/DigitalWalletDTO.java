@@ -4,7 +4,7 @@
  */
 package com.ucan.skawallet.back.end.skawallet.dto;
 
-import com.ucan.skawallet.back.end.skawallet.model.WalletType;
+import com.ucan.skawallet.back.end.skawallet.enums.WalletType;
 import java.math.BigDecimal;
 import lombok.AllArgsConstructor;
 import lombok.Data;

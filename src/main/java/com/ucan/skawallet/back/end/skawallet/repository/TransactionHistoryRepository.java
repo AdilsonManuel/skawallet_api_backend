@@ -4,7 +4,7 @@
  */
 package com.ucan.skawallet.back.end.skawallet.repository;
 
-import com.ucan.skawallet.back.end.skawallet.model.EventType;
+import com.ucan.skawallet.back.end.skawallet.enums.EventType;
 import com.ucan.skawallet.back.end.skawallet.model.TransactionHistory;
 import java.time.LocalDateTime;
 import java.util.List;

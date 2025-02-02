@@ -11,7 +11,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -20,6 +19,7 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -32,7 +32,7 @@ public class DigitalWalletController
 
     // Criar uma nova carteira digital
     @PostMapping("/")
-    public ResponseEntity<DigitalWallets> createWallet(@RequestBody DigitalWalletDTO walletDTO)
+    public ResponseEntity<DigitalWallets> createWallet (@RequestBody DigitalWalletDTO walletDTO)
     {
         DigitalWallets wallet = digitalWalletService.createWallet(walletDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(wallet);
@@ -40,7 +40,7 @@ public class DigitalWalletController
 
     // Obter todas as carteiras de um usuário
     @GetMapping("/user/{userId}")
-    public ResponseEntity<List<DigitalWallets>> getWalletsByUser(@PathVariable Long userId)
+    public ResponseEntity<List<DigitalWallets>> getWalletsByUser (@PathVariable Long userId)
     {
         List<DigitalWallets> wallets = digitalWalletService.getWalletsByUser(userId);
         return ResponseEntity.ok(wallets);
@@ -48,7 +48,7 @@ public class DigitalWalletController
 
     // Obter detalhes de uma carteira específica
     @GetMapping("/{walletId}")
-    public ResponseEntity<DigitalWallets> getWalletById(@PathVariable Long walletId)
+    public ResponseEntity<DigitalWallets> getWalletById (@PathVariable Long walletId)
     {
         DigitalWallets wallet = digitalWalletService.findById(walletId);
         return ResponseEntity.ok(wallet);
@@ -56,7 +56,7 @@ public class DigitalWalletController
 
     // Atualizar parcialmente uma carteira
     @PatchMapping("/{walletId}")
-    public ResponseEntity<DigitalWallets> updateWallet(
+    public ResponseEntity<DigitalWallets> updateWallet (
             @PathVariable Long walletId,
             @RequestBody DigitalWalletDTO walletDTO)
     {
@@ -66,14 +66,14 @@ public class DigitalWalletController
 
     // Deletar uma carteira
     @DeleteMapping("/{walletId}")
-    public ResponseEntity<String> deleteWallet(@PathVariable Long walletId)
+    public ResponseEntity<String> deleteWallet (@PathVariable Long walletId)
     {
         digitalWalletService.deleteWallet(walletId);
         return ResponseEntity.ok("Carteira deletada com sucesso.");
     }
 
     @GetMapping("/balance/{walletId}")
-    public ResponseEntity<Map<String, Object>> getWalletBalance(@PathVariable Long walletId)
+    public ResponseEntity<Map<String, Object>> getWalletBalance (@PathVariable Long walletId)
     {
         System.err.println("com.ucan.skawallet.back.end.skawallet.controller.DigitalWalletController.getWalletBalance()" + walletId);
         DigitalWallets digitalWallets = digitalWalletService.findById(walletId);
@@ -84,5 +84,11 @@ public class DigitalWalletController
         response.put("currency", digitalWallets.getCurrency());
 
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/code/{walletCode}")
+    public ResponseEntity<DigitalWallets> getWalletByCode (@PathVariable String walletCode)
+    {
+        return ResponseEntity.ok(digitalWalletService.getWalletByCode(walletCode));
     }
 }

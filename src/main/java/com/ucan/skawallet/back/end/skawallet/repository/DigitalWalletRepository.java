@@ -17,7 +17,7 @@ import org.springframework.stereotype.Repository;
 public interface DigitalWalletRepository extends JpaRepository<DigitalWallets, Long>
 {
 
-    List<DigitalWallets> findByUser(Users user);
+    List<DigitalWallets> findByUser (Users user);
 
     /**
      * Busca uma carteira específica de um usuário.
@@ -27,5 +27,11 @@ public interface DigitalWalletRepository extends JpaRepository<DigitalWallets, L
      * @return Carteira, se encontrada.
      */
     @Query(value = "SELECT dw FROM digital_wallets dw WHERE dw.fk_users = ? AND dw.pk_digital_wallets = ?", nativeQuery = true)
-    Optional<DigitalWallets> findByIdAndUserId(@Param("walletId") Long walletId, @Param("userId") Long userId);
+    Optional<DigitalWallets> findByIdAndUserId (@Param("walletId") Long walletId, @Param("userId") Long userId);
+
+    @Query(
+            value = "SELECT * FROM digital_wallets WHERE wallet_code = :code",
+            nativeQuery = true
+    )
+    Optional<DigitalWallets> getWalletByCode (@Param("code") String code);
 }
