@@ -108,6 +108,7 @@ public class TransactionService
         transaction.setTransactionType(transactionDTO.getTransactionType());
         transaction.setPaymentMethod(transactionDTO.getPaymentMethod());
         transaction.setDescription(transactionDTO.getDescription());
+        transaction.setStatus(transactionDTO.getStatus());
         transaction.setSourceWallet(sourceWallet);
         transaction.setDestinationWallet(destinationWallet);
         transactionRepository.save(transaction);

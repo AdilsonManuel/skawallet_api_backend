@@ -5,6 +5,7 @@
 package com.ucan.skawallet.back.end.skawallet.dto;
 
 import com.ucan.skawallet.back.end.skawallet.enums.PaymentMethod;
+import com.ucan.skawallet.back.end.skawallet.enums.TransactionStatus;
 import com.ucan.skawallet.back.end.skawallet.enums.TransactionType;
 import java.math.BigDecimal;
 import lombok.AllArgsConstructor;
@@ -23,4 +24,5 @@ public class TransactionDTO
     private String description; // Descrição opcional
     private Long sourceWalletId; // ID da carteira de origem (opcional)
     private Long destinationWalletId; // ID da carteira de destino (opcional)
+    private TransactionStatus status;
 }
