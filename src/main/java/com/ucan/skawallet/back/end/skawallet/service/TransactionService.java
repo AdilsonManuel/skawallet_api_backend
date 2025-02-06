@@ -16,6 +16,7 @@ import com.ucan.skawallet.back.end.skawallet.repository.DigitalWalletRepository;
 import com.ucan.skawallet.back.end.skawallet.repository.TransactionRepository;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -170,6 +171,11 @@ public class TransactionService
 
         // Registrar o histórico com o evento "DELETED"
         transactionHistoryService.saveHistory(transaction, EventType.DELETED);
+    }
+
+    public List<Transactions> getTransactionsByUserAndDateRange (Long userId, LocalDateTime startDate, LocalDateTime endDate)
+    {
+        return transactionRepository.findTransactionsByUserAndDateRange(userId, startDate, endDate);
     }
 
 }

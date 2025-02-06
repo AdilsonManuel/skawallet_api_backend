@@ -6,6 +6,7 @@ package com.ucan.skawallet.back.end.skawallet.repository;
 
 import com.ucan.skawallet.back.end.skawallet.model.DigitalWallets;
 import com.ucan.skawallet.back.end.skawallet.model.Transactions;
+import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -42,5 +43,14 @@ public interface TransactionRepository extends JpaRepository<Transactions, Long>
                             t.created_at DESC
         """, nativeQuery = true)
     List<Object[]> findTransactionsByUserId (@Param("userId") Long userId);
+
+    @Query("SELECT t FROM Transactions t "
+            + "WHERE (t.sourceWallet.user.pkUsers = :userId OR t.destinationWallet.user.pkUsers = :userId) "
+            + "AND t.createdAt BETWEEN :startDate AND :endDate "
+            + "ORDER BY t.createdAt DESC")
+    List<Transactions> findTransactionsByUserAndDateRange (
+            @Param("userId") Long userId,
+            @Param("startDate") LocalDateTime startDate,
+            @Param("endDate") LocalDateTime endDate);
 
 }

@@ -4,7 +4,6 @@
  */
 package com.ucan.skawallet.back.end.skawallet.dto;
 
-import com.ucan.skawallet.back.end.skawallet.enums.UserType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

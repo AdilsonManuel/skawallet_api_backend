@@ -13,7 +13,9 @@
     <artifactId>skawallet</artifactId>
     <version>01</version>
     <name>skawallet</name>
-    <description>SkaWallet é uma solução de carteira digital desenvolvida para simplificar a gestão de transações financeiras pessoais e oferecer uma experiência segura e integrada.</description>
+    <description>SkaWallet é uma solução de carteira digital desenvolvida para simplificar a gestão de transações
+        financeiras pessoais e oferecer uma experiência segura e integrada.
+    </description>
     <url/>
     <licenses>
         <license/>
@@ -66,8 +68,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
-        
-        
         <!-- JWT -->
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
@@ -86,7 +86,6 @@
             <version>0.11.5</version>
             <scope>runtime</scope>
         </dependency>
-        
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
@@ -97,6 +96,10 @@
             <artifactId>springfox-swagger2</artifactId>
             <version>3.0.0</version>
             <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-oauth2-client</artifactId>
         </dependency>
     </dependencies>
 

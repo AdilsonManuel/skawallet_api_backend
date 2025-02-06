@@ -8,8 +8,10 @@ import com.ucan.skawallet.back.end.skawallet.dto.TransactionDTO;
 import com.ucan.skawallet.back.end.skawallet.dto.TransactionResponseDTO;
 import com.ucan.skawallet.back.end.skawallet.model.Transactions;
 import com.ucan.skawallet.back.end.skawallet.service.TransactionService;
+import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -82,6 +85,17 @@ public class TransactionController
     {
         transactionService.deleteTransaction(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/transaction-history/{userId}")
+    public ResponseEntity<List<Transactions>> getTransactionHistoryByDateRange (
+            @PathVariable Long userId,
+            @RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
+            @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate)
+    {   
+
+        List<Transactions> transactions = transactionService.getTransactionsByUserAndDateRange(userId, startDate, endDate);
+        return ResponseEntity.ok(transactions);
     }
 
 }
