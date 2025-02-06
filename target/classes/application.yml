@@ -1,0 +1,52 @@
+spring:
+  application:
+    name: skawallet
+  datasource:
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/skawallet_db}
+    username: ${DATABASE_USERNAME:admin}
+    password: ${DATABASE_PASSWORD:admin}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+    show-sql: true
+  security:
+    oauth2:
+      client:
+        registration:
+          github:
+            client-id: Ov23liTlEqpEsFQSJNOa
+            client-secret: ${74770e9e562615efa43ee154bbeb3673a6199e74}
+            scope: user:email
+            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+            authorization-grant-type: authorization_code
+            client-name: GitHub
+          google:
+            client-id: ${112517911945-equieu857tbpbkpt0skl5er5pm3q34a3.apps.googleusercontent.com}
+            client-secret: ${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}
+            scope: email, profile
+            redirect-uri: "{baseUrl}/login/oauth2/code/google"
+            authorization-grant-type: authorization_code
+            client-name: Google 
+        provider:
+          github:
+            authorization-uri: https://github.com/login/oauth/authorize
+            token-uri: https://github.com/login/oauth/access_token
+            user-info-uri: https://api.github.com/user
+            user-name-attribute: login
+          google:
+            authorization-uri: https://accounts.google.com/o/oauth2/v2/auth
+            token-uri: https://oauth2.googleapis.com/token
+            user-info-uri: https://openidconnect.googleapis.com/v1/userinfo
+            user-name-attribute: sub
+
+server:
+  port: ${PORT:8080}
+  forward-headers-strategy: FRAMEWORK
+
+jwt:
+  expiration: 3600000
