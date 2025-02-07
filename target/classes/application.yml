@@ -20,18 +20,18 @@ spring:
         registration:
           github:
             client-id: Ov23liTlEqpEsFQSJNOa
-            client-secret: ${74770e9e562615efa43ee154bbeb3673a6199e74}
+            client-secret: ${b51b8b40c0270ebcf7e93c238c7d8eab07a79c06}
             scope: user:email
             redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
             authorization-grant-type: authorization_code
             client-name: GitHub
           google:
-            client-id: ${112517911945-equieu857tbpbkpt0skl5er5pm3q34a3.apps.googleusercontent.com}
-            client-secret: ${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}
+            client-id: ${112517911945-fur5vqq43cbcu0bp61oj6hln9g59qhqi.apps.googleusercontent.com}
+            client-secret: ${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}
             scope: email, profile
             redirect-uri: "{baseUrl}/login/oauth2/code/google"
             authorization-grant-type: authorization_code
-            client-name: Google 
+            client-name: Google
         provider:
           github:
             authorization-uri: https://github.com/login/oauth/authorize
@@ -50,3 +50,8 @@ server:
 
 jwt:
   expiration: 3600000
+  
+stripe:
+ api-key: sk_test_51QSspLAZln8OhRF6Xc2Xqwx7oLzf5LafSH2LqyUWMZ0ooHbS9qQ6OIFQStJSGK6tLB1YN3LImKlHUytwQ2Qya5zf00FQ1IFLQM
+
+

@@ -34,4 +34,8 @@ public interface DigitalWalletRepository extends JpaRepository<DigitalWallets, L
             nativeQuery = true
     )
     Optional<DigitalWallets> getWalletByCode (@Param("code") String code);
+
+    @Query(value = "SELECT * FROM digital_wallets WHERE fk_users = :userId ORDER BY created_at DESC LIMIT 1",
+            nativeQuery = true)
+    Optional<DigitalWallets> findByUserId (@Param("userId") Long userId);
 }
