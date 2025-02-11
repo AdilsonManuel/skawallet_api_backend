@@ -18,6 +18,7 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -176,6 +177,77 @@ public class TransactionService
     public List<Transactions> getTransactionsByUserAndDateRange (Long userId, LocalDateTime startDate, LocalDateTime endDate)
     {
         return transactionRepository.findTransactionsByUserAndDateRange(userId, startDate, endDate);
+    }
+
+    public Transactions updateTransactionStatus (Long transactionId, TransactionStatus newStatus)
+    {
+        Transactions transaction = transactionRepository.findById(transactionId)
+                .orElseThrow(() -> new RuntimeException("Transação não encontrada"));
+
+        transaction.setStatus(newStatus);
+        transactionRepository.save(transaction);
+
+        return transaction;
+    }
+
+    public String generateWithdrawalCode (String walletCode, BigDecimal amount)
+    {
+        DigitalWallets wallet = digitalWalletRepository.getWalletByCode(walletCode)
+                .orElseThrow(() -> new RuntimeException("Carteira não encontrada"));
+
+        if (wallet.getBalance().compareTo(amount) < 0)
+        {
+            throw new RuntimeException("Saldo insuficiente");
+        }
+
+        String withdrawalCode = UUID.randomUUID().toString().substring(0, 8).toUpperCase();
+
+        Transactions transaction = new Transactions();
+        transaction.setAmount(amount);
+        transaction.setTransactionType(TransactionType.WITHDRAWAL);
+        transaction.setStatus(TransactionStatus.PENDING);
+        transaction.setSourceWallet(wallet);
+        transaction.setPaymentMethod(PaymentMethod.DIGITAL_WALLET);
+        transaction.setDescription("Saque via ATM - Código: " + withdrawalCode);
+        transactionRepository.save(transaction);
+
+        wallet.setBalance(wallet.getBalance().subtract(amount));
+        digitalWalletRepository.save(wallet);
+
+        return withdrawalCode;
+    }
+
+    public Transactions transferFunds (String sourceWalletCode, String destinationWalletCode, BigDecimal amount)
+    {
+        DigitalWallets sourceWallet = digitalWalletRepository.getWalletByCode(sourceWalletCode)
+                .orElseThrow(() -> new RuntimeException("Carteira de origem não encontrada"));
+
+        DigitalWallets destinationWallet = digitalWalletRepository.getWalletByCode(destinationWalletCode)
+                .orElseThrow(() -> new RuntimeException("Carteira de destino não encontrada"));
+
+        if (sourceWallet.getBalance().compareTo(amount) < 0)
+        {
+            throw new RuntimeException("Saldo insuficiente para transferência");
+        }
+
+        sourceWallet.setBalance(sourceWallet.getBalance().subtract(amount));
+        destinationWallet.setBalance(destinationWallet.getBalance().add(amount));
+
+        digitalWalletRepository.save(sourceWallet);
+        digitalWalletRepository.save(destinationWallet);
+
+        // Criar e salvar a transação
+        Transactions transaction = new Transactions();
+        transaction.setAmount(amount);
+        transaction.setTransactionType(TransactionType.TRANSFER);
+        transaction.setStatus(TransactionStatus.COMPLETED);
+        transaction.setSourceWallet(sourceWallet);
+        transaction.setDestinationWallet(destinationWallet);
+        transaction.setDescription("Transferência entre carteiras digitais");
+        transactionRepository.save(transaction);
+
+        transactionHistoryService.saveHistory(transaction, EventType.CREATED);
+        return transaction;
     }
 
 }

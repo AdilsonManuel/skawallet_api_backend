@@ -6,14 +6,17 @@ package com.ucan.skawallet.back.end.skawallet.controller;
 
 import com.ucan.skawallet.back.end.skawallet.dto.TransactionDTO;
 import com.ucan.skawallet.back.end.skawallet.dto.TransactionResponseDTO;
+import com.ucan.skawallet.back.end.skawallet.enums.TransactionStatus;
 import com.ucan.skawallet.back.end.skawallet.model.Transactions;
 import com.ucan.skawallet.back.end.skawallet.service.TransactionService;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -92,10 +95,44 @@ public class TransactionController
             @PathVariable Long userId,
             @RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
             @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate)
-    {   
+    {
 
         List<Transactions> transactions = transactionService.getTransactionsByUserAndDateRange(userId, startDate, endDate);
         return ResponseEntity.ok(transactions);
+    }
+
+    @PatchMapping("/{transactionId}/status")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Transactions> updateTransactionStatus (
+            @PathVariable Long transactionId,
+            @RequestParam TransactionStatus newStatus)
+    {
+
+        Transactions updatedTransaction = transactionService.updateTransactionStatus(transactionId, newStatus);
+        return ResponseEntity.ok(updatedTransaction);
+    }
+
+    @PostMapping("/{walletCode}/withdrawal")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<String> generateWithdrawalCode (
+            @PathVariable String walletCode,
+            @RequestParam BigDecimal amount)
+    {
+
+        String withdrawalCode = transactionService.generateWithdrawalCode(walletCode, amount);
+        return ResponseEntity.ok("Código de levantamento: " + withdrawalCode);
+    }
+
+    @PostMapping("/{walletCode}/transfer")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<Transactions> transferFunds (
+            @PathVariable String walletCode,
+            @RequestParam String destinationWalletCode,
+            @RequestParam BigDecimal amount)
+    {
+
+        Transactions transaction = transactionService.transferFunds(walletCode, destinationWalletCode, amount);
+        return ResponseEntity.ok(transaction);
     }
 
 }

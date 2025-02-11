@@ -91,4 +91,12 @@ public class DigitalWalletController
     {
         return ResponseEntity.ok(digitalWalletService.getWalletByCode(walletCode));
     }
+
+    @GetMapping("/")
+    public ResponseEntity<List<DigitalWallets>> getAllWallets ()
+    {
+        List<DigitalWallets> wallets = digitalWalletService.getAllWallets();
+        return ResponseEntity.ok(wallets);
+    }
+    
 }

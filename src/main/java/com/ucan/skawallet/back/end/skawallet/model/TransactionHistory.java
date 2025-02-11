@@ -52,4 +52,10 @@ public class TransactionHistory
     @Builder.Default
     @Column(name = "timestamp", nullable = false)
     private LocalDateTime timestamp = LocalDateTime.now();
+
+    public TransactionHistory (Transactions transaction)
+    {
+        this.transaction = transaction;
+        this.timestamp = LocalDateTime.now();
+    }
 }

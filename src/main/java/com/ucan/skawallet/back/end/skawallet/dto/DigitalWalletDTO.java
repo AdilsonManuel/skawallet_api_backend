@@ -22,4 +22,6 @@ public class DigitalWalletDTO
     private String currency;
     private Boolean isDefault;
     private Long userId; // ID do usuário associado à carteira
+    private Long pk_digital_wallets;
+
 }

@@ -8,9 +8,11 @@ import com.ucan.skawallet.back.end.skawallet.enums.EventType;
 import com.ucan.skawallet.back.end.skawallet.model.TransactionHistory;
 import com.ucan.skawallet.back.end.skawallet.model.Transactions;
 import com.ucan.skawallet.back.end.skawallet.repository.TransactionHistoryRepository;
+//import com.ucan.skawallet.back.end.skawallet.security.config.TransactionProducer;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -18,7 +20,11 @@ import org.springframework.stereotype.Service;
 public class TransactionHistoryService
 {
 
+    @Autowired
     private final TransactionHistoryRepository repository;
+
+//    @Autowired
+//    private final TransactionProducer transactionProducer; // ✅ Adicionando a variável
 
     public void save (TransactionHistory history)
     {
@@ -48,4 +54,23 @@ public class TransactionHistoryService
 
         repository.save(history);
     }
+
+//    @Transactional
+//    public TransactionHistory createTransaction (TransactionDTO transactionDTO)
+//    {
+//        Transactions transaction = new Transactions();
+//        transaction.setAmount(transactionDTO.getAmount());
+//        transaction.setTransactionType(transactionDTO.getTransactionType());
+//        transaction.setStatus(TransactionStatus.PENDING);
+//
+//        TransactionHistory history = new TransactionHistory(transaction);
+//
+//        // Persistir transação no banco
+//        TransactionHistory savedHistory = repository.save(history);
+//
+//        // Enviar evento ao Kafka
+//        transactionProducer.sendTransactionEvent(savedHistory);
+//
+//        return savedHistory;
+//    }
 }

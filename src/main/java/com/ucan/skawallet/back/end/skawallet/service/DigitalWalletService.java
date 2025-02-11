@@ -120,4 +120,9 @@ public class DigitalWalletService
         return digitalWalletRepository.getWalletByCode(walletCode)
                 .orElseThrow(() -> new RuntimeException("Carteira não encontrada com o código: " + walletCode));
     }
+
+    public List<DigitalWallets> getAllWallets ()
+    {
+        return digitalWalletRepository.findAll();
+    }
 }
