@@ -73,10 +73,10 @@ public class DigitalWalletController
     }
 
     @GetMapping("/balance/{walletId}")
-    public ResponseEntity<Map<String, Object>> getWalletBalance (@PathVariable Long walletId)
+    public ResponseEntity<Map<String, Object>> getWalletBalance (@PathVariable String walletId)
     {
         System.err.println("com.ucan.skawallet.back.end.skawallet.controller.DigitalWalletController.getWalletBalance()" + walletId);
-        DigitalWallets digitalWallets = digitalWalletService.findById(walletId);
+        DigitalWallets digitalWallets = digitalWalletService.getWalletByCode(walletId);
 
         Map<String, Object> response = new HashMap<>();
         response.put("walletId", digitalWallets.getPk_digital_wallets());
@@ -98,5 +98,5 @@ public class DigitalWalletController
         List<DigitalWallets> wallets = digitalWalletService.getAllWallets();
         return ResponseEntity.ok(wallets);
     }
-    
+
 }

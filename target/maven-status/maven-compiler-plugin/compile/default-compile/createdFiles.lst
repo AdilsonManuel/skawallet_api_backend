@@ -31,6 +31,7 @@ com/ucan/skawallet/back/end/skawallet/enums/WalletType.class
 com/ucan/skawallet/back/end/skawallet/service/PartnerService.class
 com/ucan/skawallet/back/end/skawallet/controller/PaymentStripeController.class
 com/ucan/skawallet/back/end/skawallet/repository/TransactionRepository.class
+com/ucan/skawallet/back/end/skawallet/dto/DepositRequestDTO.class
 com/ucan/skawallet/back/end/skawallet/controller/TransactionController.class
 com/ucan/skawallet/back/end/skawallet/enums/TokenStatus.class
 com/ucan/skawallet/back/end/skawallet/repository/UserTokenRepository.class

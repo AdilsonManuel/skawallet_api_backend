@@ -47,6 +47,7 @@
 /home/azm/NetBeansProjects/skawallet_api_backend/src/main/java/com/ucan/skawallet/back/end/skawallet/service/PaymentService.java
 /home/azm/NetBeansProjects/skawallet_api_backend/src/main/java/com/ucan/skawallet/back/end/skawallet/repository/PaymentProvider.java
 /home/azm/NetBeansProjects/skawallet_api_backend/src/main/java/com/ucan/skawallet/back/end/skawallet/repository/TransactionHistoryRepository.java
+/home/azm/NetBeansProjects/skawallet_api_backend/src/main/java/com/ucan/skawallet/back/end/skawallet/dto/DepositRequestDTO.java
 /home/azm/NetBeansProjects/skawallet_api_backend/src/main/java/com/ucan/skawallet/back/end/skawallet/enums/TransactionType.java
 /home/azm/NetBeansProjects/skawallet_api_backend/src/main/java/com/ucan/skawallet/back/end/skawallet/service/TransactionHistoryService.java
 /home/azm/NetBeansProjects/skawallet_api_backend/src/main/java/com/ucan/skawallet/back/end/skawallet/model/Transactions.java

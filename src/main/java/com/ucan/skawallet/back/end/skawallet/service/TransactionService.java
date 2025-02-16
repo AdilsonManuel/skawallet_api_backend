@@ -4,6 +4,7 @@
  */
 package com.ucan.skawallet.back.end.skawallet.service;
 
+import com.ucan.skawallet.back.end.skawallet.dto.DepositRequestDTO;
 import com.ucan.skawallet.back.end.skawallet.dto.TransactionDTO;
 import com.ucan.skawallet.back.end.skawallet.dto.TransactionResponseDTO;
 import com.ucan.skawallet.back.end.skawallet.enums.EventType;
@@ -21,9 +22,11 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class TransactionService
@@ -248,6 +251,56 @@ public class TransactionService
 
         transactionHistoryService.saveHistory(transaction, EventType.CREATED);
         return transaction;
+    }
+
+    @Transactional
+    public Transactions topUpWallet (DepositRequestDTO request)
+    {
+
+        log.info("Iniciando carregamento da carteira: {}", request);
+
+        // Validar carteira
+        DigitalWallets wallet = digitalWalletRepository.getWalletByCode(request.getWalletCode())
+                .orElseThrow(() -> new RuntimeException("Carteira não encontrada para o código fornecido"));
+
+        // Simular validação de cartão (Em um cenário real, aqui chamaria a API do banco)
+        if (!validateCard(request.getCardNumber(), request.getExpiryDate(), request.getCvv()))
+        {
+            throw new RuntimeException("Falha na validação do cartão. Verifique os dados e tente novamente.");
+        }
+
+        // Atualizar saldo da carteira
+        BigDecimal newBalance = wallet.getBalance().add(request.getAmount());
+        wallet.setBalance(newBalance);
+        digitalWalletRepository.save(wallet);
+
+        // Registrar transação
+        Transactions transaction = new Transactions();
+        transaction.setAmount(request.getAmount());
+        transaction.setTransactionType(TransactionType.DEPOSIT);
+        transaction.setStatus(TransactionStatus.COMPLETED);
+        transaction.setCreatedAt(LocalDateTime.now());
+        transaction.setDestinationWallet(wallet);
+        transaction.setPaymentMethod(PaymentMethod.CARD);
+        transaction.setDescription("Carregamento de carteira via cartão " + maskCardNumber(request.getCardNumber()));
+
+        transactionRepository.save(transaction);
+
+        log.info("Carregamento concluído com sucesso. Novo saldo: {}", newBalance);
+        return transaction;
+    }
+
+    // Simulação de validação de cartão
+    private boolean validateCard (String cardNumber, String expiryDate, String cvv)
+    {
+        log.info("Validando cartão de crédito...");
+        return cardNumber.length() == 16 && expiryDate.matches("(0[1-9]|1[0-2])\\/(\\d{2})") && cvv.length() == 3;
+    }
+
+    // Método para mascarar o número do cartão ao armazenar em logs
+    private String maskCardNumber (String cardNumber)
+    {
+        return "**** **** **** " + cardNumber.substring(cardNumber.length() - 4);
     }
 
 }

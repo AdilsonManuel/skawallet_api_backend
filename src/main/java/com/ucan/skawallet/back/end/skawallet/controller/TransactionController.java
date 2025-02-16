@@ -4,11 +4,13 @@
  */
 package com.ucan.skawallet.back.end.skawallet.controller;
 
+import com.ucan.skawallet.back.end.skawallet.dto.DepositRequestDTO;
 import com.ucan.skawallet.back.end.skawallet.dto.TransactionDTO;
 import com.ucan.skawallet.back.end.skawallet.dto.TransactionResponseDTO;
 import com.ucan.skawallet.back.end.skawallet.enums.TransactionStatus;
 import com.ucan.skawallet.back.end.skawallet.model.Transactions;
 import com.ucan.skawallet.back.end.skawallet.service.TransactionService;
+import jakarta.validation.Valid;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -132,6 +134,13 @@ public class TransactionController
     {
 
         Transactions transaction = transactionService.transferFunds(walletCode, destinationWalletCode, amount);
+        return ResponseEntity.ok(transaction);
+    }
+
+    @PostMapping("/top-up")
+    public ResponseEntity<Transactions> topUpWallet (@Valid @RequestBody DepositRequestDTO request)
+    {
+        Transactions transaction = transactionService.topUpWallet(request);
         return ResponseEntity.ok(transaction);
     }
 

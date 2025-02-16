@@ -125,4 +125,5 @@ public class DigitalWalletService
     {
         return digitalWalletRepository.findAll();
     }
+    
 }
