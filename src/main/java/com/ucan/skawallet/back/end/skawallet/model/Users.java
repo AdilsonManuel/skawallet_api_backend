@@ -4,9 +4,10 @@
  */
 package com.ucan.skawallet.back.end.skawallet.model;
 
+import com.ucan.skawallet.back.end.skawallet.enums.KYCStatus;
 import com.ucan.skawallet.back.end.skawallet.enums.UserType;
-import java.time.LocalDateTime;
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Collections;
 import lombok.Data;
@@ -52,8 +53,15 @@ public class Users implements UserDetails
     @Column(name = "last_login")
     private LocalDateTime lastLogin;
 
+    @Enumerated(EnumType.STRING)
+    private KYCStatus kycStatus = KYCStatus.PENDING; // Padrão: Pendente
+
+    private String idDocument; // Documento de Identificação
+    private String selfieUrl;  // URL da Selfie enviada para verificação
+    private String verificationCode; // Código para ativação da conta
+
     @Override
-    public Collection<? extends GrantedAuthority> getAuthorities()
+    public Collection<? extends GrantedAuthority> getAuthorities ()
     {
 
         SimpleGrantedAuthority simpleGrantedAuthority = new SimpleGrantedAuthority(name);
@@ -62,31 +70,31 @@ public class Users implements UserDetails
     }
 
     @Override
-    public String getUsername()
+    public String getUsername ()
     {
         return name;
     }
 
     @Override
-    public boolean isAccountNonExpired()
+    public boolean isAccountNonExpired ()
     {
         return true;
     }
 
     @Override
-    public boolean isAccountNonLocked()
+    public boolean isAccountNonLocked ()
     {
         return locked == null;
     }
 
     @Override
-    public boolean isCredentialsNonExpired()
+    public boolean isCredentialsNonExpired ()
     {
         return true;
     }
 
     @Override
-    public boolean isEnabled()
+    public boolean isEnabled ()
     {
         return enabled;
     }

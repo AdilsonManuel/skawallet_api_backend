@@ -12,7 +12,9 @@ import com.ucan.skawallet.back.end.skawallet.security.token.JwtUtil;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -27,6 +29,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @AllArgsConstructor
+@Slf4j
 public class UserService implements UserDetailsService
 {
 
@@ -36,6 +39,7 @@ public class UserService implements UserDetailsService
     private final static String USER_NOT_FOUND_MSG = "User With name %s not found";
     private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     private final JwtUtil jwtUtil;
+    private final EmailService emailService;
 
     public List<Users> ListUsers ()
     {
@@ -44,7 +48,20 @@ public class UserService implements UserDetailsService
 
     public Users saveUser (Users user)
     {
-        return userRepository.save(user);
+        System.err.println("1 - UserService.saveUser->" + user);
+        user.setVerificationCode(generateVerificationCode());
+        user.setEnabled(Boolean.FALSE);
+
+        System.err.println("2 - UserService.saveUser->" + user);
+
+        userRepository.save(user);
+
+        // Enviar e-mail de ativação
+        emailService.sendVerificationEmail(user.getEmail(), user.getVerificationCode());
+
+        log.info("🆕 Usuário cadastrado: {} (aguardando ativação)", user.getEmail());
+
+        return user;
     }
 
     public Optional<Users> getUserById (Long pkUsers)
@@ -135,6 +152,11 @@ public class UserService implements UserDetailsService
         userTokenRepository.save(userToken);
 
         return token;
+    }
+
+    private String generateVerificationCode ()
+    {
+        return String.format("%06d", new Random().nextInt(999999));
     }
 
 }

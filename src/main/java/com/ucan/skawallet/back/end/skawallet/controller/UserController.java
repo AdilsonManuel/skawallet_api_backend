@@ -5,13 +5,14 @@
 package com.ucan.skawallet.back.end.skawallet.controller;
 
 import com.ucan.skawallet.back.end.skawallet.model.Users;
+import com.ucan.skawallet.back.end.skawallet.repository.UserRepository;
 import com.ucan.skawallet.back.end.skawallet.service.UserService;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -22,23 +23,28 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/*/users")
 @AllArgsConstructor
+@Slf4j
 public class UserController
 {
 
     @Autowired
     private final UserService userService;
+    private final UserRepository userRepository;
 
     private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     // 1. Criar um novo usuário
     @PostMapping("/registration")
-    public ResponseEntity<?> registUser(@RequestBody Users user)
+    public ResponseEntity<?> registUser (@RequestBody Users user)
     {
+        System.err.println("UserController.registUser()->" + user);
         if (user.getName() == null || user.getName().isEmpty())
         {
             return new ResponseEntity<>("Username is required", HttpStatus.BAD_REQUEST);
@@ -64,7 +70,7 @@ public class UserController
 
     // 2. Obter usuário por ID
     @GetMapping("/{pk_users}")
-    public ResponseEntity<?> getUserById(@PathVariable("pk_users") Long pk_users)
+    public ResponseEntity<?> getUserById (@PathVariable("pk_users") Long pk_users)
     {
         Optional<Users> user = userService.getUserById(pk_users);
         if (user.isPresent())
@@ -79,7 +85,7 @@ public class UserController
 
     // 3. Obter todos os usuários
     @GetMapping("/")
-    public ResponseEntity<List<Users>> getAllUsers()
+    public ResponseEntity<List<Users>> getAllUsers ()
     {
         List<Users> users = userService.ListUsers();
 
@@ -88,7 +94,7 @@ public class UserController
 
     // 4. Actualizar usuário
     @PatchMapping("/{pk_users}")
-    public ResponseEntity<?> updateUser(@PathVariable Long pk_users, @RequestBody Users user)
+    public ResponseEntity<?> updateUser (@PathVariable Long pk_users, @RequestBody Users user)
     {
         Optional<Users> existingUser = userService.getUserById(pk_users);
         if (existingUser.isPresent())
@@ -118,7 +124,7 @@ public class UserController
 
     // 5. Deletar usuário
     @DeleteMapping("/{pk_users}")
-    public ResponseEntity<?> deleteUser(@PathVariable Long pk_users)
+    public ResponseEntity<?> deleteUser (@PathVariable Long pk_users)
     {
         Optional<Users> user = userService.getUserById(pk_users);
         if (user.isPresent())
@@ -129,6 +135,27 @@ public class UserController
         else
         {
             return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping("/verify")
+    public ResponseEntity<String> verifyUser (@RequestParam String code)
+    {
+        Optional<Users> userOpt = userRepository.findByVerificationCode(code);
+
+        if (userOpt.isPresent())
+        {
+            Users user = userOpt.get();
+            user.setEnabled(true);  // Ativar conta
+            user.setVerificationCode(null);
+            userRepository.save(user);
+            log.info("✅ Conta ativada: {}", user.getEmail());
+            return ResponseEntity.ok("Conta ativada com sucesso!");
+        }
+        else
+        {
+            log.warn("⚠ Código de verificação inválido: {}", code);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Código inválido.");
         }
     }
 }

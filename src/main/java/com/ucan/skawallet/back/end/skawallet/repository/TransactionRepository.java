@@ -6,6 +6,7 @@ package com.ucan.skawallet.back.end.skawallet.repository;
 
 import com.ucan.skawallet.back.end.skawallet.model.DigitalWallets;
 import com.ucan.skawallet.back.end.skawallet.model.Transactions;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -53,4 +54,11 @@ public interface TransactionRepository extends JpaRepository<Transactions, Long>
             @Param("startDate") LocalDateTime startDate,
             @Param("endDate") LocalDateTime endDate);
 
+    // Contar transações de alto valor feitas nos últimos 30 minutos
+    @Query("SELECT COUNT(t) FROM Transactions t WHERE t.sourceWallet.user.pkUsers = :userId AND t.createdAt >= :startTime AND t.amount >= :threshold")
+    Long countHighValueTransactions (@Param("userId") Long userId, @Param("startTime") LocalDateTime startTime, @Param("threshold") BigDecimal threshold);
+
+    // Média de valores das transações do usuário
+    @Query("SELECT COALESCE(AVG(t.amount), 0) FROM Transactions t WHERE t.sourceWallet.user.pkUsers = :userId")
+    BigDecimal getUserAverageTransactionAmount (@Param("userId") Long userId);
 }

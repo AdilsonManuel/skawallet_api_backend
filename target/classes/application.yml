@@ -8,6 +8,18 @@ spring:
     password: ${DATABASE_PASSWORD:admin}
     driver-class-name: org.postgresql.Driver
 
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${MAIL_USERNAME:gepemed2025@gmail.com}
+    password: ${MAIL_PASSWORD:Gepe@2025}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true   
+
   jpa:
     hibernate:
       ddl-auto: update
@@ -57,13 +69,13 @@ jwt:
 stripe:
   api-key: ${STRIPE_API_KEY:sk_test_51QSspLAZln8OhRF6Xc2Xqwx7oLzf5LafSH2LqyUWMZ0ooHbS9qQ6OIFQStJSGK6tLB1YN3LImKlHUytwQ2Qya5zf00FQ1IFLQM}
 
-#  kafka:
-#    bootstrap-servers: localhost:9092
-#    consumer:
-#      group-id: skawallet-group
-#      auto-offset-reset: earliest
-#    producer:
-#      key-serializer: org.apache.kafka.common.serialization.StringSerializer
-#      value-serializer: org.apache.kafka.common.serialization.StringSerializer
-#    consumer-properties:
-#      spring.json.trusted.packages: "*"
+# kafka:
+#   bootstrap-servers: localhost:9092
+#   consumer:
+#     group-id: skawallet-group
+#     auto-offset-reset: earliest
+#   producer:
+#     key-serializer: org.apache.kafka.common.serialization.StringSerializer
+#     value-serializer: org.apache.kafka.common.serialization.StringSerializer
+#   consumer-properties:
+#     spring.json.trusted.packages: "*"
