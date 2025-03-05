@@ -1,0 +1,18 @@
+## YAML Template.
+---
+spring:
+  mail:
+    host: smtp.mailtrap.io
+    port: 2525
+    username: ${f70d5dc7961129}
+    password:  ${97390194f71383}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            
+  email:
+    from: "no-reply@skawallet.com"
+    activation-url: "http://skawallet-backend-api.onrender.com/api/v1/users/activate?code="
