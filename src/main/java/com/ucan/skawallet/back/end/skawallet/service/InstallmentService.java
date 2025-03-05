@@ -66,7 +66,7 @@ public class InstallmentService
         List<DigitalWallets> wallet = digitalWalletRepository.findByUser(installment.getUser());
 
         if (wallet.isEmpty())
-        {
+        {  
             throw new RuntimeException("Nenhuma carteira encontrada para este usuário.");
         }
 
