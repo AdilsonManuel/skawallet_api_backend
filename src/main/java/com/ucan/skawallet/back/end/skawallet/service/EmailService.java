@@ -6,6 +6,7 @@ package com.ucan.skawallet.back.end.skawallet.service;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -14,56 +15,51 @@ import org.springframework.stereotype.Service;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class EmailService
 {
 
     private final JavaMailSender mailSender;
 
-    @Value("${spring.mail.username}")
+    @Value("${spring.email.from}")
     private String fromEmail;
 
-    public EmailService (JavaMailSender mailSender)
+    @Value("${spring.email.activation-url}")
+    private String activationUrl;
+
+    public void sendAccountActivationEmail(String recipientEmail, String activationCode)
     {
-        this.mailSender = mailSender;
-    }
+        String subject = "Activação de Conta - SkaWallet";
+        String activationLink = activationUrl + activationCode;
 
-    public void sendVerificationEmail (String toEmail, String verificationCode)
-    {
-        String subject = "Ativação da Conta - Skawallet";
-        String message = String.format("""
-                Olá,
+        String content = """
+                <html>
+                <body>
+                    <h2>Bem-vindo à SkaWallet!</h2>
+                    <p>Clique no link abaixo para activar sua conta:</p>
+                    <a href="%s">Activar Conta</a>
+                    <br/><br/>
+                    <p>Se você não solicitou este cadastro, ignore este e-mail.</p>
+                </body>
+                </html>
+                """.formatted(activationLink);
 
-                Obrigado por se cadastrar na Skawallet! 
-                Para ativar sua conta, clique no link abaixo:
-
-                http://localhost:8080/api/v1/users/verify?code=%s
-
-                Se você não solicitou este cadastro, ignore este e-mail.
-
-                Atenciosamente,
-                Equipe Skawallet
-                """, verificationCode);
-
-        sendEmail(toEmail, subject, message);
-    }
-
-    public void sendEmail (String toEmail, String subject, String message)
-    {
         try
         {
-            MimeMessage mimeMessage = mailSender.createMimeMessage();
-            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
-            helper.setText(message, false);
-            helper.setTo(toEmail);
-            helper.setSubject(subject);
-            helper.setFrom(fromEmail);
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
 
-            mailSender.send(mimeMessage);
-            log.info("📧 E-mail enviado para: {}", toEmail);
+            helper.setFrom(fromEmail);
+            helper.setTo(recipientEmail);
+            helper.setSubject(subject);
+            helper.setText(content, true);
+
+            mailSender.send(message);
+            log.info("E-mail enviado com sucesso para {}", recipientEmail);
         }
         catch (MessagingException e)
         {
-            log.error("❌ Erro ao enviar e-mail: {}", e.getMessage());
+            log.error("Erro ao enviar e-mail: {}", e.getMessage());
         }
     }
 }

@@ -41,12 +41,23 @@ public class UserService implements UserDetailsService
     private final JwtUtil jwtUtil;
     private final EmailService emailService;
 
-    public List<Users> ListUsers ()
+    public List<Users> ListUsers()
     {
         return userRepository.findAll();
     }
 
-    public Users saveUser (Users user)
+    public boolean activateUser(String code)
+    {
+        Users user = userRepository.findByVerificationCode(code)
+                .orElseThrow(() -> new RuntimeException("Código de ativação inválido"));
+
+        user.setEnabled(true);
+        user.setVerificationCode(null);
+        userRepository.save(user);
+        return true;
+    }
+
+    public Users saveUser(Users user)
     {
         System.err.println("1 - UserService.saveUser->" + user);
         user.setVerificationCode(generateVerificationCode());
@@ -57,35 +68,35 @@ public class UserService implements UserDetailsService
         userRepository.save(user);
 
         // Enviar e-mail de ativação
-        emailService.sendVerificationEmail(user.getEmail(), user.getVerificationCode());
+        emailService.sendAccountActivationEmail(user.getEmail(), user.getVerificationCode());
 
         log.info("🆕 Usuário cadastrado: {} (aguardando ativação)", user.getEmail());
 
         return user;
     }
 
-    public Optional<Users> getUserById (Long pkUsers)
+    public Optional<Users> getUserById(Long pkUsers)
     {
         return userRepository.findById(pkUsers);
     }
 
-    public Optional<Users> getUserByEmail (String email)
+    public Optional<Users> getUserByEmail(String email)
     {
         return userRepository.findByEmail(email);
     }
 
-    public void deleteUser (Long pkUsers)
+    public void deleteUser(Long pkUsers)
     {
         userRepository.deleteById(pkUsers);
     }
 
     @Override
-    public UserDetails loadUserByUsername (String email) throws UsernameNotFoundException
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException
     {
         return userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException(String.format(USER_NOT_FOUND_MSG, email)));
     }
 
-    public Optional<Users> findByUsername (String username)
+    public Optional<Users> findByUsername(String username)
     {
         // Lógica para buscar o usuário
         return userRepository.findByName(username);
@@ -96,7 +107,7 @@ public class UserService implements UserDetailsService
 //        return userRepository.findByName(identifier)
 //                .or(() -> userRepository.findByPhone(identifier));
 //    }
-    public String authenticate (String identifier, String password)
+    public String authenticate(String identifier, String password)
     {
         // Buscar o usuário com base no identifier (nome ou telefone)
         Users user = findUserByIdentifier(identifier);
@@ -117,7 +128,7 @@ public class UserService implements UserDetailsService
     }
 
 // Método para buscar usuário pelo identifier
-    public Users findUserByIdentifier (String identifier)
+    public Users findUserByIdentifier(String identifier)
     {
         return userRepository.findByName(identifier)
                 .or(() -> userRepository.findByPhone(identifier))
@@ -126,7 +137,7 @@ public class UserService implements UserDetailsService
     }
 
 // Método para validar a senha
-    private void validatePassword (String rawPassword, Users user)
+    private void validatePassword(String rawPassword, Users user)
     {
         if (!passwordEncoder.matches(rawPassword, user.getPassword()))
         {
@@ -135,7 +146,7 @@ public class UserService implements UserDetailsService
     }
 
 // Método para gerar e salvar o token
-    private String generateAndSaveToken (Users user)
+    private String generateAndSaveToken(Users user)
     {
         // Criar as roles com base no tipo de usuário
         List<String> roles = List.of(user.getType().name());
@@ -154,7 +165,7 @@ public class UserService implements UserDetailsService
         return token;
     }
 
-    private String generateVerificationCode ()
+    private String generateVerificationCode()
     {
         return String.format("%06d", new Random().nextInt(999999));
     }

@@ -42,7 +42,7 @@ public class UserController
 
     // 1. Criar um novo usuário
     @PostMapping("/registration")
-    public ResponseEntity<?> registUser (@RequestBody Users user)
+    public ResponseEntity<?> registUser(@RequestBody Users user)
     {
         System.err.println("UserController.registUser()->" + user);
         if (user.getName() == null || user.getName().isEmpty())
@@ -70,7 +70,7 @@ public class UserController
 
     // 2. Obter usuário por ID
     @GetMapping("/{pk_users}")
-    public ResponseEntity<?> getUserById (@PathVariable("pk_users") Long pk_users)
+    public ResponseEntity<?> getUserById(@PathVariable("pk_users") Long pk_users)
     {
         Optional<Users> user = userService.getUserById(pk_users);
         if (user.isPresent())
@@ -85,7 +85,7 @@ public class UserController
 
     // 3. Obter todos os usuários
     @GetMapping("/")
-    public ResponseEntity<List<Users>> getAllUsers ()
+    public ResponseEntity<List<Users>> getAllUsers()
     {
         List<Users> users = userService.ListUsers();
 
@@ -94,7 +94,7 @@ public class UserController
 
     // 4. Actualizar usuário
     @PatchMapping("/{pk_users}")
-    public ResponseEntity<?> updateUser (@PathVariable Long pk_users, @RequestBody Users user)
+    public ResponseEntity<?> updateUser(@PathVariable Long pk_users, @RequestBody Users user)
     {
         Optional<Users> existingUser = userService.getUserById(pk_users);
         if (existingUser.isPresent())
@@ -124,7 +124,7 @@ public class UserController
 
     // 5. Deletar usuário
     @DeleteMapping("/{pk_users}")
-    public ResponseEntity<?> deleteUser (@PathVariable Long pk_users)
+    public ResponseEntity<?> deleteUser(@PathVariable Long pk_users)
     {
         Optional<Users> user = userService.getUserById(pk_users);
         if (user.isPresent())
@@ -139,7 +139,7 @@ public class UserController
     }
 
     @GetMapping("/verify")
-    public ResponseEntity<String> verifyUser (@RequestParam String code)
+    public ResponseEntity<String> verifyUser(@RequestParam String code)
     {
         Optional<Users> userOpt = userRepository.findByVerificationCode(code);
 
@@ -157,5 +157,13 @@ public class UserController
             log.warn("⚠ Código de verificação inválido: {}", code);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Código inválido.");
         }
+    }
+
+    @GetMapping("/activate")
+    public ResponseEntity<String> activateUser(@RequestParam String code)
+    {
+        boolean activated = userService.activateUser(code);
+        return activated ? ResponseEntity.ok("Conta activada com sucesso!")
+                : ResponseEntity.badRequest().body("Código de activação inválido.");
     }
 }

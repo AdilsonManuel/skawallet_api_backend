@@ -9,16 +9,20 @@ spring:
     driver-class-name: org.postgresql.Driver
 
   mail:
-    host: smtp.gmail.com
-    port: 587
-    username: ${MAIL_USERNAME:gepemed2025@gmail.com}
-    password: ${MAIL_PASSWORD:Gepe@2025}
+    host: smtp.mailtrap.io
+    port: 2525
+    username: f70d5dc7961129
+    password: 97390194f71383
     properties:
       mail:
         smtp:
           auth: true
           starttls:
-            enable: true   
+            enable: true
+            
+  email:
+    from: "no-reply@skawallet.com"
+    activation-url: "http://localhost:8080/api/v1/users/activate?code="
 
   jpa:
     hibernate:
