@@ -1,0 +1,81 @@
+spring:
+  application:
+    name: skawallet
+
+  datasource:
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/skawallet_db}
+    username: ${DATABASE_USERNAME:admin}
+    password: ${DATABASE_PASSWORD:admin}
+    driver-class-name: org.postgresql.Driver
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${MAIL_USERNAME:gepemed2025@gmail.com}
+    password: ${MAIL_PASSWORD:Gepe@2025}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true   
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+    show-sql: true
+
+  security:
+    oauth2:
+      client:
+        registration:
+          github:
+            client-id: Ov23liTlEqpEsFQSJNOa
+            client-secret: ${GITHUB_SECRET:b51b8b40c0270ebcf7e93c238c7d8eab07a79c06}
+            scope: user:email
+            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+            authorization-grant-type: authorization_code
+            client-name: GitHub
+          google:
+            client-id: ${GOOGLE_CLIENT_ID:112517911945-fur5vqq43cbcu0bp61oj6hln9g59qhqi.apps.googleusercontent.com}
+            client-secret: ${GOOGLE_SECRET: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}
+            scope: email, profile
+            redirect-uri: "{baseUrl}/login/oauth2/code/google"
+            authorization-grant-type: authorization_code
+            client-name: Google
+        provider:
+          github:
+            authorization-uri: https://github.com/login/oauth/authorize
+            token-uri: https://github.com/login/oauth/access_token
+            user-info-uri: https://api.github.com/user
+            user-name-attribute: login
+          google:
+            authorization-uri: https://accounts.google.com/o/oauth2/v2/auth
+            token-uri: https://oauth2.googleapis.com/token
+            user-info-uri: https://openidconnect.googleapis.com/v1/userinfo
+            user-name-attribute: sub
+
+server:
+  port: ${PORT:8080}
+  forward-headers-strategy: FRAMEWORK
+
+jwt:
+  expiration: 3600000
+
+stripe:
+  api-key: ${STRIPE_API_KEY:sk_test_51QSspLAZln8OhRF6Xc2Xqwx7oLzf5LafSH2LqyUWMZ0ooHbS9qQ6OIFQStJSGK6tLB1YN3LImKlHUytwQ2Qya5zf00FQ1IFLQM}
+
+# kafka:
+#   bootstrap-servers: localhost:9092
+#   consumer:
+#     group-id: skawallet-group
+#     auto-offset-reset: earliest
+#   producer:
+#     key-serializer: org.apache.kafka.common.serialization.StringSerializer
+#     value-serializer: org.apache.kafka.common.serialization.StringSerializer
+#   consumer-properties:
+#     spring.json.trusted.packages: "*"
