@@ -39,7 +39,7 @@ public class UserService implements UserDetailsService
     private final static String USER_NOT_FOUND_MSG = "User With name %s not found";
     private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     private final JwtUtil jwtUtil;
-//    private final EmailService emailService;
+    private final EmailService emailService;
 
     public List<Users> ListUsers ()
     {
@@ -57,7 +57,7 @@ public class UserService implements UserDetailsService
         userRepository.save(user);
 
         // Enviar e-mail de ativação
-//        emailService.sendVerificationEmail(user.getEmail(), user.getVerificationCode());
+        emailService.sendActivationEmail(user.getEmail(), user.getVerificationCode());
 
         log.info("🆕 Usuário cadastrado: {} (aguardando ativação)", user.getEmail());
 

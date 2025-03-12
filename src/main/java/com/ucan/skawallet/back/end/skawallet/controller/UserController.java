@@ -138,9 +138,11 @@ public class UserController
         }
     }
 
-    @GetMapping("/verify")
+    @GetMapping("/activate")
     public ResponseEntity<String> verifyUser (@RequestParam String code)
     {
+        log.info("Recebido código de activação: {}", code);
+
         Optional<Users> userOpt = userRepository.findByVerificationCode(code);
 
         if (userOpt.isPresent())
@@ -149,8 +151,8 @@ public class UserController
             user.setEnabled(true);  // Ativar conta
             user.setVerificationCode(null);
             userRepository.save(user);
-            log.info("✅ Conta ativada: {}", user.getEmail());
-            return ResponseEntity.ok("Conta ativada com sucesso!");
+            log.info("✅ Conta activada: {}", user.getEmail());
+            return ResponseEntity.ok("Conta activada com sucesso!");
         }
         else
         {
@@ -158,4 +160,5 @@ public class UserController
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Código inválido.");
         }
     }
+
 }
