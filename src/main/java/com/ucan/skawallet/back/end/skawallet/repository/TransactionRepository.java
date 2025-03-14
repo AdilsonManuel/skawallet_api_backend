@@ -4,8 +4,10 @@
  */
 package com.ucan.skawallet.back.end.skawallet.repository;
 
+import com.ucan.skawallet.back.end.skawallet.enums.TransactionStatus;
 import com.ucan.skawallet.back.end.skawallet.model.DigitalWallets;
 import com.ucan.skawallet.back.end.skawallet.model.Transactions;
+import com.ucan.skawallet.back.end.skawallet.model.Users;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -61,4 +63,6 @@ public interface TransactionRepository extends JpaRepository<Transactions, Long>
     // Média de valores das transações do usuário
     @Query("SELECT COALESCE(AVG(t.amount), 0) FROM Transactions t WHERE t.sourceWallet.user.pkUsers = :userId")
     BigDecimal getUserAverageTransactionAmount (@Param("userId") Long userId);
+
+    int countBySourceWallet_UserOrDestinationWallet_UserAndStatus (Users user1, Users user2, TransactionStatus status);
 }
