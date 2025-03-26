@@ -112,4 +112,9 @@ public class InstallmentService
                 user, user, TransactionStatus.COMPLETED);
         return completedTransactions >= 5;
     }
+
+    public List<Installment> getAllInstallments ()
+    {
+        return installmentRepository.findAll();
+    }
 }

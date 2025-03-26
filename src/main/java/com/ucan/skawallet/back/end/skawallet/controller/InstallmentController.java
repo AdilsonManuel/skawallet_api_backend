@@ -8,6 +8,7 @@ import com.ucan.skawallet.back.end.skawallet.dto.InstallmentRequestDTO;
 import com.ucan.skawallet.back.end.skawallet.model.Installment;
 import com.ucan.skawallet.back.end.skawallet.service.InstallmentService;
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -50,5 +51,12 @@ public class InstallmentController
             @RequestParam BigDecimal amount)
     {
         return ResponseEntity.ok(installmentService.payInstallment(installmentId, walletCode, amount));
+    }
+
+    @GetMapping("/installments")
+    public ResponseEntity<List<Installment>> getAllInstallments ()
+    {
+        List<Installment> installments = installmentService.getAllInstallments();
+        return ResponseEntity.ok(installments.isEmpty() ? Collections.emptyList() : installments);
     }
 }
