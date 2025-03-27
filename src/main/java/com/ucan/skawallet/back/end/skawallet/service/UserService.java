@@ -9,6 +9,7 @@ import com.ucan.skawallet.back.end.skawallet.model.Users;
 import com.ucan.skawallet.back.end.skawallet.repository.UserRepository;
 import com.ucan.skawallet.back.end.skawallet.repository.UserTokenRepository;
 import com.ucan.skawallet.back.end.skawallet.security.token.JwtUtil;
+import jakarta.mail.MessagingException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -46,22 +47,31 @@ public class UserService implements UserDetailsService
         return userRepository.findAll();
     }
 
-    public Users saveUser (Users user)
+    /**
+     * Registra um novo usuário e envia o e-mail de ativação.
+     */
+    public Users saveUser (Users user) throws MessagingException
     {
-        System.err.println("1 - UserService.saveUser->" + user);
+        log.info("1️⃣ - Iniciando cadastro do usuário: {}", user.getEmail());
+
+        // Gera o código de verificação e desativa a conta até ativação
         user.setVerificationCode(generateVerificationCode());
-        user.setEnabled(Boolean.FALSE);
+        user.setEnabled(false);
+        user.setLocked(false);
 
-        System.err.println("2 - UserService.saveUser->" + user);
+        log.info("2️⃣ - Código de verificação gerado: {}", user.getVerificationCode());
 
-        userRepository.save(user);
+        // Salva o usuário no banco
+        Users savedUser = userRepository.save(user);
+        log.info("3️⃣ - Usuário {} salvo na base de dados", user.getEmail());
 
+        
+        
         // Enviar e-mail de ativação
         emailService.sendActivationEmail(user.getEmail(), user.getVerificationCode());
+        log.info("📩 E-mail de activação enviado para {}", user.getEmail());
 
-        log.info("🆕 Usuário cadastrado: {} (aguardando ativação)", user.getEmail());
-
-        return user;
+        return savedUser;
     }
 
     public Optional<Users> getUserById (Long pkUsers)

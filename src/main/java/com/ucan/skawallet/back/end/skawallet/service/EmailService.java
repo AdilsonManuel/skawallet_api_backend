@@ -9,6 +9,7 @@ import jakarta.mail.internet.MimeMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -31,7 +32,7 @@ public class EmailService
     @Value("${email.activation-url}")
     private String activationUrl;
 
-    public void sendActivationEmail (String to, String activationCode)
+    public void sendActivationEmail (String to, String activationCode) throws MessagingException
     {
         try
         {
@@ -44,10 +45,12 @@ public class EmailService
                     + "<a href=\"" + activationUrl + activationCode + "\">Activar Conta</a>", true);
 
             mailSender.send(message);
+            log.info("✅ E-mail enviado com sucesso para {}", to);
         }
-        catch (MessagingException e)
+        catch (MailException e)
         {
-            // Trate a exceção conforme necessário
+            log.error("❌ Erro ao enviar e-mail para {}: {}", to, e.getMessage());
+            throw new MessagingException("Não foi possível enviar o e-mail. Verifique se o endereço está correto ou tente novamente mais tarde.");
         }
     }
 

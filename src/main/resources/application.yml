@@ -9,10 +9,10 @@ spring:
     driver-class-name: org.postgresql.Driver
 
   mail:
-    host: sandbox.smtp.mailtrap.io
-    port: 2525
-    username: ${MAIL_USERNAME:f70d5dc7961129}
-    password: ${MAIL_PASSWORD:97390194f71383}
+    host: smtp.gmail.com
+    port: 587
+    username: ${MAIL_USERNAME:skawallet52@gmail.com}
+    password: ${MAIL_PASSWORD:bdqv ruxm ishq mdua}
     properties:
       mail:
         smtp:
@@ -72,3 +72,4 @@ jwt:
 
 stripe:
   api-key: ${STRIPE_API_KEY:sk_test_51QSspLAZln8OhRF6Xc2Xqwx7oLzf5LafSH2LqyUWMZ0ooHbS9qQ6OIFQStJSGK6tLB1YN3LImKlHUytwQ2Qya5zf00FQ1IFLQM}
+

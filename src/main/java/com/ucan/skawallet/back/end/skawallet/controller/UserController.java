@@ -7,6 +7,7 @@ package com.ucan.skawallet.back.end.skawallet.controller;
 import com.ucan.skawallet.back.end.skawallet.model.Users;
 import com.ucan.skawallet.back.end.skawallet.repository.UserRepository;
 import com.ucan.skawallet.back.end.skawallet.service.UserService;
+import jakarta.mail.MessagingException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -62,7 +63,7 @@ public class UserController
             Users newUser = userService.saveUser(user);
             return new ResponseEntity<>(newUser, HttpStatus.CREATED);
         }
-        catch (Exception e)
+        catch (MessagingException e)
         {
             return new ResponseEntity<>("Error creating user", HttpStatus.INTERNAL_SERVER_ERROR);
         }
