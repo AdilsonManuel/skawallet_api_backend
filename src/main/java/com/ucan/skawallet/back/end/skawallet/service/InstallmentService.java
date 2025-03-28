@@ -6,7 +6,6 @@ package com.ucan.skawallet.back.end.skawallet.service;
 
 import com.ucan.skawallet.back.end.skawallet.dto.InstallmentRequestDTO;
 import com.ucan.skawallet.back.end.skawallet.enums.InstallmentStatus;
-import com.ucan.skawallet.back.end.skawallet.enums.TransactionStatus;
 import com.ucan.skawallet.back.end.skawallet.model.DigitalWallets;
 import com.ucan.skawallet.back.end.skawallet.model.Installment;
 import com.ucan.skawallet.back.end.skawallet.model.Partner;
@@ -19,14 +18,11 @@ import com.ucan.skawallet.back.end.skawallet.repository.UserRepository;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-/**
- *
- * @author azm
- */
 @Service
 @RequiredArgsConstructor
 public class InstallmentService
@@ -46,19 +42,17 @@ public class InstallmentService
         Partner partner = partnersRepository.findById(request.getPartnerId())
                 .orElseThrow(() -> new RuntimeException("Parceiro não encontrado."));
 
-        // Simulação de score e elegibilidade
-        if (!isEligibleForInstallments(user))
+        // Avaliação do score de crédito do usuário
+        int userScore = calculateUserScore(user);
+        if (userScore < 70)
         {
-            throw new RuntimeException("Usuário não elegível para parcelamento");
+            throw new RuntimeException("Usuário não elegível para parcelamento. Score de crédito insuficiente: " + userScore);
         }
 
-        int approvedInstallments = request.getInstallments();
-        if (approvedInstallments > 6)
-        {
-            approvedInstallments = 6;
-        }
+        int approvedInstallments = Math.min(request.getInstallments(), 6);
 
-        BigDecimal monthlyPayment = request.getAmount().divide(BigDecimal.valueOf(approvedInstallments), RoundingMode.HALF_UP);
+        BigDecimal monthlyPayment = request.getAmount()
+                .divide(BigDecimal.valueOf(approvedInstallments), RoundingMode.HALF_UP);
         LocalDate firstDueDate = LocalDate.now().plusMonths(1);
 
         Installment installment = new Installment();
@@ -106,11 +100,28 @@ public class InstallmentService
         return installmentRepository.save(installment);
     }
 
-    private boolean isEligibleForInstallments (Users user)
+    public int calculateUserScore (Users user)
     {
-        int completedTransactions = transactionRepository.countBySourceWallet_UserOrDestinationWallet_UserAndStatus(
-                user, user, TransactionStatus.COMPLETED);
-        return completedTransactions >= 5;
+        int score = 0;
+
+        // ✅ Tempo de conta ativa (mais tempo = mais pontos)
+        long accountAgeInDays = ChronoUnit.DAYS.between(user.getCreatedAt(), LocalDate.now());
+        score += (accountAgeInDays / 30) * 5; // 5 pontos a cada mês de conta ativa
+
+//        // ✅ Pagamentos concluídos
+//        int successfulPayments = transactionRepository.countByUserAndStatus(user,TransactionStatus.COMPLETED);
+//        score += successfulPayments * 2; // 2 pontos por pagamento bem-sucedido
+//        // ✅ Recomendações (cada convite gera pontos)
+//        int invitedUsers = referralRepository.countByInviter(user);
+//        score += invitedUsers * 10; // 10 pontos por cada amigo indicado
+        // ✅ Histórico de Parcelamentos (se pagou tudo sem atraso, ganha pontos extras)
+        boolean hasGoodHistory = installmentRepository.countLatePaymentsByUser(user) == 0;
+        if (hasGoodHistory)
+        {
+            score += 30; // Bônus por bom comportamento financeiro
+        }
+
+        return score;
     }
 
     public List<Installment> getAllInstallments ()

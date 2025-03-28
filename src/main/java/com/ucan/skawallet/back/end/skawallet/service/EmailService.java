@@ -34,23 +34,27 @@ public class EmailService
 
     public void sendActivationEmail (String to, String activationCode) throws MessagingException
     {
+        String subject = "Active sua conta na SkaWallet";
+        String message = "<p>Olá,</p>"
+                + "<p>Obrigado por se cadastrar na SkaWallet! Para activar sua conta, clique no link abaixo:</p>"
+                + "<p><a href=\"" + activationUrl + activationCode + "\">Activar Conta</a></p>"
+                + "<p>Se você não se cadastrou, ignore este e-mail.</p>"
+                + "<p>Atenciosamente, <br> Equipe SkaWallet</p>";
         try
         {
-            MimeMessage message = mailSender.createMimeMessage();
-            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+            MimeMessage mimeMessage = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
             helper.setFrom(fromEmail);
             helper.setTo(to);
-            helper.setSubject("Activação de Conta");
-            helper.setText("<p>Para activar sua conta, clique no link abaixo:</p>"
-                    + "<a href=\"" + activationUrl + activationCode + "\">Activar Conta</a>", true);
-
-            mailSender.send(message);
+            helper.setSubject(subject);
+            helper.setText(message, true);
+            mailSender.send(mimeMessage);
             log.info("✅ E-mail enviado com sucesso para {}", to);
         }
         catch (MailException e)
         {
             log.error("❌ Erro ao enviar e-mail para {}: {}", to, e.getMessage());
-            throw new MessagingException("Não foi possível enviar o e-mail. Verifique se o endereço está correto ou tente novamente mais tarde.");
+            throw new MessagingException("Não foi possível enviar o e-mail. Verifique se o endereço está correcto ou tente novamente mais tarde.");
         }
     }
 

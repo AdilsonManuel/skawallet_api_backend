@@ -20,4 +20,6 @@ public interface CreditScoringRepository extends JpaRepository<CreditScoring, Lo
     Optional<CreditScoring> findByUserPkUsers (Long userId); // Buscar o scoring de um usuário pelo ID
 
     boolean existsByUserPkUsers (Long userId); // Verificar se um usuário já possui um score registrado
+
+//    public Object findByUserId (Long userId);
 }
