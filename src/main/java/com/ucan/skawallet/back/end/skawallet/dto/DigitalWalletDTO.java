@@ -23,5 +23,5 @@ public class DigitalWalletDTO
     private Boolean isDefault;
     private Long userId; // ID do usuário associado à carteira
     private Long pk_digital_wallets;
-
+    private String walletCode; // Código único da carteira
 }

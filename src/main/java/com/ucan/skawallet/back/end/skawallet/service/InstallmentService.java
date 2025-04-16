@@ -15,6 +15,8 @@ import com.ucan.skawallet.back.end.skawallet.repository.InstallmentRepository;
 import com.ucan.skawallet.back.end.skawallet.repository.PartnerRepository;
 import com.ucan.skawallet.back.end.skawallet.repository.TransactionRepository;
 import com.ucan.skawallet.back.end.skawallet.repository.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
@@ -42,12 +44,8 @@ public class InstallmentService
         Partner partner = partnersRepository.findById(request.getPartnerId())
                 .orElseThrow(() -> new RuntimeException("Parceiro não encontrado."));
 
-        // Avaliação do score de crédito do usuário
-        int userScore = calculateUserScore(user);
-        if (userScore < 70)
-        {
-            throw new RuntimeException("Usuário não elegível para parcelamento. Score de crédito insuficiente: " + userScore);
-        }
+        // Verifica se o usuário é elegível para parcelamento
+        validateUserEligibility(user);
 
         int approvedInstallments = Math.min(request.getInstallments(), 6);
 
@@ -73,47 +71,64 @@ public class InstallmentService
         return installmentRepository.findByUserPkUsers(userId);
     }
 
-    public Installment payInstallment (Long installmentId, String walletCode, BigDecimal amount)
+    @Transactional
+    public String payInstallment (Long installmentId, String walletCode, BigDecimal amount)
     {
+        // Busca o parcelamento pelo ID
         Installment installment = installmentRepository.findById(installmentId)
-                .orElseThrow(() -> new RuntimeException("Parcelamento não encontrado."));
+                .orElseThrow(() -> new EntityNotFoundException("Parcelamento não encontrado."));
 
-        DigitalWallets wallet = digitalWalletRepository.getWalletByCode(walletCode)
-                .orElseThrow(() -> new RuntimeException("Carteira não encontrada."));
-
-        if (wallet.getBalance().compareTo(amount) < 0)
+        // Verifica se o parcelamento já foi quitado
+        if (installment.getRemainingInstallments() == 0)
         {
-            throw new RuntimeException("Saldo insuficiente.");
+            return "Não há parcelas pendentes para pagamento.";
         }
 
+        // Busca a carteira pelo código
+        DigitalWallets wallet = digitalWalletRepository.getWalletByCode(walletCode)
+                .orElseThrow(() -> new EntityNotFoundException("Carteira não encontrada."));
+
+        // Verifica saldo suficiente
+        if (wallet.getBalance().compareTo(amount) < 0)
+        {
+            throw new IllegalStateException("Saldo insuficiente para pagamento da parcela.");
+        }
+
+        // Debita o valor da carteira
         wallet.setBalance(wallet.getBalance().subtract(amount));
         digitalWalletRepository.save(wallet);
 
+        // Atualiza o parcelamento
         installment.setRemainingInstallments(installment.getRemainingInstallments() - 1);
-        installment.setNextDueDate(LocalDate.now().plusMonths(1));
+        installment.setNextDueDate(LocalDate.now().plusMonths(1)); // Atualiza a próxima data de vencimento
 
+        // Verifica se o parcelamento pode ser marcado como COMPLETED
         if (installment.getRemainingInstallments() == 0)
         {
             installment.setStatus(InstallmentStatus.COMPLETED);
         }
+        else
+        {
+            // Se ainda há parcelas, não altera o status
+            installment.setStatus(InstallmentStatus.PENDING); // Exemplo de status alternativo, se necessário
+        }
 
-        return installmentRepository.save(installment);
+        // Salva as alterações no parcelamento
+        installmentRepository.save(installment);
+
+        return "Parcelamento pago com sucesso! Restam " + installment.getRemainingInstallments() + " parcelas.";
     }
 
     public int calculateUserScore (Users user)
     {
         int score = 0;
 
-        // ✅ Tempo de conta ativa (mais tempo = mais pontos)
-        long accountAgeInDays = ChronoUnit.DAYS.between(user.getCreatedAt(), LocalDate.now());
+        // ✅ Converter LocalDateTime para LocalDate
+        LocalDate createdAt = user.getCreatedAt().toLocalDate();
+        long accountAgeInDays = ChronoUnit.DAYS.between(createdAt, LocalDate.now());
+
         score += (accountAgeInDays / 30) * 5; // 5 pontos a cada mês de conta ativa
 
-//        // ✅ Pagamentos concluídos
-//        int successfulPayments = transactionRepository.countByUserAndStatus(user,TransactionStatus.COMPLETED);
-//        score += successfulPayments * 2; // 2 pontos por pagamento bem-sucedido
-//        // ✅ Recomendações (cada convite gera pontos)
-//        int invitedUsers = referralRepository.countByInviter(user);
-//        score += invitedUsers * 10; // 10 pontos por cada amigo indicado
         // ✅ Histórico de Parcelamentos (se pagou tudo sem atraso, ganha pontos extras)
         boolean hasGoodHistory = installmentRepository.countLatePaymentsByUser(user) == 0;
         if (hasGoodHistory)
@@ -122,6 +137,20 @@ public class InstallmentService
         }
 
         return score;
+    }
+
+    /**
+     * Método que verifica se um usuário pode solicitar um parcelamento.
+     */
+    private void validateUserEligibility (Users user)
+    {
+        int userScore = calculateUserScore(user);
+        long transactionCount = transactionRepository.countTransactionsByUserId(user.getPkUsers());
+
+        if (transactionCount < 5)
+        {
+            throw new RuntimeException("Usuário não elegível para parcelamento. Necessário ter no mínimo 5 transações, actualmente tem: " + transactionCount);
+        }
     }
 
     public List<Installment> getAllInstallments ()

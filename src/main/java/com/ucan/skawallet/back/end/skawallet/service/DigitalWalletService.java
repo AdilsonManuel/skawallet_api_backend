@@ -68,6 +68,10 @@ public class DigitalWalletService
     // Atualizar parcialmente uma carteira
     public DigitalWallets updateWallet (Long walletId, DigitalWalletDTO walletDTO)
     {
+        //        System.err.println("wallet DTO: " + walletDTO);
+        Users user = userRepository.findById(walletDTO.getUserId())
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado."));
+
         DigitalWallets wallet = findById(walletId);
 
         if (walletDTO.getWalletName() != null)
@@ -85,6 +89,13 @@ public class DigitalWalletService
         if (walletDTO.getIsDefault() != null)
         {
             wallet.setIsDefault(walletDTO.getIsDefault());
+        }
+
+        if (wallet.getWalletCode() == null || wallet.getWalletCode().isEmpty())
+        {
+            String generatedCode = generateUniqueWalletCode(user.getPkUsers());
+            walletDTO.setWalletCode(generatedCode);
+            wallet.setWalletCode(generatedCode);
         }
 
         wallet.setUpdatedAt(LocalDateTime.now());
@@ -125,5 +136,5 @@ public class DigitalWalletService
     {
         return digitalWalletRepository.findAll();
     }
-    
+
 }

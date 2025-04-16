@@ -65,4 +65,7 @@ public interface TransactionRepository extends JpaRepository<Transactions, Long>
     BigDecimal getUserAverageTransactionAmount (@Param("userId") Long userId);
 
     int countBySourceWallet_UserOrDestinationWallet_UserAndStatus (Users user1, Users user2, TransactionStatus status);
+
+    @Query("SELECT COUNT(t) FROM Transactions t WHERE t.sourceWallet.user.pkUsers = :userId OR t.destinationWallet.user.pkUsers = :userId")
+    long countTransactionsByUserId (@Param("userId") Long userId);
 }

@@ -45,12 +45,13 @@ public class InstallmentController
     }
 
     @PostMapping("/pay")
-    public ResponseEntity<Installment> payInstallment (
+    public ResponseEntity<String> payInstallment (
             @RequestParam Long installmentId,
             @RequestParam String walletCode,
             @RequestParam BigDecimal amount)
     {
-        return ResponseEntity.ok(installmentService.payInstallment(installmentId, walletCode, amount));
+        String result = installmentService.payInstallment(installmentId, walletCode, amount);
+        return ResponseEntity.ok(result);
     }
 
     @GetMapping("/installments")
