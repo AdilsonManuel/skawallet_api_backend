@@ -11,7 +11,7 @@ import com.ucan.skawallet.back.end.skawallet.repository.DigitalWalletRepository;
 import com.ucan.skawallet.back.end.skawallet.repository.TopUpReferenceRepository;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.util.Random;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -23,13 +23,12 @@ public class TopUpReferenceService
     private final TopUpReferenceRepository topUpReferenceRepository;
     private final DigitalWalletRepository digitalWalletRepository;
 
-    public TopUpReference generateReference (String walletCode, BigDecimal amount)
+    public TopUpReference generateReference (String walletId, BigDecimal amount)
     {
-        System.err.println("Wallet Code -> " + walletCode);
-        DigitalWallets wallet = digitalWalletRepository.getWalletByCode(walletCode)
+        DigitalWallets wallet = digitalWalletRepository.getWalletByCode(walletId)
                 .orElseThrow(() -> new RuntimeException("Carteira não encontrada"));
 
-        String code = "REF-" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmm")) + "-WALLET-" + walletCode;
+        String code = generateUniqueReferenceCode();
 
         TopUpReference reference = TopUpReference.builder()
                 .referenceCode(code)
@@ -39,6 +38,30 @@ public class TopUpReferenceService
                 .build();
 
         return topUpReferenceRepository.save(reference);
+    }
+
+    /**
+     * Gera um código de 8 dígitos e garante que ele não exista no banco.
+     */
+    private String generateUniqueReferenceCode ()
+    {
+        String code;
+        int tentativas = 0;
+        do
+        {
+            code = String.format("%08d", new Random().nextInt(100_000_000));
+            tentativas++;
+
+            // Evita loop infinito caso o banco esteja cheio
+            if (tentativas > 10)
+            {
+                throw new RuntimeException("Não foi possível gerar um código de referência único após 10 tentativas.");
+            }
+
+        }
+        while (topUpReferenceRepository.existsByReferenceCode(code));
+
+        return code;
     }
 
     public TopUpReference confirmTopUp (String referenceCode)

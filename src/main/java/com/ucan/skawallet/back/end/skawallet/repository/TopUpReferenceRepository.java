@@ -18,4 +18,7 @@ public interface TopUpReferenceRepository extends JpaRepository<TopUpReference, 
 {
 
     Optional<TopUpReference> findByReferenceCode (String referenceCode);
+
+    boolean existsByReferenceCode (String referenceCode);
+
 }
