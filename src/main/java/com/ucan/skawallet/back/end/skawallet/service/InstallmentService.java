@@ -23,6 +23,7 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -38,8 +39,13 @@ public class InstallmentService
 
     public Installment createInstallment (InstallmentRequestDTO request)
     {
-        Users user = usersRepository.findById(request.getUserId())
+        Users user = usersRepository.findByIdDocument(request.getIdDocument())
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado."));
+
+        if (Boolean.TRUE.equals(user.getBlockedByInadimplencia()))
+        {
+            throw new IllegalStateException("Operação não permitida. BI bloqueado.");
+        }
 
         Partner partner = partnersRepository.findById(request.getPartnerId())
                 .orElseThrow(() -> new RuntimeException("Parceiro não encontrado."));
@@ -156,5 +162,21 @@ public class InstallmentService
     public List<Installment> getAllInstallments ()
     {
         return installmentRepository.findAll();
+    }
+
+    @Scheduled(cron = "0 0 2 * * *") // Executa todos os dias às 2h
+    public void verificarInadimplencia ()
+    {
+        List<Installment> atrasados = installmentRepository.findOverdueInstallments(LocalDate.now());
+
+        for (Installment inst : atrasados)
+        {
+            Users user = inst.getUser();
+            if (!Boolean.TRUE.equals(user.getBlockedByInadimplencia()))
+            {
+                user.setBlockedByInadimplencia(true);
+                usersRepository.save(user);
+            }
+        }
     }
 }

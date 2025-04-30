@@ -27,4 +27,8 @@ public interface UserRepository extends JpaRepository<Users, Long>
 
     public Optional<Users> findByVerificationCode (String code);
 
+    boolean existsByIdDocument (String idDocument);
+
+    Optional<Users> findByIdDocument (String idDocument);
+
 }

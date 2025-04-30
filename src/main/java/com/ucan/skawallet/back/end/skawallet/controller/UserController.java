@@ -45,7 +45,10 @@ public class UserController
     @PostMapping("/registration")
     public ResponseEntity<?> registUser (@RequestBody Users user)
     {
-        System.err.println("UserController.registUser()->" + user);
+        if (userRepository.existsByIdDocument(user.getIdDocument()))
+        {
+            throw new IllegalArgumentException("BI já cadastrado.");
+        }
         if (user.getName() == null || user.getName().isEmpty())
         {
             return new ResponseEntity<>("Username is required", HttpStatus.BAD_REQUEST);

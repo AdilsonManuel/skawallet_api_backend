@@ -11,7 +11,7 @@ import lombok.Data;
 public class InstallmentRequestDTO
 {
 
-    private Long userId;
+    private String idDocument;
     private Long partnerId;
     private BigDecimal amount;
     private Integer installments;

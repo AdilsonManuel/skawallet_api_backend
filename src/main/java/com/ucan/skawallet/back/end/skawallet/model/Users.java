@@ -60,6 +60,9 @@ public class Users implements UserDetails
     private String selfieUrl;  // URL da Selfie enviada para verificação
     private String verificationCode; // Código para ativação da conta
 
+    @Column(nullable = false)
+    private Boolean blockedByInadimplencia = false;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities ()
     {

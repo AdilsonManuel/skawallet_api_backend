@@ -34,7 +34,7 @@ public class TopUpReferenceService
                 .referenceCode(code)
                 .wallet(wallet)
                 .amount(amount)
-                .expiresAt(LocalDateTime.now().plusHours(2))
+                .expiresAt(LocalDateTime.now().plusHours(0))
                 .build();
 
         return topUpReferenceRepository.save(reference);
