@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "92bfd3ad-f59f-464a-b90f-8fb560451019",
+		"_postman_id": "24d860ac-bbc8-4247-918a-8032b15e86b1",
 		"name": "SkaWallet API",
 		"description": "#### **Descrição Geral**\n\nA **SkaWallet API** é uma solução poderosa para gerenciar contas bancárias, autenticação de usuários e operações financeiras. Esta API suporta autenticação baseada em **JWT (JSON Web Tokens)** e integração com **OAuth2**, além de funcionalidades robustas para gerenciamento de transações, notificações e promoções.\n\nEsta documentação é projectada para uso com o **Postman**, permitindo testar endpoints de forma simples e eficiente.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
@@ -80,12 +80,114 @@
 				},
 				{
 					"name": "Insert Users",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var template = `",
+									"<style type=\"text/css\">",
+									"    .tftable {font-size:14px;color:#333333;width:100%;border-width: 1px;border-color: #87ceeb;border-collapse: collapse;}",
+									"    .tftable th {font-size:18px;background-color:#87ceeb;border-width: 1px;padding: 8px;border-style: solid;border-color: #87ceeb;text-align:left;}",
+									"    .tftable tr {background-color:#ffffff;}",
+									"    .tftable td {font-size:14px;border-width: 1px;padding: 8px;border-style: solid;border-color: #87ceeb;}",
+									"    .tftable tr:hover {background-color:#e0ffff;}",
+									"</style>",
+									"",
+									"<table class=\"tftable\" border=\"1\">",
+									"    <tr>",
+									"        <th>Response</th>",
+									"    </tr>",
+									"    <tr>",
+									"        <td>{{response}}</td>",
+									"    </tr>",
+									"</table>",
+									"`;",
+									"",
+									"function constructVisualizerPayload() {",
+									"    return { response: pm.response.text() }",
+									"}",
+									"",
+									"pm.visualizer.set(template, constructVisualizerPayload());"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"name\": \"Adilson Zumba Manuel \",\n  \"email\": \"adilson.zm@skawallet.com\",\n  \"password\": \"senha123\",\n  \"phone\":\"+244929214112\",  \n  \"type\": \"ADMIN\"\n}\n",
+							"raw": "{\n    \"name\": \"Adilson Zumba Manuel \",\n    \"email\": \"adilsonzumba@hotmail.com\",\n    \"password\": \"senha123\",\n    \"phone\": \"924123456987\", \n    \"type\": \"USER\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/users/registration",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"registration"
+							]
+						},
+						"description": "#### **1\\. Registro de Usuário**\n\nEndpoint para criar um novo usuário na plataforma.\n\n- **URL:** `POST /api/v1/auth/register`\n    \n- **Método:** POST\n    \n- **Descrição:** Registra um novo usuário com suas informações básicas."
+					},
+					"response": []
+				},
+				{
+					"name": "Insert Users Copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var template = `",
+									"<style type=\"text/css\">",
+									"    .tftable {font-size:14px;color:#333333;width:100%;border-width: 1px;border-color: #87ceeb;border-collapse: collapse;}",
+									"    .tftable th {font-size:18px;background-color:#87ceeb;border-width: 1px;padding: 8px;border-style: solid;border-color: #87ceeb;text-align:left;}",
+									"    .tftable tr {background-color:#ffffff;}",
+									"    .tftable td {font-size:14px;border-width: 1px;padding: 8px;border-style: solid;border-color: #87ceeb;}",
+									"    .tftable tr:hover {background-color:#e0ffff;}",
+									"</style>",
+									"",
+									"<table class=\"tftable\" border=\"1\">",
+									"    <tr>",
+									"        <th>Response</th>",
+									"    </tr>",
+									"    <tr>",
+									"        <td>{{response}}</td>",
+									"    </tr>",
+									"</table>",
+									"`;",
+									"",
+									"function constructVisualizerPayload() {",
+									"    return { response: pm.response.text() }",
+									"}",
+									"",
+									"pm.visualizer.set(template, constructVisualizerPayload());"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Adilson Zumba Manuel \",\n    \"email\": \"adilsonzm60@gmailcom\",\n    \"password\": \"senha123\",\n    \"phone\": \"924147258\", \n    \"type\": \"USER\"\n}\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -164,15 +266,56 @@
 						"description": "#### **5\\. Excluir Conta do Usuário**\n\nEndpoint para deletar permanentemente a conta do usuário.\n\n- **URL:** `DELETE /api/v1/users/{id}`\n    \n- **Método:** DELETE\n    \n- **Headers:**\n    \n    - `Authorization: Bearer {token}`\n        \n- **Descrição:** Remove a conta do usuário e todos os dados associados."
 					},
 					"response": []
-				}
-			],
-			"description": "A **User** é destinada a gerenciar todas as operações relacionadas aos usuários na **SkaWallet API**. Esta pasta inclui endpoints para autenticação, registro, gerenciamento de perfis, e recuperação de informações do usuário."
-		},
-		{
-			"name": "Partners",
-			"item": [
+				},
 				{
-					"name": "List Partners",
+					"name": "Verify Code KYC",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/kyc/verify/11?email=adilsonzumba@hotmail.com&code=259563",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"kyc",
+								"verify",
+								"11"
+							],
+							"query": [
+								{
+									"key": "email",
+									"value": "adilsonzumba@hotmail.com"
+								},
+								{
+									"key": "code",
+									"value": "259563"
+								},
+								{
+									"key": "",
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Status KYC",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
@@ -189,7 +332,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/api/v1/partners/",
+							"raw": "http://localhost:8080/api/v1/kyc/status/11",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -198,126 +341,41 @@
 							"path": [
 								"api",
 								"v1",
-								"partners",
-								""
+								"kyc",
+								"status",
+								"11"
+							],
+							"query": [
+								{
+									"key": "email",
+									"value": "joao@email.com",
+									"disabled": true
+								},
+								{
+									"key": "code",
+									"value": null,
+									"disabled": true
+								},
+								{
+									"key": "",
+									"value": "271119",
+									"disabled": true
+								}
 							]
-						},
-						"description": "Este endpoint é utilizado para recuperar uma lista de todos os usuários registrados na **SkaWallet API**. Ele está disponível apenas para administradores autenticados."
+						}
 					},
 					"response": []
 				},
 				{
-					"name": "List By PK",
+					"name": "Acti",
 					"request": {
 						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8080/api/v1/partners/1",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"api",
-								"v1",
-								"partners",
-								"1"
-							]
-						},
-						"description": "Endpoint para recuperar detalhes do perfil do usuário autenticado.\n\n- **URL:** `GET /api/v1/users/me`\n    \n- **Método:** GET\n    \n- **Headers:**\n    \n    - `Authorization: Bearer {token}`\n        \n- **Descrição:** Retorna informações do perfil do usuário autenticado.\n    \n    {  \n    \"id\": 1,  \n    \"name\": \"John Doe\",  \n    \"email\": \"[john.doe@example.com](https://mailto:john.doe@example.com)\",  \n    \"type\": \"USER\",  \n    \"createdAt\": \"2024-11-18T12:00:00\"  \n    }"
-					},
-					"response": []
-				},
-				{
-					"name": "Insert Users",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"name\": \"Parceiro Comercial A\",\n  \"description\": \"Fornece serviços de pagamento\",\n  \"contactEmail\": \"contato@parceiro.com\",\n  \"contactPhone\": \"123456789\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8080/api/v1/partners/",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"api",
-								"v1",
-								"partners",
-								""
-							]
-						},
-						"description": "#### **1\\. Registro de Usuário**\n\nEndpoint para criar um novo usuário na plataforma.\n\n- **URL:** `POST /api/v1/auth/register`\n    \n- **Método:** POST\n    \n- **Descrição:** Registra um novo usuário com suas informações básicas."
-					},
-					"response": []
-				},
-				{
-					"name": "Update Users",
-					"request": {
-						"method": "PATCH",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"name\": \"Parceiro Comercial A\",\n  \"description\": \"Fornece serviços de pagamento\",\n  \"contactEmail\": \"contato@parceiro.com\",\n  \"contactPhone\": \"123456789\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8080/api/v1/partners/1",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"api",
-								"v1",
-								"partners",
-								"1"
-							]
-						},
-						"description": "Endpoint para atualizar os dados do usuário.\n\n- **URL:** `PUT /api/v1/users/{id}`\n    \n- **Método:** PUT\n    \n- **Headers:**\n    \n    - `Authorization: Bearer {token}`\n        \n- **Descrição:** Permite ao usuário atualizar seu perfil, como nome e senha."
-					},
-					"response": []
-				},
-				{
-					"name": "Delete Users",
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8080/api/v1/registration/8",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"api",
-								"v1",
-								"registration",
-								"8"
-							]
-						},
-						"description": "#### **5\\. Excluir Conta do Usuário**\n\nEndpoint para deletar permanentemente a conta do usuário.\n\n- **URL:** `DELETE /api/v1/users/{id}`\n    \n- **Método:** DELETE\n    \n- **Headers:**\n    \n    - `Authorization: Bearer {token}`\n        \n- **Descrição:** Remove a conta do usuário e todos os dados associados."
+						"header": []
 					},
 					"response": []
 				}
 			],
-			"description": "O objectivo dete endpoint gerencia os parceiros comerciais, permitindo que o sistema armazene informações como nome, descrição, e dados de contato."
+			"description": "A **User** é destinada a gerenciar todas as operações relacionadas aos usuários na **SkaWallet API**. Esta pasta inclui endpoints para autenticação, registro, gerenciamento de perfis, e recuperação de informações do usuário."
 		},
 		{
 			"name": "Token",
@@ -329,7 +387,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"identifier\": \"Teste Today\",\n    \"password\": \"senha123\"\n}",
+							"raw": "{\n    \"identifier\": \"adilson.manuel@skawallet.com\",\n    \"password\": \"senha123\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -383,193 +441,6 @@
 							]
 						},
 						"description": "Endpoint para autenticação do usuário e obtenção de token JWT.\n\n- **URL:** `POST /api/v1/auth/login`\n    \n- **Método:** POST\n    \n- **Descrição:** Autentica um usuário registrado e retorna um token JWT.\n    \n    {  \n    \"email\": \"[john.doe@example.com](https://mailto:john.doe@example.com)\",  \n    \"password\": \"123456\"  \n    }"
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "OAUTH2",
-			"item": [
-				{
-					"name": "Login2",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8080/oauth2/authorization/github",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"oauth2",
-								"authorization",
-								"github"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Banks",
-			"item": [
-				{
-					"name": "Add Banks",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"name\": \"Banco de Angola\",\n  \"code\": \"011\",\n  \"createdDate\": \"2024-08-29\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8080/api/v1/banks/",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"api",
-								"v1",
-								"banks",
-								""
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "List Banks",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8080/api/v1/banks/",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"api",
-								"v1",
-								"banks",
-								""
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Bank Accounts",
-			"item": [
-				{
-					"name": "List Banks Account",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8080/api/v1/bank-accounts/",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"api",
-								"v1",
-								"bank-accounts",
-								""
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "List By Banks Account",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8080/api/v1/bank-accounts/10101010",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"api",
-								"v1",
-								"bank-accounts",
-								"10101010"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "List Banks Account By User",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8080/api/v1/bank-accounts/user/2",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"api",
-								"v1",
-								"bank-accounts",
-								"user",
-								"2"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Creating Bank Account",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"accountNumber\":\"159753\",\n    \"balance\":183000.00,\n    \"pk_users\": 3,\n    \"pk_banks\": 4\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8080/api/v1/bank-accounts/",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"api",
-								"v1",
-								"bank-accounts",
-								""
-							]
-						}
 					},
 					"response": []
 				}
@@ -686,13 +557,108 @@
 					"response": []
 				},
 				{
+					"name": "List Transactions By Wallet Date",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var template = `",
+									"<style type=\"text/css\">",
+									"    .tftable {font-size:14px;color:#333333;width:100%;border-width: 1px;border-color: #87ceeb;border-collapse: collapse;}",
+									"    .tftable th {font-size:18px;background-color:#87ceeb;border-width: 1px;padding: 8px;border-style: solid;border-color: #87ceeb;text-align:left;}",
+									"    .tftable tr {background-color:#ffffff;}",
+									"    .tftable td {font-size:14px;border-width: 1px;padding: 8px;border-style: solid;border-color: #87ceeb;}",
+									"    .tftable tr:hover {background-color:#e0ffff;}",
+									"</style>",
+									"",
+									"<table class=\"tftable\" border=\"1\">",
+									"    <tr>",
+									"        <th>Status</th>",
+									"        <th>Amount</th>",
+									"        <th>Source Account</th>",
+									"        <th>Transaction Type</th>",
+									"        <th>Destination Account</th>",
+									"        <th>PK Transactions</th>",
+									"        <th>Created At</th>",
+									"        <th>Name</th>",
+									"    </tr>",
+									"    ",
+									"    {{#each response}}",
+									"        <tr>",
+									"            <td>{{status}}</td>",
+									"            <td>{{amount}}</td>",
+									"            <td>{{sourceAccount}}</td>",
+									"            <td>{{transactionType}}</td>",
+									"            <td>{{destinationAccount}}</td>",
+									"            <td>{{pk_transactions}}</td>",
+									"            <td>{{created_at}}</td>",
+									"            <td>{{name}}</td>",
+									"        </tr>",
+									"    {{/each}}",
+									"</table>",
+									"`;",
+									"",
+									"function constructVisualizerPayload() {",
+									"    return {response: pm.response.json()}",
+									"}",
+									"",
+									"pm.visualizer.set(template, constructVisualizerPayload());"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/transactions/transaction-history/1?startDate=2025-01-01T00:00:00&endDate=2025-02-01T00:00:00",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"transactions",
+								"transaction-history",
+								"1"
+							],
+							"query": [
+								{
+									"key": "startDate",
+									"value": "2025-01-01T00:00:00"
+								},
+								{
+									"key": "endDate",
+									"value": "2025-02-01T00:00:00"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Transfer Transactions",
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"amount\": 1000.50,\n  \"transactionType\": \"TRANSFER\",\n  \"paymentMethod\": \"DIGITAL_WALLET\",\n  \"description\": \"Transferência entre carteiras\",\n  \"sourceWalletId\": 1,\n  \"destinationWalletId\": 2\n}\n",
+							"raw": "{\n  \"amount\": 1000000.50,\n  \"transactionType\": \"TRANSFER\",\n  \"paymentMethod\": \"DIGITAL_WALLET\",\n  \"description\": \"Transferência entre carteiras\",\n  \"sourceWalletId\": 1,\n  \"destinationWalletId\": 2,\n  \"status\":\"COMPLETED\"\n}\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -717,13 +683,55 @@
 					"response": []
 				},
 				{
+					"name": "Transfer Transactions BY Wallet Code",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"transactionType\": \"TRANSFER\",\n  \"paymentMethod\": \"DIGITAL_WALLET\",\n  \"description\": \"Transferência entre carteiras\",\n  \"status\":\"COMPLETED\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/transactions/SKA-1-BE489D03/transfer?destinationWalletCode=SKA-1-BE489D03&amount=70000",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"transactions",
+								"SKA-1-BE489D03",
+								"transfer"
+							],
+							"query": [
+								{
+									"key": "destinationWalletCode",
+									"value": "SKA-1-BE489D03"
+								},
+								{
+									"key": "amount",
+									"value": "70000"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Payment Transactions",
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"amount\": 300.00,\n  \"transactionType\": \"PAYMENT\",\n  \"paymentMethod\": \"CARD\",\n  \"description\": \"Pagamento de compra\",\n  \"sourceWalletId\": 2\n}\n",
+							"raw": "{\n  \"sourceWalletId\": 1,\n  \"destinationWalletId\": 2,\n  \"amount\": 1000.00,\n  \"transactionType\": \"PAYMENT\",\n  \"paymentMethod\": \"DIGITAL_WALLET\",\n  \"description\": \"Pagamento de Serviço\",\n  \"status\":\"COMPLETED\"\n}\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -754,7 +762,38 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"amount\": 5000000.00,\n  \"transactionType\": \"DEPOSIT\",\n  \"paymentMethod\": \"BANK\",\n  \"description\": \"Depósito bancário\",\n  \"destinationWalletId\": 1\n}\n",
+							"raw": "{\n  \"amount\": 5000.00,\n  \"cardNumber\": \"4111111111111111\",\n  \"expiryDate\": \"12/25\",\n  \"cvv\": \"123\",\n  \"walletCode\": \"SKA-1-BE489D03\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/transactions/top-up",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"transactions",
+								"top-up"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "WITHDRAWAL Transactions",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"amount\": 500.00,\n  \"transactionType\": \"WITHDRAWAL\",\n  \"paymentMethod\": \"DIGITAL_WALLET\",\n  \"description\": \"Retirada para uso pessoal\",\n  \"sourceWalletId\": 1\n}\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -779,13 +818,13 @@
 					"response": []
 				},
 				{
-					"name": "WITHDRAWAL Transactions",
+					"name": "WITHDRAWAL Transactions By Code",
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"amount\": 500.00,\n  \"transactionType\": \"WITHDRAWAL\",\n  \"paymentMethod\": \"DIGITAL_WALLET\",\n  \"description\": \"Retirada para uso pessoal\",\n  \"sourceWalletId\": 2\n}\n",
+							"raw": "{\n  \"amount\": 500.00,\n  \"transactionType\": \"WITHDRAWAL\",\n  \"paymentMethod\": \"DIGITAL_WALLET\",\n  \"description\": \"Retirada para uso pessoal\",\n  \"sourceWalletId\": 1\n}\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -793,7 +832,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/api/v1/transactions/",
+							"raw": "http://localhost:8080/api/v1/transactions/SKA-1-6F09370A/withdrawal?amount=5000",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -803,7 +842,14 @@
 								"api",
 								"v1",
 								"transactions",
-								""
+								"SKA-1-6F09370A",
+								"withdrawal"
+							],
+							"query": [
+								{
+									"key": "amount",
+									"value": "5000"
+								}
 							]
 						}
 					},
@@ -892,6 +938,39 @@
 					"response": []
 				},
 				{
+					"name": "List All  TransactionHistory By Date",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/transactions/history/{userId}?startDate=2024-02-01&endDate=2024-02-10",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"transactions",
+								"history",
+								"{userId}"
+							],
+							"query": [
+								{
+									"key": "startDate",
+									"value": "2024-02-01"
+								},
+								{
+									"key": "endDate",
+									"value": "2024-02-10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "List Transaction History By User Pk",
 					"request": {
 						"method": "GET",
@@ -920,7 +999,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/api/v1/transactions/history/2",
+							"raw": "http://localhost:8080/api/v1/transactions/history/29",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -931,7 +1010,7 @@
 								"v1",
 								"transactions",
 								"history",
-								"2"
+								"29"
 							]
 						}
 					},
@@ -943,13 +1022,13 @@
 			"name": "Payments",
 			"item": [
 				{
-					"name": "Pagamento",
+					"name": "Payment",
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"sourceWalletId\": 3,\n  \"destinationWalletId\": 2,\n  \"amount\": 1000,\n  \"description\": \"Pagamento de compra\",\n  \"paymentMethod\": \"DIGITAL_WALLET\"\n}\n",
+							"raw": "{\n    \"amount\": 150000,\n    \"currency\": \"usd\",\n    \"paymentMethodId\":\"pm_card_visa\",\n    \"description\":\"Test payment\"\n}\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -968,6 +1047,76 @@
 								"v1",
 								"payments",
 								""
+							],
+							"query": [
+								{
+									"key": "partnerCode",
+									"value": "UNITEL",
+									"disabled": true
+								},
+								{
+									"key": "amount",
+									"value": "5000.00",
+									"disabled": true
+								},
+								{
+									"key": "walletCode",
+									"value": "SKA-1-BE489D03",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Check status",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/payments/pi_3QprWoAZln8OhRF62kuSA84o",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"payments",
+								"pi_3QprWoAZln8OhRF62kuSA84o"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Product",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\"productName\": \"Tvs LG OLED\",\n\"productDescription\": \"This is a description of the awesome product.\",\n\"price\": 599.99,\n\"currency\": \"USD\",\n\"billingType\": \"recurring\",\n\"frequency\": \"year\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/payments/products",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"payments",
+								"products"
 							]
 						}
 					},
@@ -979,16 +1128,285 @@
 			"name": "Render",
 			"item": [
 				{
-					"name": "Users",
+					"name": "Fraud Repots",
 					"item": [
 						{
-							"name": "Insert Users Copy",
+							"name": "Report",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://skawallet-backend-api.onrender.com/api/v1/fraud/report",
+									"protocol": "https",
+									"host": [
+										"skawallet-backend-api",
+										"onrender",
+										"com"
+									],
+									"path": [
+										"api",
+										"v1",
+										"fraud",
+										"report"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Token",
+					"item": [
+						{
+							"name": "Generate Token",
 							"request": {
 								"method": "POST",
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n  \"name\": \"Teste\",\n  \"email\": \"teste@example.com\",\n  \"password\": \"senha123\",\n  \"phone\":\"+244923345678\",  \n  \"type\": \"ADMIN\"\n}\n",
+									"raw": "{\n    \"identifier\": \"adilson.zm@skawallet.com\",\n    \"password\": \"senha123\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://skawallet-backend-api.onrender.com/api/v1/auth/login",
+									"protocol": "https",
+									"host": [
+										"skawallet-backend-api",
+										"onrender",
+										"com"
+									],
+									"path": [
+										"api",
+										"v1",
+										"auth",
+										"login"
+									]
+								},
+								"description": "Endpoint para autenticação do usuário e obtenção de token JWT.\n\n- **URL:** `POST /api/v1/auth/login`\n    \n- **Método:** POST\n    \n- **Descrição:** Autentica um usuário registrado e retorna um token JWT.\n    \n    {  \n    \"email\": \"[john.doe@example.com](https://mailto:john.doe@example.com)\",  \n    \"password\": \"123456\"  \n    }"
+							},
+							"response": []
+						},
+						{
+							"name": "Renovar Token",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"identifier\": \"Teste Today\",\n    \"password\": \"senha123\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://skawallet-backend-api.onrender.com/api/v1/auth/refresh-token",
+									"protocol": "https",
+									"host": [
+										"skawallet-backend-api",
+										"onrender",
+										"com"
+									],
+									"path": [
+										"api",
+										"v1",
+										"auth",
+										"refresh-token"
+									]
+								},
+								"description": "Endpoint para autenticação do usuário e obtenção de token JWT.\n\n- **URL:** `POST /api/v1/auth/login`\n    \n- **Método:** POST\n    \n- **Descrição:** Autentica um usuário registrado e retorna um token JWT.\n    \n    {  \n    \"email\": \"[john.doe@example.com](https://mailto:john.doe@example.com)\",  \n    \"password\": \"123456\"  \n    }"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "User",
+					"item": [
+						{
+							"name": "Verify Code KYC",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://skawallet-backend-api.onrender.com/api/*/kyc/verify/11?email=joao@email.com&code&=271119",
+									"protocol": "https",
+									"host": [
+										"skawallet-backend-api",
+										"onrender",
+										"com"
+									],
+									"path": [
+										"api",
+										"*",
+										"kyc",
+										"verify",
+										"11"
+									],
+									"query": [
+										{
+											"key": "email",
+											"value": "joao@email.com"
+										},
+										{
+											"key": "code",
+											"value": null
+										},
+										{
+											"key": "",
+											"value": "271119"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Status KYC",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://skawallet-backend-api.onrender.com/api/*/kyc/status/11",
+									"protocol": "https",
+									"host": [
+										"skawallet-backend-api",
+										"onrender",
+										"com"
+									],
+									"path": [
+										"api",
+										"*",
+										"kyc",
+										"status",
+										"11"
+									],
+									"query": [
+										{
+											"key": "email",
+											"value": "joao@email.com",
+											"disabled": true
+										},
+										{
+											"key": "code",
+											"value": null,
+											"disabled": true
+										},
+										{
+											"key": "",
+											"value": "271119",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "List Users",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://skawallet-backend-api.onrender.com/api/*/users/",
+									"protocol": "https",
+									"host": [
+										"skawallet-backend-api",
+										"onrender",
+										"com"
+									],
+									"path": [
+										"api",
+										"*",
+										"users",
+										""
+									]
+								},
+								"description": "Este endpoint é utilizado para recuperar uma lista de todos os usuários registrados na **SkaWallet API**. Ele está disponível apenas para administradores autenticados."
+							},
+							"response": []
+						},
+						{
+							"name": "List By PK",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJBRE1JTiJdLCJzdWIiOiJhZG1pbjEyIiwiaWF0IjoxNzM1NTkyMzQ2LCJleHAiOjE3MzU1OTU5NDZ9.UnR-cif_CuOd15ctzWVeGbWvrCOG0ZesWQTQUSoFxPM",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://skawallet-backend-api.onrender.com/api/v1/users/1",
+									"protocol": "https",
+									"host": [
+										"skawallet-backend-api",
+										"onrender",
+										"com"
+									],
+									"path": [
+										"api",
+										"v1",
+										"users",
+										"1"
+									]
+								},
+								"description": "Endpoint para recuperar detalhes do perfil do usuário autenticado.\n\n- **URL:** `GET /api/v1/users/me`\n    \n- **Método:** GET\n    \n- **Headers:**\n    \n    - `Authorization: Bearer {token}`\n        \n- **Descrição:** Retorna informações do perfil do usuário autenticado.\n    \n    {  \n    \"id\": 1,  \n    \"name\": \"John Doe\",  \n    \"email\": \"[john.doe@example.com](https://mailto:john.doe@example.com)\",  \n    \"type\": \"USER\",  \n    \"createdAt\": \"2024-11-18T12:00:00\"  \n    }"
+							},
+							"response": []
+						},
+						{
+							"name": "Insert Users",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\": \"Adilson Zumba Manuel \",\n    \"email\": \"adilsonzumba@hotmail.com\",\n    \"password\": \"senha123\",\n    \"phone\": \"924123456987\", \n    \"type\": \"USER\"\n}\n",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1015,12 +1433,21 @@
 							"response": []
 						},
 						{
-							"name": "List Users Copy",
+							"name": "Update Users",
 							"request": {
-								"method": "GET",
+								"method": "PATCH",
 								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"type\":\"USER\"\n}\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
 								"url": {
-									"raw": "https://skawallet-backend-api.onrender.com/api/v1/users/",
+									"raw": "https://skawallet-backend-api.onrender.com/api/v1/users/2",
 									"protocol": "https",
 									"host": [
 										"skawallet-backend-api",
@@ -1031,26 +1458,121 @@
 										"api",
 										"v1",
 										"users",
-										""
+										"2"
 									]
 								},
-								"description": "Este endpoint é utilizado para recuperar uma lista de todos os usuários registrados na **SkaWallet API**. Ele está disponível apenas para administradores autenticados."
+								"description": "Endpoint para atualizar os dados do usuário.\n\n- **URL:** `PUT /api/v1/users/{id}`\n    \n- **Método:** PUT\n    \n- **Headers:**\n    \n    - `Authorization: Bearer {token}`\n        \n- **Descrição:** Permite ao usuário atualizar seu perfil, como nome e senha."
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Users",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "https://skawallet-backend-api.onrender.com/api/v1/users/12",
+									"protocol": "https",
+									"host": [
+										"skawallet-backend-api",
+										"onrender",
+										"com"
+									],
+									"path": [
+										"api",
+										"v1",
+										"users",
+										"12"
+									]
+								},
+								"description": "#### **5\\. Excluir Conta do Usuário**\n\nEndpoint para deletar permanentemente a conta do usuário.\n\n- **URL:** `DELETE /api/v1/users/{id}`\n    \n- **Método:** DELETE\n    \n- **Headers:**\n    \n    - `Authorization: Bearer {token}`\n        \n- **Descrição:** Remove a conta do usuário e todos os dados associados."
 							},
 							"response": []
 						}
-					]
+					],
+					"description": "A **User** é destinada a gerenciar todas as operações relacionadas aos usuários na **SkaWallet API**. Esta pasta inclui endpoints para autenticação, registro, gerenciamento de perfis, e recuperação de informações do usuário."
 				},
 				{
-					"name": "Banks",
+					"name": "Wallets",
 					"item": [
 						{
-							"name": "Add Banks Copy",
+							"name": "List All Wallets by User",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://skawallet-backend-api.onrender.com/api/v1/wallets/user/7",
+									"protocol": "https",
+									"host": [
+										"skawallet-backend-api",
+										"onrender",
+										"com"
+									],
+									"path": [
+										"api",
+										"v1",
+										"wallets",
+										"user",
+										"7"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "List Wallets By ID",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://skawallet-backend-api.onrender.com/api/v1/wallets/1",
+									"protocol": "https",
+									"host": [
+										"skawallet-backend-api",
+										"onrender",
+										"com"
+									],
+									"path": [
+										"api",
+										"v1",
+										"wallets",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "List All Wallets",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://skawallet-backend-api.onrender.com/api/v1/wallets/",
+									"protocol": "https",
+									"host": [
+										"skawallet-backend-api",
+										"onrender",
+										"com"
+									],
+									"path": [
+										"api",
+										"v1",
+										"wallets",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create Wallets",
 							"request": {
 								"method": "POST",
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"name\": \"Banco Sol \",\n    \"code\": \"140\",\n    \"createdDate\": \"2024-11-14\"\n}",
+									"raw": "{\n  \"walletName\": \"Carteira Negócios\",\n  \"walletType\": \"MERCHANT\",\n  \"balance\": 1000000.00,\n  \"currency\": \"AKZ\",\n  \"isDefault\": true,\n  \"userId\": 7\n}\n",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1058,7 +1580,7 @@
 									}
 								},
 								"url": {
-									"raw": "https://skawallet-backend-api.onrender.com/api/v1/banks/",
+									"raw": "https://skawallet-backend-api.onrender.com/api/v1/wallets/",
 									"protocol": "https",
 									"host": [
 										"skawallet-backend-api",
@@ -1068,7 +1590,7 @@
 									"path": [
 										"api",
 										"v1",
-										"banks",
+										"wallets",
 										""
 									]
 								}
@@ -1076,36 +1598,13 @@
 							"response": []
 						},
 						{
-							"name": "List Banks Copy",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "https://skawallet-backend-api.onrender.com/api/v1/banks/",
-									"protocol": "https",
-									"host": [
-										"skawallet-backend-api",
-										"onrender",
-										"com"
-									],
-									"path": [
-										"api",
-										"v1",
-										"banks",
-										""
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Update Banks Copy",
+							"name": "Update Wallet",
 							"request": {
 								"method": "PATCH",
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"name\": \"Banco de Poupança e Crédito\",\n    \"code\": \"004\",\n    \"createdDate\": \"2024-01-01\"\n}",
+									"raw": "{\n  \"walletName\": \"Carteira Atualizada\",\n  \"currency\": \"EUR\",\n  \"isDefault\": false\n}\n",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1113,43 +1612,7 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:8080/api/v1/banks/",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "8080",
-									"path": [
-										"api",
-										"v1",
-										"banks",
-										""
-									]
-								}
-							},
-							"response": []
-						}
-					]
-				},
-				{
-					"name": "Payments",
-					"item": [
-						{
-							"name": "Iniciar Pagamento",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n  \"amount\": 150000,\n  \"currency\": \"usd\",\n  \"paymentMethodId\": \"pm_card_visa\",\n  \"description\": \"Test payment\"\n}\n",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "https://skawallet-backend-api.onrender.com/api/v1/payments/",
+									"raw": "https://skawallet-backend-api.onrender.com/api/v1/wallets/1",
 									"protocol": "https",
 									"host": [
 										"skawallet-backend-api",
@@ -1159,128 +1622,7 @@
 									"path": [
 										"api",
 										"v1",
-										"payments",
-										""
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Consultar Status",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "https://skawallet-backend-api.onrender.com/api/v1/payments/pi_3Qd7kWAZln8OhRF60iC5RHap",
-									"protocol": "https",
-									"host": [
-										"skawallet-backend-api",
-										"onrender",
-										"com"
-									],
-									"path": [
-										"api",
-										"v1",
-										"payments",
-										"pi_3Qd7kWAZln8OhRF60iC5RHap"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Create Product",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n  \"productName\": \"Awesome Product\",\n  \"productDescription\": \"This is a description of the awesome product.\",\n  \"price\": 29.99,\n  \"currency\": \"USD\",\n  \"billingType\": \"recurring\",\n  \"frequency\": \"month\"\n}\n",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "https://skawallet-backend-api.onrender.com/api/v1/payments/products",
-									"protocol": "https",
-									"host": [
-										"skawallet-backend-api",
-										"onrender",
-										"com"
-									],
-									"path": [
-										"api",
-										"v1",
-										"payments",
-										"products"
-									]
-								}
-							},
-							"response": []
-						}
-					]
-				},
-				{
-					"name": "Token",
-					"item": [
-						{
-							"name": "Generate Token",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n    \"identifier\": \"teste@example.com\",\n    \"password\": \"senha123\"\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "https://skawallet-backend-api.onrender.com/api/v1/auth/login",
-									"protocol": "https",
-									"host": [
-										"skawallet-backend-api",
-										"onrender",
-										"com"
-									],
-									"path": [
-										"api",
-										"v1",
-										"auth",
-										"login"
-									]
-								}
-							},
-							"response": []
-						}
-					]
-				},
-				{
-					"name": "Transaction History",
-					"item": [
-						{
-							"name": "List All Transaction History",
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "https://skawallet-backend-api.onrender.com/api/v1/transaction-history/user/1",
-									"protocol": "https",
-									"host": [
-										"skawallet-backend-api",
-										"onrender",
-										"com"
-									],
-									"path": [
-										"api",
-										"v1",
-										"transaction-history",
-										"user",
+										"wallets",
 										"1"
 									]
 								}
@@ -1288,12 +1630,12 @@
 							"response": []
 						},
 						{
-							"name": "List Transaction History By PK",
+							"name": "Delete Wallets",
 							"request": {
-								"method": "GET",
+								"method": "DELETE",
 								"header": [],
 								"url": {
-									"raw": "https://skawallet-backend-api.onrender.com/api/v1/transaction-history/1",
+									"raw": "https://skawallet-backend-api.onrender.com/api/v1/wallets/1",
 									"protocol": "https",
 									"host": [
 										"skawallet-backend-api",
@@ -1303,45 +1645,8 @@
 									"path": [
 										"api",
 										"v1",
-										"transaction-history",
+										"wallets",
 										"1"
-									]
-								}
-							},
-							"response": []
-						}
-					]
-				},
-				{
-					"name": "Transactions",
-					"item": [
-						{
-							"name": "Transfer",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n    \"sourceAccount\": \"159753\",\n    \"destinationAccount\": \"159755\",\n    \"amount\": 900.00,\n    \"transactionType\": \"TRANSFER\"\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "https://skawallet-backend-api.onrender.com/api/v1/transactions/",
-									"protocol": "https",
-									"host": [
-										"skawallet-backend-api",
-										"onrender",
-										"com"
-									],
-									"path": [
-										"api",
-										"v1",
-										"transactions",
-										""
 									]
 								}
 							},
@@ -1353,7 +1658,7 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "https://skawallet-backend-api.onrender.com/api/v1/transactions/balance/159753",
+									"raw": "https://skawallet-backend-api.onrender.com/api/v1/wallets/balance/SKA-7-44F1CE31",
 									"protocol": "https",
 									"host": [
 										"skawallet-backend-api",
@@ -1363,21 +1668,35 @@
 									"path": [
 										"api",
 										"v1",
-										"transactions",
+										"wallets",
 										"balance",
-										"159753"
+										"SKA-7-44F1CE31"
 									]
 								}
 							},
 							"response": []
-						},
+						}
+					]
+				},
+				{
+					"name": "Transaction History",
+					"item": [
 						{
-							"name": "List Transactions By User",
+							"name": "Regist Transaction",
 							"request": {
-								"method": "GET",
+								"method": "POST",
 								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"transaction\": { \"pk_transactions\": 1 },\n  \"eventType\": \"CREATED\",\n  \"timestamp\": \"2025-01-15T12:00:00\"\n}\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
 								"url": {
-									"raw": "https://skawallet-backend-api.onrender.com/api/v1/transactions/history/3",
+									"raw": "https://skawallet-backend-api.onrender.com/api/v1/transactions/history/",
 									"protocol": "https",
 									"host": [
 										"skawallet-backend-api",
@@ -1389,28 +1708,99 @@
 										"v1",
 										"transactions",
 										"history",
-										"3"
+										""
 									]
 								}
 							},
 							"response": []
 						},
 						{
-							"name": "Deposit",
+							"name": "List All  TransactionHistory",
 							"request": {
-								"method": "POST",
+								"method": "GET",
 								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n    \"sourceAccount\": \"159753\",\n    \"amount\": 1000000.00,\n    \"transactionType\": \"DEPOSIT\"\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
 								"url": {
-									"raw": "https://skawallet-backend-api.onrender.com/api/v1/transactions/",
+									"raw": "https://skawallet-backend-api.onrender.com/api/v1/transaction-history/",
+									"protocol": "https",
+									"host": [
+										"skawallet-backend-api",
+										"onrender",
+										"com"
+									],
+									"path": [
+										"api",
+										"v1",
+										"transaction-history",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "List All  TransactionHistory By Date Copy",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://skawallet-backend-api.onrender.com/api/v1/transaction-history/{userId}?startDate=2024-02-01&endDate=2024-02-10",
+									"protocol": "https",
+									"host": [
+										"skawallet-backend-api",
+										"onrender",
+										"com"
+									],
+									"path": [
+										"api",
+										"v1",
+										"transaction-history",
+										"{userId}"
+									],
+									"query": [
+										{
+											"key": "startDate",
+											"value": "2024-02-01"
+										},
+										{
+											"key": "endDate",
+											"value": "2024-02-10"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "List All  TransactionHistory By PK",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://skawallet-backend-api.onrender.com/api/v1/transaction-history/transaction/1",
+									"protocol": "https",
+									"host": [
+										"skawallet-backend-api",
+										"onrender",
+										"com"
+									],
+									"path": [
+										"api",
+										"v1",
+										"transaction-history",
+										"transaction",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "List Transaction History By User Pk",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://skawallet-backend-api.onrender.com/api/v1/transactions/history/1",
 									"protocol": "https",
 									"host": [
 										"skawallet-backend-api",
@@ -1421,28 +1811,20 @@
 										"api",
 										"v1",
 										"transactions",
-										""
+										"history",
+										"1"
 									]
 								}
 							},
 							"response": []
 						},
 						{
-							"name": "Withdrawal",
+							"name": "Transactions History By User",
 							"request": {
-								"method": "POST",
+								"method": "GET",
 								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n    \"sourceAccount\": \"159753\",\n    \"amount\": 10000.00,\n    \"transactionType\": \"WITHDRAWAL\"\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
 								"url": {
-									"raw": "https://skawallet-backend-api.onrender.com/api/v1/transactions/",
+									"raw": "https://skawallet-backend-api.onrender.com/api/v1/transactions/history/2",
 									"protocol": "https",
 									"host": [
 										"skawallet-backend-api",
@@ -1453,7 +1835,8 @@
 										"api",
 										"v1",
 										"transactions",
-										""
+										"history",
+										"2"
 									]
 								}
 							},
@@ -1462,59 +1845,711 @@
 					]
 				},
 				{
-					"name": "Bank Account",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"accountNumber\":\"159755\",\r\n    \"balance\":183000.00,\r\n    \"pk_users\": 3,\r\n    \"pk_banks\": 1\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
+					"name": "Transactions",
+					"item": [
+						{
+							"name": "Transfer Transactions BY Wallet Code",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"transactionType\": \"TRANSFER\",\n  \"paymentMethod\": \"DIGITAL_WALLET\",\n  \"description\": \"Transferência entre carteiras\",\n  \"sourceWalletId\": 1,\n  \"destinationWalletId\": 2,\n  \"status\":\"COMPLETED\"\n}\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://skawallet-backend-api.onrender.com/api/v1/transactions/SKA-1-97E61062/transfer?destinationWalletCode=SKA-1-6F09370A&amount=300",
+									"protocol": "https",
+									"host": [
+										"skawallet-backend-api",
+										"onrender",
+										"com"
+									],
+									"path": [
+										"api",
+										"v1",
+										"transactions",
+										"SKA-1-97E61062",
+										"transfer"
+									],
+									"query": [
+										{
+											"key": "destinationWalletCode",
+											"value": "SKA-1-6F09370A"
+										},
+										{
+											"key": "amount",
+											"value": "300"
+										}
+									]
 								}
-							}
+							},
+							"response": []
 						},
-						"url": {
-							"raw": "https://skawallet-backend-api.onrender.com/api/v1/bank-accounts/",
-							"protocol": "https",
-							"host": [
-								"skawallet-backend-api",
-								"onrender",
-								"com"
+						{
+							"name": "Check Balance",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://skawallet-backend-api.onrender.com/api/v1/transactions/balance/SKA-7-44F1CE31 ",
+									"protocol": "https",
+									"host": [
+										"skawallet-backend-api",
+										"onrender",
+										"com"
+									],
+									"path": [
+										"api",
+										"v1",
+										"transactions",
+										"balance",
+										"SKA-7-44F1CE31 "
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "List Transactions By Wallet Date",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var template = `",
+											"<style type=\"text/css\">",
+											"    .tftable {font-size:14px;color:#333333;width:100%;border-width: 1px;border-color: #87ceeb;border-collapse: collapse;}",
+											"    .tftable th {font-size:18px;background-color:#87ceeb;border-width: 1px;padding: 8px;border-style: solid;border-color: #87ceeb;text-align:left;}",
+											"    .tftable tr {background-color:#ffffff;}",
+											"    .tftable td {font-size:14px;border-width: 1px;padding: 8px;border-style: solid;border-color: #87ceeb;}",
+											"    .tftable tr:hover {background-color:#e0ffff;}",
+											"</style>",
+											"",
+											"<table class=\"tftable\" border=\"1\">",
+											"    <tr>",
+											"        <th>Status</th>",
+											"        <th>Amount</th>",
+											"        <th>Source Account</th>",
+											"        <th>Transaction Type</th>",
+											"        <th>Destination Account</th>",
+											"        <th>PK Transactions</th>",
+											"        <th>Created At</th>",
+											"        <th>Name</th>",
+											"    </tr>",
+											"    ",
+											"    {{#each response}}",
+											"        <tr>",
+											"            <td>{{status}}</td>",
+											"            <td>{{amount}}</td>",
+											"            <td>{{sourceAccount}}</td>",
+											"            <td>{{transactionType}}</td>",
+											"            <td>{{destinationAccount}}</td>",
+											"            <td>{{pk_transactions}}</td>",
+											"            <td>{{created_at}}</td>",
+											"            <td>{{name}}</td>",
+											"        </tr>",
+											"    {{/each}}",
+											"</table>",
+											"`;",
+											"",
+											"function constructVisualizerPayload() {",
+											"    return {response: pm.response.json()}",
+											"}",
+											"",
+											"pm.visualizer.set(template, constructVisualizerPayload());"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
 							],
-							"path": [
-								"api",
-								"v1",
-								"bank-accounts",
-								""
-							]
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://skawallet-backend-api.onrender.com/api/v1/transactions/1?startDate=2025-01-01T00:00:00&endDate=2025-02-01T00:00:00",
+									"protocol": "https",
+									"host": [
+										"skawallet-backend-api",
+										"onrender",
+										"com"
+									],
+									"path": [
+										"api",
+										"v1",
+										"transactions",
+										"1"
+									],
+									"query": [
+										{
+											"key": "startDate",
+											"value": "2025-01-01T00:00:00"
+										},
+										{
+											"key": "endDate",
+											"value": "2025-02-01T00:00:00"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "List Transactions By Wallet",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var template = `",
+											"<style type=\"text/css\">",
+											"    .tftable {font-size:14px;color:#333333;width:100%;border-width: 1px;border-color: #87ceeb;border-collapse: collapse;}",
+											"    .tftable th {font-size:18px;background-color:#87ceeb;border-width: 1px;padding: 8px;border-style: solid;border-color: #87ceeb;text-align:left;}",
+											"    .tftable tr {background-color:#ffffff;}",
+											"    .tftable td {font-size:14px;border-width: 1px;padding: 8px;border-style: solid;border-color: #87ceeb;}",
+											"    .tftable tr:hover {background-color:#e0ffff;}",
+											"</style>",
+											"",
+											"<table class=\"tftable\" border=\"1\">",
+											"    <tr>",
+											"        <th>Status</th>",
+											"        <th>Amount</th>",
+											"        <th>Source Account</th>",
+											"        <th>Transaction Type</th>",
+											"        <th>Destination Account</th>",
+											"        <th>PK Transactions</th>",
+											"        <th>Created At</th>",
+											"        <th>Name</th>",
+											"    </tr>",
+											"    ",
+											"    {{#each response}}",
+											"        <tr>",
+											"            <td>{{status}}</td>",
+											"            <td>{{amount}}</td>",
+											"            <td>{{sourceAccount}}</td>",
+											"            <td>{{transactionType}}</td>",
+											"            <td>{{destinationAccount}}</td>",
+											"            <td>{{pk_transactions}}</td>",
+											"            <td>{{created_at}}</td>",
+											"            <td>{{name}}</td>",
+											"        </tr>",
+											"    {{/each}}",
+											"</table>",
+											"`;",
+											"",
+											"function constructVisualizerPayload() {",
+											"    return {response: pm.response.json()}",
+											"}",
+											"",
+											"pm.visualizer.set(template, constructVisualizerPayload());"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://skawallet-backend-api.onrender.com/api/v1/transactions/wallet/2",
+									"protocol": "https",
+									"host": [
+										"skawallet-backend-api",
+										"onrender",
+										"com"
+									],
+									"path": [
+										"api",
+										"v1",
+										"transactions",
+										"wallet",
+										"2"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Transfer Transactions",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"amount\": 500.50,\n  \"transactionType\": \"TRANSFER\",\n  \"paymentMethod\": \"DIGITAL_WALLET\",\n  \"description\": \"Transferência entre carteiras\",\n  \"sourceWalletId\": 2,\n  \"destinationWalletId\": 1\n}\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://skawallet-backend-api.onrender.com/api/v1/transactions/",
+									"protocol": "https",
+									"host": [
+										"skawallet-backend-api",
+										"onrender",
+										"com"
+									],
+									"path": [
+										"api",
+										"v1",
+										"transactions",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Payment Transactions",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"sourceWalletId\": 1,\n  \"destinationWalletId\": 2,\n  \"amount\": 1000.00,\n  \"transactionType\": \"PAYMENT\",\n  \"paymentMethod\": \"DIGITAL_WALLET\",\n  \"description\": \"Pagamento de Serviço\"\n}\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://skawallet-backend-api.onrender.com/api/v1/transactions/",
+									"protocol": "https",
+									"host": [
+										"skawallet-backend-api",
+										"onrender",
+										"com"
+									],
+									"path": [
+										"api",
+										"v1",
+										"transactions",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Deposit Transactions",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"amount\": 5000.00,\n  \"cardNumber\": \"4111111111111111\",\n  \"expiryDate\": \"12/25\",\n  \"cvv\": \"123\",\n  \"walletCode\": \"SKA-7-44F1CE31\"\n}\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://skawallet-backend-api.onrender.com/api/v1/transactions/top-up",
+									"protocol": "https",
+									"host": [
+										"skawallet-backend-api",
+										"onrender",
+										"com"
+									],
+									"path": [
+										"api",
+										"v1",
+										"transactions",
+										"top-up"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "WITHDRAWAL Transactions",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"amount\": 500.00,\n  \"transactionType\": \"WITHDRAWAL\",\n  \"paymentMethod\": \"DIGITAL_WALLET\",\n  \"description\": \"Retirada para uso pessoal\",\n  \"sourceWalletId\": 1\n}\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://skawallet-backend-api.onrender.com/api/v1/transactions/",
+									"protocol": "https",
+									"host": [
+										"skawallet-backend-api",
+										"onrender",
+										"com"
+									],
+									"path": [
+										"api",
+										"v1",
+										"transactions",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "WITHDRAWAL Transactions By Code",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"amount\": 500.00,\n  \"transactionType\": \"WITHDRAWAL\",\n  \"paymentMethod\": \"DIGITAL_WALLET\",\n  \"description\": \"Retirada para uso pessoal\",\n  \"sourceWalletId\": 1\n}\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://skawallet-backend-api.onrender.com/api/v1/transactions/SKA-1-6F09370A/withdrawal?amount=5000",
+									"protocol": "https",
+									"host": [
+										"skawallet-backend-api",
+										"onrender",
+										"com"
+									],
+									"path": [
+										"api",
+										"v1",
+										"transactions",
+										"SKA-1-6F09370A",
+										"withdrawal"
+									],
+									"query": [
+										{
+											"key": "amount",
+											"value": "5000"
+										}
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
+					]
 				},
 				{
-					"name": "List Bank Accounts",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "https://skawallet-backend-api.onrender.com/api/v1/bank-accounts/",
-							"protocol": "https",
-							"host": [
-								"skawallet-backend-api",
-								"onrender",
-								"com"
-							],
-							"path": [
-								"api",
-								"v1",
-								"bank-accounts",
-								""
-							]
+					"name": "Partner",
+					"item": [
+						{
+							"name": "Insert Partner",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"partnerCode\":\"MOVICEL\",\n  \"name\": \"MOVICEL Angola\",\n  \"description\": \"Operadora de telecomunicações\",\n  \"category\": \"TELECOM\",\n  \"paymentSupported\": true\n}\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://skawallet-backend-api.onrender.com/api/v1/partners/",
+									"protocol": "https",
+									"host": [
+										"skawallet-backend-api",
+										"onrender",
+										"com"
+									],
+									"path": [
+										"api",
+										"v1",
+										"partners",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Lista All Partners",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://skawallet-backend-api.onrender.com/api/v1/partners/",
+									"protocol": "https",
+									"host": [
+										"skawallet-backend-api",
+										"onrender",
+										"com"
+									],
+									"path": [
+										"api",
+										"v1",
+										"partners",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "List Partners by Codex",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://skawallet-backend-api.onrender.com/api/v1/partners/UNITEL",
+									"protocol": "https",
+									"host": [
+										"skawallet-backend-api",
+										"onrender",
+										"com"
+									],
+									"path": [
+										"api",
+										"v1",
+										"partners",
+										"UNITEL"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Partner",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "https://skawallet-backend-api.onrender.com/api/v1/partners/TESTE_ANGO",
+									"protocol": "https",
+									"host": [
+										"skawallet-backend-api",
+										"onrender",
+										"com"
+									],
+									"path": [
+										"api",
+										"v1",
+										"partners",
+										"TESTE_ANGO"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Partners",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"contactInfo\": \"912725812\"\n}\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://skawallet-backend-api.onrender.com/api/v1/partners/MOVICEL_AN",
+									"protocol": "https",
+									"host": [
+										"skawallet-backend-api",
+										"onrender",
+										"com"
+									],
+									"path": [
+										"api",
+										"v1",
+										"partners",
+										"MOVICEL_AN"
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
+					]
+				},
+				{
+					"name": "BNPL - Buy Now, Pay Later",
+					"item": [
+						{
+							"name": "Parcelamento",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"userId\": 1,\n  \"amount\": 50000,\n  \"installments\": 4,\n  \"partnerId\": 1,\n  \"description\": \"Compra de eletrodoméstico\"\n}\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://skawallet-backend-api.onrender.com/api/v1/installments/",
+									"protocol": "https",
+									"host": [
+										"skawallet-backend-api",
+										"onrender",
+										"com"
+									],
+									"path": [
+										"api",
+										"v1",
+										"installments",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Pagar uma Parcela",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "https://skawallet-backend-api.onrender.com/api/v1/installments/pay?installmentId=2&walletCode=SKA-1-BE489D03&amount=100",
+									"protocol": "https",
+									"host": [
+										"skawallet-backend-api",
+										"onrender",
+										"com"
+									],
+									"path": [
+										"api",
+										"v1",
+										"installments",
+										"pay"
+									],
+									"query": [
+										{
+											"key": "installmentId",
+											"value": "2"
+										},
+										{
+											"key": "walletCode",
+											"value": "SKA-1-BE489D03"
+										},
+										{
+											"key": "amount",
+											"value": "100"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Listar Parcelamento",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://skawallet-backend-api.onrender.com/api/v1/installments/user/1",
+									"protocol": "https",
+									"host": [
+										"skawallet-backend-api",
+										"onrender",
+										"com"
+									],
+									"path": [
+										"api",
+										"v1",
+										"installments",
+										"user",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Payments",
+					"item": [
+						{
+							"name": "Payment Entity",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"pkTransactions\": 1,\n  \"amount\": 5000.00,\n  \"transactionType\": \"PAYMENT\",\n  \"status\": \"COMPLETED\",\n  \"createdAt\": \"2025-02-01T10:30:00\",\n  \"description\": \"Pagamento para Unitel\"\n}\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://skawallet-backend-api.onrender.com/api/v1/payments/pay?partnerCode=UNITEL&amount=5000.00&walletCode=SKA-1-BE489D03",
+									"protocol": "https",
+									"host": [
+										"skawallet-backend-api",
+										"onrender",
+										"com"
+									],
+									"path": [
+										"api",
+										"v1",
+										"payments",
+										"pay"
+									],
+									"query": [
+										{
+											"key": "partnerCode",
+											"value": "UNITEL"
+										},
+										{
+											"key": "amount",
+											"value": "5000.00"
+										},
+										{
+											"key": "walletCode",
+											"value": "SKA-1-BE489D03"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
 				}
 			]
 		},
@@ -1536,7 +2571,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/api/v1/kafka/publish",
+							"raw": "http://localhost:8080/api/v1/kafka/publishx",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1546,7 +2581,7 @@
 								"api",
 								"v1",
 								"kafka",
-								"publish"
+								"publishx"
 							]
 						}
 					},
@@ -1696,12 +2731,7 @@
 						}
 					},
 					"response": []
-				}
-			]
-		},
-		{
-			"name": "Notifications",
-			"item": [
+				},
 				{
 					"name": "WebSocket",
 					"request": {
@@ -1783,7 +2813,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/api/v1/wallets/user/1",
+							"raw": "http://localhost:8080/api/v1/wallets/user/2",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1794,7 +2824,29 @@
 								"v1",
 								"wallets",
 								"user",
-								"1"
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List All Wallets",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/wallets/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"wallets",
+								""
 							]
 						}
 					},
@@ -1829,7 +2881,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"walletName\": \"Carteira Negócios\",\n  \"walletType\": \"MERCHANT\",\n  \"balance\": 1000000.00,\n  \"currency\": \"AKZ\",\n  \"isDefault\": true,\n  \"userId\": 1\n}\n",
+							"raw": "{\n  \"walletName\": \"Minha Carteira Digital\",\n  \"walletType\": \"MERCHANT\",\n  \"balance\": 1000000.00,\n  \"currency\": \"USD\",\n  \"isDefault\": true,\n  \"userId\": 49\n}\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1912,7 +2964,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/api/v1/wallets/balance/1",
+							"raw": "http://localhost:8080/api/v1/wallets/balance/SKA-1-BE489D03",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -1923,6 +2975,333 @@
 								"v1",
 								"wallets",
 								"balance",
+								"SKA-1-BE489D03"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Wallet By Codex",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/wallets/code/SKA-1-BE489D03",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"wallets",
+								"code",
+								"SKA-1-BE489D03"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Partner",
+			"item": [
+				{
+					"name": "Insert Partner",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"partnerCode\":\"MOVICEL\",\n  \"name\": \"MOVICEL Angola\",\n  \"description\": \"Operadora de telecomunicações\",\n  \"category\": \"TELECOM\",\n  \"paymentSupported\": true\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/partners/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"partners",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Lista All Partners",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/partners/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"partners",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Partners by Codex",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/partners/UNITEL",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"partners",
+								"UNITEL"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Partner",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/partners/TESTE_ANGO",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"partners",
+								"TESTE_ANGO"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Partners",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"contactInfo\": \"912725812\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/partners/MOVICEL_AN",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"partners",
+								"MOVICEL_AN"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "OAuth2",
+			"item": [
+				{
+					"name": "Login",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/oauth2/authorization/github",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"oauth2",
+								"authorization",
+								"github"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Call Back",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/auth/oauth2/callback",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"oauth2",
+								"callback"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Fraud Repots",
+			"item": [
+				{
+					"name": "Report",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/fraud/report",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"fraud",
+								"report"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "BNPL - Buy Now, Pay Later",
+			"item": [
+				{
+					"name": "Parcelamento",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"userId\": 1,\n  \"amount\": 50000,\n  \"installments\": 4,\n  \"partnerId\": 3,\n  \"description\": \"Compra de eletrodoméstico\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/installments/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"installments",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Pagar uma Parcela",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/installments/pay?installmentId=2&walletCode=SKA-1-BE489D03&amount=100",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"installments",
+								"pay"
+							],
+							"query": [
+								{
+									"key": "installmentId",
+									"value": "2"
+								},
+								{
+									"key": "walletCode",
+									"value": "SKA-1-BE489D03"
+								},
+								{
+									"key": "amount",
+									"value": "100"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Listar Parcelamento",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/installments/user/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"installments",
+								"user",
 								"1"
 							]
 						}
