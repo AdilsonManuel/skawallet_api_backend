@@ -48,9 +48,9 @@ public interface TransactionRepository extends JpaRepository<Transactions, Long>
     List<Object[]> findTransactionsByUserId (@Param("userId") Long userId);
 
     @Query("SELECT t FROM Transactions t "
-            + "WHERE (t.sourceWallet.user.pkUsers = :userId OR t.destinationWallet.user.pkUsers = :userId) "
-            + "AND t.createdAt BETWEEN :startDate AND :endDate "
-            + "ORDER BY t.createdAt DESC")
+           + "WHERE (t.sourceWallet.user.pkUsers = :userId OR t.destinationWallet.user.pkUsers = :userId) "
+           + "AND t.createdAt BETWEEN :startDate AND :endDate "
+           + "ORDER BY t.createdAt DESC")
     List<Transactions> findTransactionsByUserAndDateRange (
             @Param("userId") Long userId,
             @Param("startDate") LocalDateTime startDate,
@@ -66,6 +66,13 @@ public interface TransactionRepository extends JpaRepository<Transactions, Long>
 
     int countBySourceWallet_UserOrDestinationWallet_UserAndStatus (Users user1, Users user2, TransactionStatus status);
 
-    @Query("SELECT COUNT(t) FROM Transactions t WHERE t.sourceWallet.user.pkUsers = :userId OR t.destinationWallet.user.pkUsers = :userId")
+    @Query("""
+        SELECT COUNT(th) 
+        FROM TransactionHistory th
+        JOIN th.transaction t
+        JOIN DigitalWallets dw 
+          ON dw = t.sourceWallet OR dw = t.destinationWallet
+        WHERE dw.user.pkUsers = :userId
+    """)
     long countTransactionsByUserId (@Param("userId") Long userId);
 }
