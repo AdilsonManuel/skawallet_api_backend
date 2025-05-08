@@ -319,7 +319,7 @@ public class TransactionService
         // Transações: Transferência e Saque
         for (Transactions t : transactions)
         {
-            if (t.getTransactionType ().equals ("TRANSFER") || t.getTransactionType ().equals ("WITHDRAWAL"))
+            if (t.getTransactionType ().equals ("TRANSFER") || t.getTransactionType ().equals ("WITHDRAWAL") || t.getTransactionType ().equals ("DEPOSIT") || t.getTransactionType ().equals ("PAYMENT"))
             {
                 history.add (UserHistoryDTO.builder ()
                         .type (t.getTransactionType ().name ())
