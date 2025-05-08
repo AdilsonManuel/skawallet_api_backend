@@ -7,6 +7,7 @@ package com.ucan.skawallet.back.end.skawallet.controller;
 import com.ucan.skawallet.back.end.skawallet.dto.DepositRequestDTO;
 import com.ucan.skawallet.back.end.skawallet.dto.TransactionDTO;
 import com.ucan.skawallet.back.end.skawallet.dto.TransactionResponseDTO;
+import com.ucan.skawallet.back.end.skawallet.dto.UserHistoryDTO;
 import com.ucan.skawallet.back.end.skawallet.enums.TransactionStatus;
 import com.ucan.skawallet.back.end.skawallet.model.Transactions;
 import com.ucan.skawallet.back.end.skawallet.service.TransactionService;
@@ -40,56 +41,56 @@ public class TransactionController
     @GetMapping("/")
     public ResponseEntity<List<Transactions>> getAllUsers ()
     {
-        List<Transactions> transactionses = transactionService.ListTransactions();
+        List<Transactions> transactionses = transactionService.ListTransactions ();
 
-        return new ResponseEntity<>(transactionses, HttpStatus.OK);
+        return new ResponseEntity<> (transactionses, HttpStatus.OK);
     }
 
     // Criar uma nova transação
     @PostMapping("/")
     public ResponseEntity<Transactions> createTransaction (@RequestBody TransactionDTO transactionDTO)
     {
-        Transactions transaction = transactionService.createTransaction(transactionDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(transaction);
+        Transactions transaction = transactionService.createTransaction (transactionDTO);
+        return ResponseEntity.status (HttpStatus.CREATED).body (transaction);
     }
 
     // Obter todas as transações por carteira
     @GetMapping("/wallet/{walletId}")
     public ResponseEntity<List<Transactions>> getTransactionsByWallet (@PathVariable Long walletId)
     {
-        List<Transactions> transactions = transactionService.getTransactionsByWallet(walletId);
-        return ResponseEntity.ok(transactions);
+        List<Transactions> transactions = transactionService.getTransactionsByWallet (walletId);
+        return ResponseEntity.ok (transactions);
     }
 
     // Obter detalhes de uma transação específica
     @GetMapping("/{transactionId}")
     public ResponseEntity<Transactions> getTransactionById (@PathVariable Long transactionId)
     {
-        Transactions transaction = transactionService.getTransactionById(transactionId);
-        return ResponseEntity.ok(transaction);
+        Transactions transaction = transactionService.getTransactionById (transactionId);
+        return ResponseEntity.ok (transaction);
     }
 
     @GetMapping("/history/{userId}")
     public ResponseEntity<List<TransactionResponseDTO>> getUserTransactionHistory (@PathVariable Long userId)
     {
-        List<TransactionResponseDTO> transactions = transactionService.getTransactionsByUserId(userId);
-        return ResponseEntity.ok(transactions);
+        List<TransactionResponseDTO> transactions = transactionService.getTransactionsByUserId (userId);
+        return ResponseEntity.ok (transactions);
     }
 
     @PatchMapping("/{id}")
     public ResponseEntity<Transactions> updateTransaction (
             @PathVariable Long id, @RequestBody Transactions transaction)
     {
-        transaction.setPkTransactions(id);
-        Transactions updatedTransaction = transactionService.updateTransaction(transaction);
-        return ResponseEntity.ok(updatedTransaction);
+        transaction.setPkTransactions (id);
+        Transactions updatedTransaction = transactionService.updateTransaction (transaction);
+        return ResponseEntity.ok (updatedTransaction);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTransaction (@PathVariable Long id)
     {
-        transactionService.deleteTransaction(id);
-        return ResponseEntity.noContent().build();
+        transactionService.deleteTransaction (id);
+        return ResponseEntity.noContent ().build ();
     }
 
     @GetMapping("/transaction-history/{userId}")
@@ -99,8 +100,8 @@ public class TransactionController
             @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate)
     {
 
-        List<Transactions> transactions = transactionService.getTransactionsByUserAndDateRange(userId, startDate, endDate);
-        return ResponseEntity.ok(transactions);
+        List<Transactions> transactions = transactionService.getTransactionsByUserAndDateRange (userId, startDate, endDate);
+        return ResponseEntity.ok (transactions);
     }
 
     @PatchMapping("/{transactionId}/status")
@@ -110,8 +111,8 @@ public class TransactionController
             @RequestParam TransactionStatus newStatus)
     {
 
-        Transactions updatedTransaction = transactionService.updateTransactionStatus(transactionId, newStatus);
-        return ResponseEntity.ok(updatedTransaction);
+        Transactions updatedTransaction = transactionService.updateTransactionStatus (transactionId, newStatus);
+        return ResponseEntity.ok (updatedTransaction);
     }
 
     @PostMapping("/{walletCode}/withdrawal")
@@ -121,8 +122,8 @@ public class TransactionController
             @RequestParam BigDecimal amount)
     {
 
-        String withdrawalCode = transactionService.generateWithdrawalCode(walletCode, amount);
-        return ResponseEntity.ok("Código de levantamento: " + withdrawalCode);
+        String withdrawalCode = transactionService.generateWithdrawalCode (walletCode, amount);
+        return ResponseEntity.ok ("Código de levantamento: " + withdrawalCode);
     }
 
     @PostMapping("/{walletCode}/transfer")
@@ -133,15 +134,22 @@ public class TransactionController
             @RequestParam BigDecimal amount)
     {
 
-        Transactions transaction = transactionService.transferFunds(walletCode, destinationWalletCode, amount);
-        return ResponseEntity.ok(transaction);
+        Transactions transaction = transactionService.transferFunds (walletCode, destinationWalletCode, amount);
+        return ResponseEntity.ok (transaction);
     }
 
     @PostMapping("/top-up")
     public ResponseEntity<Transactions> topUpWallet (@Valid @RequestBody DepositRequestDTO request)
     {
-        Transactions transaction = transactionService.topUpWallet(request);
-        return ResponseEntity.ok(transaction);
+        Transactions transaction = transactionService.topUpWallet (request);
+        return ResponseEntity.ok (transaction);
+    }
+
+    @GetMapping("/history/unified/{userId}")
+    public ResponseEntity<List<UserHistoryDTO>> getUnifiedHistory (@PathVariable Long userId)
+    {
+        List<UserHistoryDTO> history = transactionService.getUnifiedUserHistory (userId);
+        return ResponseEntity.ok (history);
     }
 
 }

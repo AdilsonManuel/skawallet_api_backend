@@ -75,4 +75,12 @@ public interface TransactionRepository extends JpaRepository<Transactions, Long>
         WHERE dw.user.pkUsers = :userId
     """)
     long countTransactionsByUserId (@Param("userId") Long userId);
+
+    @Query("""
+    SELECT t FROM Transactions t
+    WHERE t.sourceWallet.user.id = :userId
+       OR t.destinationWallet.user.id = :userId
+""")
+    List<Transactions> findByUserId (@Param("userId") Long userId);
+
 }
