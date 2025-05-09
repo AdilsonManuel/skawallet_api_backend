@@ -6,9 +6,13 @@ package com.ucan.skawallet.back.end.skawallet.service;
 
 import com.ucan.skawallet.back.end.skawallet.dto.InstallmentRequestDTO;
 import com.ucan.skawallet.back.end.skawallet.enums.InstallmentStatus;
+import com.ucan.skawallet.back.end.skawallet.enums.PaymentMethod;
+import com.ucan.skawallet.back.end.skawallet.enums.TransactionStatus;
+import com.ucan.skawallet.back.end.skawallet.enums.TransactionType;
 import com.ucan.skawallet.back.end.skawallet.model.DigitalWallets;
 import com.ucan.skawallet.back.end.skawallet.model.Installment;
 import com.ucan.skawallet.back.end.skawallet.model.Partner;
+import com.ucan.skawallet.back.end.skawallet.model.Transactions;
 import com.ucan.skawallet.back.end.skawallet.model.Users;
 import com.ucan.skawallet.back.end.skawallet.repository.DigitalWalletRepository;
 import com.ucan.skawallet.back.end.skawallet.repository.InstallmentRepository;
@@ -20,10 +24,11 @@ import jakarta.transaction.Transactional;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -37,11 +42,16 @@ public class InstallmentService
     private final DigitalWalletRepository digitalWalletRepository;
     private final TransactionRepository transactionRepository;
 
+    @Transactional
     public Installment createInstallment (InstallmentRequestDTO request)
     {
         Users user = usersRepository.findByIdDocument(request.getIdDocument())
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado."));
 
+        // ✅ Verifica se o usuário está bloqueado por inadimplência antes de qualquer ação
+        verificarBloqueioUsuario(user);
+
+        // Verifica se o usuário não está bloqueado por inadimplência
         if (Boolean.TRUE.equals(user.getBlockedByInadimplencia()))
         {
             throw new IllegalStateException("Operação não permitida. BI bloqueado.");
@@ -50,26 +60,54 @@ public class InstallmentService
         Partner partner = partnersRepository.findById(request.getPartnerId())
                 .orElseThrow(() -> new RuntimeException("Parceiro não encontrado."));
 
-        // Verifica se o usuário é elegível para parcelamento
         validateUserEligibility(user);
 
         int approvedInstallments = Math.min(request.getInstallments(), 6);
-
         BigDecimal monthlyPayment = request.getAmount()
                 .divide(BigDecimal.valueOf(approvedInstallments), RoundingMode.HALF_UP);
-        LocalDate firstDueDate = LocalDate.now().plusMonths(1);
 
+        // Verifica e debita a primeira parcela
+        DigitalWallets wallet = digitalWalletRepository.getWalletByCode(request.getWalletCode())
+                .orElseThrow(() -> new EntityNotFoundException("Carteira não encontrada."));
+
+        if (wallet.getBalance().compareTo(monthlyPayment) < 0)
+        {
+            throw new IllegalStateException("Saldo insuficiente para iniciar parcelamento.");
+        }
+
+        // Débito inicial
+        wallet.setBalance(wallet.getBalance().subtract(monthlyPayment));
+        digitalWalletRepository.save(wallet);
+
+        // Criação da parcela
         Installment installment = new Installment();
         installment.setUser(user);
         installment.setPartner(partner);
         installment.setTotalAmount(request.getAmount());
         installment.setInstallments(approvedInstallments);
-        installment.setRemainingInstallments(approvedInstallments);
+        installment.setRemainingInstallments(approvedInstallments - 1); // primeira já paga
         installment.setMonthlyPayment(monthlyPayment);
-        installment.setNextDueDate(firstDueDate);
-        installment.setStatus(InstallmentStatus.APPROVED);
+        installment.setNextDueDate(LocalDate.now().plusMonths(1));
+        installment.setStatus(InstallmentStatus.PENDING);
 
-        return installmentRepository.save(installment);
+        installmentRepository.save(installment);
+
+        // Transação inicial
+        Transactions tx = new Transactions();
+        tx.setAmount(monthlyPayment);
+        tx.setTransactionType(TransactionType.INSTALLMENT_PAYMENT);
+        tx.setStatus(TransactionStatus.COMPLETED);
+        tx.setCreatedAt(LocalDateTime.now());
+        tx.setCompletedAt(LocalDateTime.now());
+        tx.setSourceWallet(wallet);
+        tx.setPaymentMethod(PaymentMethod.DIGITAL_WALLET);
+        tx.setDescription("Pagamento da 1ª parcela do parcelamento");
+        transactionRepository.save(tx);
+
+        // ✅ Tenta debitar parcelas vencidas (caso o usuário tenha outras pendentes)
+        debitarParcelasVencidasDoUsuario(user);
+
+        return installment;
     }
 
     public List<Installment> getUserInstallments (Long userId)
@@ -164,19 +202,61 @@ public class InstallmentService
         return installmentRepository.findAll();
     }
 
-    @Scheduled(cron = "0 0 2 * * *") // Executa todos os dias às 2h
-    public void verificarInadimplencia ()
+    public void verificarBloqueioUsuario (Users user)
     {
-        List<Installment> atrasados = installmentRepository.findOverdueInstallments(LocalDate.now());
+        LocalDate hoje = LocalDate.now();
+        boolean possuiAtraso = installmentRepository
+                .findByUserPkUsers(user.getPkUsers()).stream()
+                .anyMatch(i -> i.getStatus() == InstallmentStatus.PENDING && i.getNextDueDate().isBefore(hoje));
 
-        for (Installment inst : atrasados)
+        if (possuiAtraso && !Boolean.TRUE.equals(user.getBlockedByInadimplencia()))
         {
-            Users user = inst.getUser();
-            if (!Boolean.TRUE.equals(user.getBlockedByInadimplencia()))
+            user.setBlockedByInadimplencia(true);
+            usersRepository.save(user);
+        }
+    }
+
+    public void debitarParcelasVencidasDoUsuario (Users user)
+    {
+        LocalDate hoje = LocalDate.now();
+
+        List<Installment> vencidas = installmentRepository
+                .findByUserPkUsers(user.getPkUsers()).stream()
+                .filter(i -> i.getStatus() == InstallmentStatus.PENDING && !i.getNextDueDate().isAfter(hoje))
+                .collect(Collectors.toList());
+
+        for (Installment parcela : vencidas)
+        {
+            DigitalWallets wallet = (DigitalWallets) user.getWallets();
+            BigDecimal valor = parcela.getMonthlyPayment();
+
+            if (wallet.getBalance().compareTo(valor) >= 0)
             {
-                user.setBlockedByInadimplencia(true);
-                usersRepository.save(user);
+                wallet.setBalance(wallet.getBalance().subtract(valor));
+                digitalWalletRepository.save(wallet);
+
+                parcela.setRemainingInstallments(parcela.getRemainingInstallments() - 1);
+                parcela.setNextDueDate(hoje.plusMonths(1));
+
+                if (parcela.getRemainingInstallments() == 0)
+                {
+                    parcela.setStatus(InstallmentStatus.COMPLETED);
+                }
+
+                installmentRepository.save(parcela);
+
+                Transactions tx = new Transactions();
+                tx.setAmount(valor);
+                tx.setTransactionType(TransactionType.INSTALLMENT_PAYMENT);
+                tx.setStatus(TransactionStatus.COMPLETED);
+                tx.setCreatedAt(LocalDateTime.now());
+                tx.setCompletedAt(LocalDateTime.now());
+                tx.setSourceWallet(wallet);
+                tx.setPaymentMethod(PaymentMethod.DIGITAL_WALLET);
+                tx.setDescription("Débito automático de parcela vencida");
+                transactionRepository.save(tx);
             }
         }
+
     }
 }

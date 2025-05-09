@@ -16,4 +16,5 @@ public class InstallmentRequestDTO
     private BigDecimal amount;
     private Integer installments;
     private String description;
+    private String WalletCode;
 }

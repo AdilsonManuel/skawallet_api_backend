@@ -10,6 +10,7 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -62,6 +63,10 @@ public class Users implements UserDetails
 
     @Column(nullable = false)
     private Boolean blockedByInadimplencia = false;
+
+    // Em Users.java
+    @OneToMany(mappedBy = "user")
+    private List<DigitalWallets> wallets;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities ()

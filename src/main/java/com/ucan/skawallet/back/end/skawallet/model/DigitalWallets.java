@@ -4,6 +4,7 @@
  */
 package com.ucan.skawallet.back.end.skawallet.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ucan.skawallet.back.end.skawallet.enums.WalletType;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
@@ -40,6 +41,7 @@ public class DigitalWallets
 
     @ManyToOne
     @JoinColumn(name = "fk_users", nullable = false)
+    @JsonIgnore
     private Users user;
 
     @Column(name = "created_at", updatable = false)

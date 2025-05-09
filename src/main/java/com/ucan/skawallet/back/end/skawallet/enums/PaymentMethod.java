@@ -8,5 +8,6 @@ public enum PaymentMethod
 {
     CARD,
     BANK,
-    DIGITAL_WALLET
+    DIGITAL_WALLET,
+    CASH
 }
