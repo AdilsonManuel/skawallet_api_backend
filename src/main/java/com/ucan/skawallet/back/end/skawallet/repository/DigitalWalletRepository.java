@@ -39,5 +39,7 @@ public interface DigitalWalletRepository extends JpaRepository<DigitalWallets, L
             nativeQuery = true)
     Optional<DigitalWallets> findByUserId (@Param("userId") Long userId);
 
-//    public BigDecimal getAverageBalance (Users user);
+    @Query("SELECT w FROM DigitalWallets w WHERE w.user.pkUsers = :pkUsers AND w.isDefault = true")
+    Optional<DigitalWallets> findByUserPkUsersAndIsDefaultTrue (@Param("pkUsers") Long pkUsers);
+
 }

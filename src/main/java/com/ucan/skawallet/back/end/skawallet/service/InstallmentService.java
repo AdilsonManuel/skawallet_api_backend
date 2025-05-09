@@ -27,6 +27,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -105,8 +106,7 @@ public class InstallmentService
         transactionRepository.save(tx);
 
         // ✅ Tenta debitar parcelas vencidas (caso o usuário tenha outras pendentes)
-        debitarParcelasVencidasDoUsuario(user);
-
+//        debitarParcelasVencidasDoUsuario(user);
         return installment;
     }
 
@@ -225,9 +225,20 @@ public class InstallmentService
                 .filter(i -> i.getStatus() == InstallmentStatus.PENDING && !i.getNextDueDate().isAfter(hoje))
                 .collect(Collectors.toList());
 
+        // Buscar a carteira padrão do usuário
+        Optional<DigitalWallets> optionalWallet = digitalWalletRepository.findByUserPkUsersAndIsDefaultTrue(user.getPkUsers());
+
+        if (optionalWallet.isEmpty())
+        {
+            // Logar ou lançar uma exceção conforme sua regra de negócio
+            System.out.println("Usuário não possui carteira padrão.");
+            return;
+        }
+
+        DigitalWallets wallet = optionalWallet.get();
+
         for (Installment parcela : vencidas)
         {
-            DigitalWallets wallet = (DigitalWallets) user.getWallets();
             BigDecimal valor = parcela.getMonthlyPayment();
 
             if (wallet.getBalance().compareTo(valor) >= 0)
@@ -254,9 +265,10 @@ public class InstallmentService
                 tx.setSourceWallet(wallet);
                 tx.setPaymentMethod(PaymentMethod.DIGITAL_WALLET);
                 tx.setDescription("Débito automático de parcela vencida");
+
                 transactionRepository.save(tx);
             }
         }
-
     }
+
 }
