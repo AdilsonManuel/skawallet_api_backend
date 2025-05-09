@@ -87,12 +87,12 @@ public class DigitalWalletController
     }
 
     @GetMapping("/code/{walletCode}")
-    public ResponseEntity<DigitalWallets> getWalletByCode (@PathVariable String walletCode)
+    public ResponseEntity<DigitalWallets> getWalletByCode ( @PathVariable String walletCode)
     {
         return ResponseEntity.ok(digitalWalletService.getWalletByCode(walletCode));
     }
 
-    @GetMapping("/listAll")
+    @GetMapping("/")
     public ResponseEntity<List<DigitalWallets>> getAllWallets ()
     {
         List<DigitalWallets> wallets = digitalWalletService.getAllWallets();
