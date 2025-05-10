@@ -4,6 +4,7 @@
  */
 package com.ucan.skawallet.back.end.skawallet.service;
 
+import com.ucan.skawallet.back.end.skawallet.dto.InstallmentHistoryDTO;
 import com.ucan.skawallet.back.end.skawallet.dto.InstallmentRequestDTO;
 import com.ucan.skawallet.back.end.skawallet.enums.InstallmentStatus;
 import com.ucan.skawallet.back.end.skawallet.enums.PaymentMethod;
@@ -183,17 +184,37 @@ public class InstallmentService
         return score;
     }
 
-    /**
-     * Método que verifica se um usuário pode solicitar um parcelamento.
-     */
     private void validateUserEligibility (Users user)
     {
-        int userScore = calculateUserScore(user);
+        int userScore = calculateUserScore(user); // pode ser usado no futuro para scoring mais avançado
         long transactionCount = transactionRepository.countTransactionsByUserId(user.getPkUsers());
 
         if (transactionCount < 5)
         {
-            throw new RuntimeException("Usuário não elegível para parcelamento. Necessário ter no mínimo 5 transações, actualmente tem: " + transactionCount);
+            throw new RuntimeException("Usuário não elegível para parcelamento. Necessário ter no mínimo 5 transações, atualmente tem: " + transactionCount);
+        }
+
+        List<Installment> activeInstallments = installmentRepository.findByUserAndStatus(user, InstallmentStatus.PENDING);
+        int activeCount = activeInstallments.size();
+
+        LocalDate carteiraCriadaEm = user.getCreatedAt().toLocalDate();
+        long mesesAtivo = ChronoUnit.MONTHS.between(carteiraCriadaEm, LocalDate.now());
+
+        if (mesesAtivo < 6)
+        {
+            // Cliente novo
+            if (activeCount > 0)
+            {
+                throw new RuntimeException("Usuário novo só pode ter 1 parcelamento ativo por vez.");
+            }
+        }
+        else
+        {
+            // Cliente com mais de 6 meses (antigo)
+            if (activeCount >= 3)
+            {
+                throw new RuntimeException("Usuário já possui o número máximo de parcelamentos ativos (3).");
+            }
         }
     }
 
@@ -269,6 +290,23 @@ public class InstallmentService
                 transactionRepository.save(tx);
             }
         }
+    }
+
+    public List<InstallmentHistoryDTO> getUserInstallmentHistory (Long userId)
+    {
+        List<Installment> installments = installmentRepository.findByUserPkUsers(userId);
+
+        return installments.stream()
+                .map(i -> InstallmentHistoryDTO.builder()
+                .partnerName(i.getPartner().getName())
+                .totalAmount(i.getTotalAmount())
+                .installments(i.getInstallments())
+                .remainingInstallments(i.getRemainingInstallments())
+                .monthlyPayment(i.getMonthlyPayment())
+                .nextDueDate(i.getNextDueDate())
+                .status(i.getStatus().name())
+                .build())
+                .collect(Collectors.toList());
     }
 
 }

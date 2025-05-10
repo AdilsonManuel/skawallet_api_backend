@@ -32,4 +32,8 @@ public interface InstallmentRepository extends JpaRepository<Installment, Long>
 
     @Query("SELECT i FROM Installment i WHERE i.nextDueDate < :hoje AND i.status <> 'COMPLETED'")
     List<Installment> findOverdueInstallments (@Param("hoje") LocalDate hoje);
+
+    @Query("SELECT i FROM Installment i WHERE i.user = :user AND i.status = :status")
+    List<Installment> findByUserAndStatus (@Param("user") Users user, @Param("status") InstallmentStatus status);
+
 }

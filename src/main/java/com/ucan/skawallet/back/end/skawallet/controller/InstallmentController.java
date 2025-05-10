@@ -4,6 +4,7 @@
  */
 package com.ucan.skawallet.back.end.skawallet.controller;
 
+import com.ucan.skawallet.back.end.skawallet.dto.InstallmentHistoryDTO;
 import com.ucan.skawallet.back.end.skawallet.dto.InstallmentRequestDTO;
 import com.ucan.skawallet.back.end.skawallet.model.Installment;
 import com.ucan.skawallet.back.end.skawallet.service.InstallmentService;
@@ -59,5 +60,12 @@ public class InstallmentController
     {
         List<Installment> installments = installmentService.getAllInstallments();
         return ResponseEntity.ok(installments.isEmpty() ? Collections.emptyList() : installments);
+    }
+
+    @GetMapping("/history/{userId}")
+    public ResponseEntity<List<InstallmentHistoryDTO>> getInstallmentHistory (@PathVariable Long userId)
+    {
+        List<InstallmentHistoryDTO> history = installmentService.getUserInstallmentHistory(userId);
+        return ResponseEntity.ok(history);
     }
 }
