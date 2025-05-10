@@ -23,7 +23,9 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.EnumSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -311,26 +313,36 @@ public class TransactionService
 
     public List<UserHistoryDTO> getUnifiedUserHistory (Long userId)
     {
-        List<Transactions> transactions = transactionRepository.findByUserId(userId);
-        List<TopUpReference> topUps = topUpReferenceRepository.findConfirmedByUserId(userId);
+        // Tipos de transações suportados no histórico
+        EnumSet<TransactionType> tiposSuportados = EnumSet.of(
+                TransactionType.DEPOSIT,
+                TransactionType.WITHDRAWAL,
+                TransactionType.TRANSFER,
+                TransactionType.PAYMENT,
+                TransactionType.DEBIT,
+                TransactionType.TOP_UP,
+                TransactionType.INSTALLMENT_PAYMENT
+        );
 
         List<UserHistoryDTO> history = new ArrayList<>();
 
-        // Todas as transações disponíveis no enum TransactionType
+        // Transações gerais
+        List<Transactions> transactions = transactionRepository.findByUserId(userId);
         for (Transactions t : transactions)
         {
-            if (t.getTransactionType() != null)
+            if (t.getTransactionType() != null && tiposSuportados.contains(t.getTransactionType()))
             {
                 history.add(UserHistoryDTO.builder()
                         .type(t.getTransactionType().name())
                         .amount(t.getAmount())
-                        .description(t.getDescription())
+                        .description(Optional.ofNullable(t.getDescription()).orElse("Transação"))
                         .date(t.getCreatedAt())
                         .build());
             }
         }
 
         // Recargas via referência (TOP_UP)
+        List<TopUpReference> topUps = topUpReferenceRepository.findConfirmedByUserId(userId);
         for (TopUpReference topUp : topUps)
         {
             history.add(UserHistoryDTO.builder()
@@ -341,7 +353,7 @@ public class TransactionService
                     .build());
         }
 
-        // Ordenar por data (mais recente primeiro)
+        // Ordena do mais recente para o mais antigo
         history.sort(Comparator.comparing(UserHistoryDTO::getDate).reversed());
 
         return history;
