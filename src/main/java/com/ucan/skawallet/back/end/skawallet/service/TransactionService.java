@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -313,7 +314,6 @@ public class TransactionService
 
     public List<UserHistoryDTO> getUnifiedUserHistory (Long userId)
     {
-        // Tipos de transações suportados no histórico
         EnumSet<TransactionType> tiposSuportados = EnumSet.of(
                 TransactionType.DEPOSIT,
                 TransactionType.WITHDRAWAL,
@@ -326,20 +326,23 @@ public class TransactionService
 
         List<UserHistoryDTO> history = new ArrayList<>();
 
-        // Transações gerais
-        List<Transactions> transactions = transactionRepository.findByUserId(userId);
-        for (Transactions t : transactions)
+        // Buscar todas as carteiras do usuário
+        Optional<DigitalWallets> wallets = digitalWalletRepository.findByUserId(userId);
+
+        wallets.ifPresent(wallet ->
         {
-            if (t.getTransactionType() != null && tiposSuportados.contains(t.getTransactionType()))
-            {
-                history.add(UserHistoryDTO.builder()
-                        .type(t.getTransactionType().name())
-                        .amount(t.getAmount())
-                        .description(Optional.ofNullable(t.getDescription()).orElse("Transação"))
-                        .date(t.getCreatedAt())
-                        .build());
-            }
-        }
+            List<Transactions> sourceTxs = transactionRepository.findBySourceWallet(wallet);
+            List<Transactions> destTxs = transactionRepository.findByDestinationWallet(wallet);
+
+            Stream.concat(sourceTxs.stream(), destTxs.stream())
+                    .filter(t -> t.getTransactionType() != null && tiposSuportados.contains(t.getTransactionType()))
+                    .forEach(t -> history.add(UserHistoryDTO.builder()
+                    .type(t.getTransactionType().name())
+                    .amount(t.getAmount())
+                    .description(Optional.ofNullable(t.getDescription()).orElse("Transação"))
+                    .date(t.getCreatedAt())
+                    .build()));
+        });
 
         // Recargas via referência (TOP_UP)
         List<TopUpReference> topUps = topUpReferenceRepository.findConfirmedByUserId(userId);
@@ -353,7 +356,6 @@ public class TransactionService
                     .build());
         }
 
-        // Ordena do mais recente para o mais antigo
         history.sort(Comparator.comparing(UserHistoryDTO::getDate).reversed());
 
         return history;

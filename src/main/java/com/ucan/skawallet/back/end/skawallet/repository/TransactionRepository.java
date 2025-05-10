@@ -48,9 +48,9 @@ public interface TransactionRepository extends JpaRepository<Transactions, Long>
     List<Object[]> findTransactionsByUserId (@Param("userId") Long userId);
 
     @Query("SELECT t FROM Transactions t "
-           + "WHERE (t.sourceWallet.user.pkUsers = :userId OR t.destinationWallet.user.pkUsers = :userId) "
-           + "AND t.createdAt BETWEEN :startDate AND :endDate "
-           + "ORDER BY t.createdAt DESC")
+            + "WHERE (t.sourceWallet.user.pkUsers = :userId OR t.destinationWallet.user.pkUsers = :userId) "
+            + "AND t.createdAt BETWEEN :startDate AND :endDate "
+            + "ORDER BY t.createdAt DESC")
     List<Transactions> findTransactionsByUserAndDateRange (
             @Param("userId") Long userId,
             @Param("startDate") LocalDateTime startDate,
@@ -82,5 +82,9 @@ public interface TransactionRepository extends JpaRepository<Transactions, Long>
        OR t.destinationWallet.user.id = :userId
 """)
     List<Transactions> findByUserId (@Param("userId") Long userId);
+
+    List<Transactions> findBySourceWallet (DigitalWallets wallet); // Transações onde a carteira é origem
+
+    List<Transactions> findByDestinationWallet (DigitalWallets wallet); // Transações onde a carteira é destino
 
 }
