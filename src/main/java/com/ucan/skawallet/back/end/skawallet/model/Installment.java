@@ -53,5 +53,5 @@ public class Installment
     private LocalDate nextDueDate; // Próxima data de vencimento
 
     @Enumerated(EnumType.STRING)
-    private InstallmentStatus status = InstallmentStatus.PENDING;
+    private InstallmentStatus status = InstallmentStatus.APPROVED;
 }
