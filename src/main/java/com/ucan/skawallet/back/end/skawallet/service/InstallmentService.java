@@ -191,7 +191,7 @@ public class InstallmentService
 
         if (transactionCount < 5)
         {
-            throw new RuntimeException("Usuário não elegível para parcelamento. Necessário ter no mínimo 5 transações, atualmente tem: " + transactionCount);
+            throw new RuntimeException("Usuário não elegível para parcelamento. Usuário com histórico Insuficiente ");
         }
 
         List<Installment> activeInstallments = installmentRepository.findByUserAndStatus(user, InstallmentStatus.PENDING);
