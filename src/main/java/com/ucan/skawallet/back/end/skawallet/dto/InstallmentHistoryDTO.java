@@ -17,6 +17,8 @@ public class InstallmentHistoryDTO
 {
 
     private String partnerName;
+    private String productName; // 🆕 nome do produto
+    private BigDecimal productprice; // 🆕 nome do produto
     private BigDecimal totalAmount;
     private int installments;
     private int remainingInstallments;

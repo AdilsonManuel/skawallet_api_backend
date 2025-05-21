@@ -54,4 +54,8 @@ public class Installment
 
     @Enumerated(EnumType.STRING)
     private InstallmentStatus status = InstallmentStatus.PENDING;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "fk_product")
+    private Produto produto;
 }

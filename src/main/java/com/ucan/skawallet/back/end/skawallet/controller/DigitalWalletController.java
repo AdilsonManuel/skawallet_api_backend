@@ -54,7 +54,7 @@ public class DigitalWalletController
         return ResponseEntity.ok(wallet);
     }
 
-    // Atualizar parcialmente uma carteira
+    // Actualizar parcialmente uma carteira
     @PatchMapping("/{walletId}")
     public ResponseEntity<DigitalWallets> updateWallet (
             @PathVariable Long walletId,

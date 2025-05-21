@@ -5,10 +5,10 @@
 package com.ucan.skawallet.back.end.skawallet.controller;
 
 import com.ucan.skawallet.back.end.skawallet.dto.InstallmentHistoryDTO;
+import com.ucan.skawallet.back.end.skawallet.dto.InstallmentPaymentRequest;
 import com.ucan.skawallet.back.end.skawallet.dto.InstallmentRequestDTO;
 import com.ucan.skawallet.back.end.skawallet.model.Installment;
 import com.ucan.skawallet.back.end.skawallet.service.InstallmentService;
-import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -46,12 +45,9 @@ public class InstallmentController
     }
 
     @PostMapping("/pay")
-    public ResponseEntity<String> payInstallment (
-            @RequestParam Long installmentId,
-            @RequestParam String walletCode,
-            @RequestParam BigDecimal amount)
+    public ResponseEntity<String> payInstallment (@RequestBody InstallmentPaymentRequest dto)
     {
-        String result = installmentService.payInstallment(installmentId, walletCode, amount);
+        String result = installmentService.payInstallment(dto.getInstallmentId(), dto.getWalletCode());
         return ResponseEntity.ok(result);
     }
 

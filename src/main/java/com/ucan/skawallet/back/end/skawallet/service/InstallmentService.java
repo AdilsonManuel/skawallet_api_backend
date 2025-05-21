@@ -13,11 +13,13 @@ import com.ucan.skawallet.back.end.skawallet.enums.TransactionType;
 import com.ucan.skawallet.back.end.skawallet.model.DigitalWallets;
 import com.ucan.skawallet.back.end.skawallet.model.Installment;
 import com.ucan.skawallet.back.end.skawallet.model.Partner;
+import com.ucan.skawallet.back.end.skawallet.model.Produto;
 import com.ucan.skawallet.back.end.skawallet.model.Transactions;
 import com.ucan.skawallet.back.end.skawallet.model.Users;
 import com.ucan.skawallet.back.end.skawallet.repository.DigitalWalletRepository;
 import com.ucan.skawallet.back.end.skawallet.repository.InstallmentRepository;
 import com.ucan.skawallet.back.end.skawallet.repository.PartnerRepository;
+import com.ucan.skawallet.back.end.skawallet.repository.ProdutoRepository;
 import com.ucan.skawallet.back.end.skawallet.repository.TransactionRepository;
 import com.ucan.skawallet.back.end.skawallet.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -43,6 +45,7 @@ public class InstallmentService
     private final PartnerRepository partnersRepository;
     private final DigitalWalletRepository digitalWalletRepository;
     private final TransactionRepository transactionRepository;
+    private final ProdutoRepository produtoRepository;
 
     @Transactional
     public Installment createInstallment (InstallmentRequestDTO request)
@@ -50,10 +53,8 @@ public class InstallmentService
         Users user = usersRepository.findByIdDocument(request.getIdDocument())
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado."));
 
-        // ✅ Verifica se o usuário está bloqueado por inadimplência antes de qualquer ação
         verificarBloqueioUsuario(user);
 
-        // Verifica se o usuário não está bloqueado por inadimplência
         if (Boolean.TRUE.equals(user.getBlockedByInadimplencia()))
         {
             throw new IllegalStateException("Operação não permitida. BI bloqueado.");
@@ -62,13 +63,22 @@ public class InstallmentService
         Partner partner = partnersRepository.findById(request.getPartnerId())
                 .orElseThrow(() -> new RuntimeException("Parceiro não encontrado."));
 
+        // ✅ Busca o produto e valida se pertence ao parceiro
+        Produto produto = produtoRepository.findById(request.getProductId())
+                .orElseThrow(() -> new RuntimeException("Produto não encontrado."));
+
+        if (!produto.getPartner().getPkPartners().equals(partner.getPkPartners()))
+        {
+            throw new IllegalArgumentException("Produto informado não pertence ao parceiro selecionado.");
+        }
+
         validateUserEligibility(user);
 
         int approvedInstallments = Math.min(request.getInstallments(), 6);
-        BigDecimal monthlyPayment = request.getAmount()
+        BigDecimal totalAmount = produto.getPreco(); // Usa o preço do produto
+        BigDecimal monthlyPayment = totalAmount
                 .divide(BigDecimal.valueOf(approvedInstallments), RoundingMode.HALF_UP);
 
-        // Verifica e debita a primeira parcela
         DigitalWallets wallet = digitalWalletRepository.getWalletByCode(request.getWalletCode())
                 .orElseThrow(() -> new EntityNotFoundException("Carteira não encontrada."));
 
@@ -77,24 +87,23 @@ public class InstallmentService
             throw new IllegalStateException("Saldo insuficiente para iniciar parcelamento.");
         }
 
-        // Débito inicial
         wallet.setBalance(wallet.getBalance().subtract(monthlyPayment));
         digitalWalletRepository.save(wallet);
 
-        // Criação da parcela
         Installment installment = new Installment();
         installment.setUser(user);
         installment.setPartner(partner);
-        installment.setTotalAmount(request.getAmount());
+        installment.setProduto(produto); // ✅ vincula o produto ao parcelamento
+        installment.setTotalAmount(totalAmount);
+        installment.setMonthlyPayment(monthlyPayment);
         installment.setInstallments(approvedInstallments);
-        installment.setRemainingInstallments(approvedInstallments - 1); // primeira já paga
+        installment.setRemainingInstallments(approvedInstallments - 1);
         installment.setMonthlyPayment(monthlyPayment);
         installment.setNextDueDate(LocalDate.now().plusMonths(1));
         installment.setStatus(InstallmentStatus.PENDING);
 
         installmentRepository.save(installment);
 
-        // Transação inicial
         Transactions tx = new Transactions();
         tx.setAmount(monthlyPayment);
         tx.setTransactionType(TransactionType.INSTALLMENT_PAYMENT);
@@ -106,8 +115,6 @@ public class InstallmentService
         tx.setDescription("Pagamento da 1ª parcela do parcelamento");
         transactionRepository.save(tx);
 
-        // ✅ Tenta debitar parcelas vencidas (caso o usuário tenha outras pendentes)
-//        debitarParcelasVencidasDoUsuario(user);
         return installment;
     }
 
@@ -117,7 +124,7 @@ public class InstallmentService
     }
 
     @Transactional
-    public String payInstallment (Long installmentId, String walletCode, BigDecimal amount)
+    public String payInstallment (Long installmentId, String walletCode)
     {
         // Busca o parcelamento pelo ID
         Installment installment = installmentRepository.findById(installmentId)
@@ -133,14 +140,16 @@ public class InstallmentService
         DigitalWallets wallet = digitalWalletRepository.getWalletByCode(walletCode)
                 .orElseThrow(() -> new EntityNotFoundException("Carteira não encontrada."));
 
+        BigDecimal monthlyPayment = installment.getMonthlyPayment();
+
         // Verifica saldo suficiente
-        if (wallet.getBalance().compareTo(amount) < 0)
+        if (wallet.getBalance().compareTo(monthlyPayment) < 0)
         {
             throw new IllegalStateException("Saldo insuficiente para pagamento da parcela.");
         }
 
         // Debita o valor da carteira
-        wallet.setBalance(wallet.getBalance().subtract(amount));
+        wallet.setBalance(wallet.getBalance().subtract(monthlyPayment));
         digitalWalletRepository.save(wallet);
 
         // Atualiza o parcelamento
@@ -154,12 +163,22 @@ public class InstallmentService
         }
         else
         {
-            // Se ainda há parcelas, não altera o status
-            installment.setStatus(InstallmentStatus.PENDING); // Exemplo de status alternativo, se necessário
+            installment.setStatus(InstallmentStatus.PENDING);
         }
 
-        // Salva as alterações no parcelamento
         installmentRepository.save(installment);
+
+        // Criar registro da transação
+        Transactions tx = new Transactions();
+        tx.setAmount(monthlyPayment);
+        tx.setTransactionType(TransactionType.INSTALLMENT_PAYMENT);
+        tx.setStatus(TransactionStatus.COMPLETED);
+        tx.setCreatedAt(LocalDateTime.now());
+        tx.setCompletedAt(LocalDateTime.now());
+        tx.setSourceWallet(wallet);
+        tx.setPaymentMethod(PaymentMethod.DIGITAL_WALLET);
+        tx.setDescription("Pagamento da parcela do parcelamento ID " + installmentId);
+        transactionRepository.save(tx);
 
         return "Parcelamento pago com sucesso! Restam " + installment.getRemainingInstallments() + " parcelas.";
     }
@@ -299,6 +318,7 @@ public class InstallmentService
         return installments.stream()
                 .map(i -> InstallmentHistoryDTO.builder()
                 .partnerName(i.getPartner().getName())
+                .productName(i.getProduto() != null ? i.getProduto().getNome() : "Produto não definido") // ⛑️ Protege contra null
                 .totalAmount(i.getTotalAmount())
                 .installments(i.getInstallments())
                 .remainingInstallments(i.getRemainingInstallments())

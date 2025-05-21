@@ -4,16 +4,21 @@
  */
 package com.ucan.skawallet.back.end.skawallet.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
+/**
+ *
+ * @author azm
+ */
 @Data
-public class InstallmentRequestDTO
+@AllArgsConstructor
+@NoArgsConstructor
+public class InstallmentPaymentRequest
 {
 
-    private String idDocument;
-    private Long partnerId;
-    private Integer installments;
-    private String description;
-    private String WalletCode;
-    private Long productId; // Novo campo
+    private Long installmentId;
+    private String walletCode;
+    // remove o campo "amount"
 }
