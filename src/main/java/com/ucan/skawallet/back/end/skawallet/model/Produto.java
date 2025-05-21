@@ -4,6 +4,7 @@
  */
 package com.ucan.skawallet.back.end.skawallet.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -40,10 +41,11 @@ public class Produto
     private Long id;
 
     private String nome;
+
     private BigDecimal preco;
 
     @ManyToOne
     @JoinColumn(name = "partner_id")
+    @JsonBackReference
     private Partner partner;
-
 }

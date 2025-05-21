@@ -4,7 +4,9 @@
  */
 package com.ucan.skawallet.back.end.skawallet.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.ucan.skawallet.back.end.skawallet.enums.PartnerCategory;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -33,7 +35,7 @@ public class Partner
     private Long pkPartners;
 
     @Column(nullable = false, unique = true)
-    private String partnerCode; // "UNITEL"
+    private String partnerCode;
 
     @Column(nullable = false)
     private String name;
@@ -42,7 +44,7 @@ public class Partner
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private PartnerCategory category; // Enum: TELECOM, ENERGY, GOV, FINANCE, RETAIL
+    private PartnerCategory category;
 
     @Column(nullable = false)
     private Boolean paymentSupported = true;
@@ -50,9 +52,9 @@ public class Partner
     private String contactInfo;
 
     @Column(name = "created_at", updatable = false)
-    private LocalDateTime createdAt = LocalDateTime.now();
+    private LocalDateTime createdAt = LocalDateTime.now ();
 
-    // Alteração no Partner.java
-    @OneToMany(mappedBy = "partner")
+    @OneToMany(mappedBy = "partner", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<Produto> produtos;
 }
