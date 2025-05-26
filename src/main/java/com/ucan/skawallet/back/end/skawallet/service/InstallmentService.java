@@ -313,20 +313,29 @@ public class InstallmentService
 
     public List<InstallmentHistoryDTO> getUserInstallmentHistory (Long userId)
     {
-        List<Installment> installments = installmentRepository.findByUserPkUsers(userId);
-
-        return installments.stream()
-                .map(i -> InstallmentHistoryDTO.builder()
-                .partnerName(i.getPartner().getName())
-                .productName(i.getProduto() != null ? i.getProduto().getNome() : "Produto não definido") // ⛑️ Protege contra null
-                .totalAmount(i.getTotalAmount())
-                .installments(i.getInstallments())
-                .remainingInstallments(i.getRemainingInstallments())
-                .monthlyPayment(i.getMonthlyPayment())
-                .nextDueDate(i.getNextDueDate())
-                .status(i.getStatus().name())
-                .build())
+        return installmentRepository.findInstallmentsByUserId(userId).stream()
+                .map(this::convertToDto)
                 .collect(Collectors.toList());
+    }
+
+    private InstallmentHistoryDTO convertToDto (Installment installment)
+    {
+        return InstallmentHistoryDTO.builder()
+                .installmentId(installment.getInstallmentId())
+                .partnerName(installment.getPartner().getName())
+                .productName(Optional.ofNullable(installment.getProduto())
+                        .map(Produto::getNome)
+                        .orElse("Produto não definido"))
+                .productPrice(Optional.ofNullable(installment.getProduto())
+                        .map(Produto::getPreco)
+                        .orElse(null))
+                .totalAmount(installment.getTotalAmount())
+                .installments(installment.getInstallments())
+                .remainingInstallments(installment.getRemainingInstallments())
+                .monthlyPayment(installment.getMonthlyPayment())
+                .nextDueDate(installment.getNextDueDate())
+                .status(installment.getStatus().name())
+                .build();
     }
 
 }

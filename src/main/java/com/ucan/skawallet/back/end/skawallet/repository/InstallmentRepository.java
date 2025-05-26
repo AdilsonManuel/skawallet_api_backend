@@ -36,4 +36,11 @@ public interface InstallmentRepository extends JpaRepository<Installment, Long>
     @Query("SELECT i FROM Installment i WHERE i.user = :user AND i.status = :status")
     List<Installment> findByUserAndStatus (@Param("user") Users user, @Param("status") InstallmentStatus status);
 
+    @Query("SELECT i FROM Installment i "
+            + "LEFT JOIN FETCH i.partner "
+            + "LEFT JOIN FETCH i.produto "
+            + "WHERE i.user.id = :userId "
+            + "ORDER BY i.nextDueDate ASC")
+    List<Installment> findInstallmentsByUserId (@Param("userId") Long userId);
+
 }

@@ -4,21 +4,22 @@
  */
 package com.ucan.skawallet.back.end.skawallet.dto;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import lombok.Data;
+
+@Data
 @Builder
-@Getter
-@Setter
 public class InstallmentHistoryDTO
 {
 
+    private Long installmentId;  // ID da parcela
     private String partnerName;
-    private String productName; // 🆕 nome do produto
-    private BigDecimal productprice; // 🆕 nome do produto
+    private String productName;
+    private BigDecimal productPrice;  // Corrigido para camelCase
     private BigDecimal totalAmount;
     private int installments;
     private int remainingInstallments;

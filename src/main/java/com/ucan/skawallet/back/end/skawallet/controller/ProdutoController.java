@@ -30,7 +30,7 @@ public class ProdutoController
     @Autowired
     private ProdutoService produtoService;
 
-    @PostMapping
+    @PostMapping("/")
     public ResponseEntity<Produto> criar (@RequestBody Produto produto)
     {
         return ResponseEntity.ok(produtoService.salvarProduto(produto));

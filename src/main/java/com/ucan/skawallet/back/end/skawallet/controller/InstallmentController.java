@@ -62,6 +62,8 @@ public class InstallmentController
     public ResponseEntity<List<InstallmentHistoryDTO>> getInstallmentHistory (@PathVariable Long userId)
     {
         List<InstallmentHistoryDTO> history = installmentService.getUserInstallmentHistory(userId);
-        return ResponseEntity.ok(history);
+        return history.isEmpty()
+                ? ResponseEntity.noContent().build()
+                : ResponseEntity.ok(history);
     }
 }
