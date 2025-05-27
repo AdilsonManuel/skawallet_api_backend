@@ -61,7 +61,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/api/v1/users/2",
+							"raw": "http://localhost:8080/api/v1/users/66",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -71,7 +71,7 @@
 								"api",
 								"v1",
 								"users",
-								"2"
+								"66"
 							]
 						},
 						"description": "Endpoint para recuperar detalhes do perfil do usuário autenticado.\n\n- **URL:** `GET /api/v1/users/me`\n    \n- **Método:** GET\n    \n- **Headers:**\n    \n    - `Authorization: Bearer {token}`\n        \n- **Descrição:** Retorna informações do perfil do usuário autenticado.\n    \n    {  \n    \"id\": 1,  \n    \"name\": \"John Doe\",  \n    \"email\": \"[john.doe@example.com](https://mailto:john.doe@example.com)\",  \n    \"type\": \"USER\",  \n    \"createdAt\": \"2024-11-18T12:00:00\"  \n    }"
@@ -316,15 +316,12 @@
 				},
 				{
 					"name": "Status KYC",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "",
+							"raw": "{\n  \"identifier\": \"adilsonzumba@hotmail.com\",\n  \"password\": \"senha123\"\n}\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -332,7 +329,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/api/v1/kyc/status/11",
+							"raw": "http://localhost:8080/api/*/auth/login",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -340,10 +337,9 @@
 							"port": "8080",
 							"path": [
 								"api",
-								"v1",
-								"kyc",
-								"status",
-								"11"
+								"*",
+								"auth",
+								"login"
 							],
 							"query": [
 								{
@@ -850,7 +846,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"amount\": 1000000.50,\n  \"transactionType\": \"TRANSFER\",\n  \"paymentMethod\": \"DIGITAL_WALLET\",\n  \"description\": \"Transferência entre carteiras\",\n  \"sourceWalletId\": 1,\n  \"destinationWalletId\": 2,\n  \"status\":\"COMPLETED\"\n}\n",
+							"raw": "{\n  \"amount\": 500.50,\n  \"transactionType\": \"TRANSFER\",\n  \"paymentMethod\": \"DIGITAL_WALLET\",\n  \"description\": \"Transferência entre carteiras\",\n  \"sourceWalletId\": 5,\n  \"destinationWalletId\": 1,\n  \"status\":\"COMPLETED\"\n}\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -954,7 +950,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"amount\": 500000.00,\n  \"cardNumber\": \"4111111111111111\",\n  \"expiryDate\": \"12/25\",\n  \"cvv\": \"123\",\n  \"walletCode\": \"SKA-65-A5249A18\"\n}\n",
+							"raw": "{\n  \"amount\": 500000.00,\n  \"cardNumber\": \"4111111111111111\",\n  \"expiryDate\": \"12/25\",\n  \"cvv\": \"123\",\n  \"walletCode\": \"SKA-66-94D1F538\"\n}\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -985,7 +981,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"amount\": 500.00,\n  \"transactionType\": \"WITHDRAWAL\",\n  \"paymentMethod\": \"DIGITAL_WALLET\",\n  \"description\": \"Retirada para uso pessoal\",\n  \"sourceWalletId\": 4,\n  \"status\":\"COMPLETED\"\n}\n",
+							"raw": "{\n  \"amount\": 500.00,\n  \"transactionType\": \"WITHDRAWAL\",\n  \"paymentMethod\": \"DIGITAL_WALLET\",\n  \"description\": \"Retirada para uso pessoal\",\n  \"sourceWalletId\": 5,\n  \"status\":\"COMPLETED\"\n}\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1400,7 +1396,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "// Body (x-www-form-urlencoded)\n{\n  \"walletCode\": \"SKA-11-857B257F\",\n  \"amount\": 10000   \n}\n",
+									"raw": "// Body (x-www-form-urlencoded)\n{\n  \"walletCode\": \"SKA-11-857B257F\",\n  \"amount\": 100000   \n}\n",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1468,7 +1464,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "// Body (x-www-form-urlencoded)\n{\n  \"referenceCode\": \"85956311\"\n}\n",
+									"raw": "// Body (x-www-form-urlencoded)\n{\n  \"referenceCode\": \"66488719\"\n}\n",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1648,15 +1644,12 @@
 						},
 						{
 							"name": "Status KYC",
-							"protocolProfileBehavior": {
-								"disableBodyPruning": true
-							},
 							"request": {
-								"method": "GET",
+								"method": "POST",
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "",
+									"raw": "{\n  \"identifier\": \"adilsonzumba@hotmail.com\",\n  \"password\": \"senha123\"\n}\n",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1664,7 +1657,7 @@
 									}
 								},
 								"url": {
-									"raw": "https://skawallet-backend-api.onrender.com/api/*/kyc/status/11",
+									"raw": "https://skawallet-backend-api.onrender.com/api/*/auth/login",
 									"protocol": "https",
 									"host": [
 										"skawallet-backend-api",
@@ -1674,9 +1667,8 @@
 									"path": [
 										"api",
 										"*",
-										"kyc",
-										"status",
-										"11"
+										"auth",
+										"login"
 									],
 									"query": [
 										{
@@ -1776,7 +1768,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"name\": \"Maria\",\n    \"email\": \"maria@example.com\",\n    \"phone\": \"923456788\",\n    \"password\": \"senha123\",\n    \"idDocument\": \"123456789LA045\",\n    \"type\": \"USER\"\n}",
+									"raw": "{\n  \"name\": \"Sofia Lopes\",\n  \"email\": \"sofia.lopes01@gmail.com\",\n  \"phone\": \"923444444\",\n  \"password\": \"senha321\",\n  \"idDocument\": \"000000321LA004\",\n  \"type\": \"ADMIN\"\n}\n",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1809,7 +1801,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"type\":\"USER\"\n}\n",
+									"raw": "{\n    \"name\": \"Skawallet Admin\",\n    \"email\": \"skawallet52@gmail.com\",\n    \"phone\": \"949159962\",\n    \"password\": \"senha123\",\n    \"idDocument\": \"123456789LA045\",\n    \"type\": \"ADMIN\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1817,7 +1809,7 @@
 									}
 								},
 								"url": {
-									"raw": "https://skawallet-backend-api.onrender.com/api/v1/users/2",
+									"raw": "https://skawallet-backend-api.onrender.com/api/v1/users/1",
 									"protocol": "https",
 									"host": [
 										"skawallet-backend-api",
@@ -1828,7 +1820,7 @@
 										"api",
 										"v1",
 										"users",
-										"2"
+										"1"
 									]
 								},
 								"description": "Endpoint para atualizar os dados do usuário.\n\n- **URL:** `PUT /api/v1/users/{id}`\n    \n- **Método:** PUT\n    \n- **Headers:**\n    \n    - `Authorization: Bearer {token}`\n        \n- **Descrição:** Permite ao usuário atualizar seu perfil, como nome e senha."
@@ -1871,7 +1863,7 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "https://skawallet-backend-api.onrender.com/api/v1/wallets/user/11",
+									"raw": "https://skawallet-backend-api.onrender.com/api/v1/wallets/user/15",
 									"protocol": "https",
 									"host": [
 										"skawallet-backend-api",
@@ -1883,7 +1875,7 @@
 										"v1",
 										"wallets",
 										"user",
-										"11"
+										"15"
 									]
 								}
 							},
@@ -1895,7 +1887,7 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "https://skawallet-backend-api.onrender.com/api/v1/wallets/1",
+									"raw": "https://skawallet-backend-api.onrender.com/api/v1/wallets/11",
 									"protocol": "https",
 									"host": [
 										"skawallet-backend-api",
@@ -1906,7 +1898,7 @@
 										"api",
 										"v1",
 										"wallets",
-										"1"
+										"11"
 									]
 								}
 							},
@@ -1942,7 +1934,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n  \"walletName\": \"Carteira Pessoal\",\n  \"walletType\": \"PERSONAL\",\n  \"balance\": 1789258123.00,\n  \"currency\": \"USD\",\n  \"isDefault\": true,\n  \"userId\": 11\n}\n",
+									"raw": "{\n  \"walletName\": \"Carteira Pessoal\",\n  \"walletType\": \"PERSONAL\",\n  \"balance\": 17500900.00,\n  \"currency\": \"USD\",\n  \"isDefault\": true,\n  \"userId\": 9\n}\n",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1974,7 +1966,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n  \"walletName\": \"Carteira Atualizada\",\n  \"currency\": \"EUR\",\n  \"isDefault\": false\n}\n",
+									"raw": "{\n \"pk_digital_wallets\": 11\n}\n",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1982,7 +1974,7 @@
 									}
 								},
 								"url": {
-									"raw": "https://skawallet-backend-api.onrender.com/api/v1/wallets/1",
+									"raw": "https://skawallet-backend-api.onrender.com/api/v1/wallets/9",
 									"protocol": "https",
 									"host": [
 										"skawallet-backend-api",
@@ -1993,7 +1985,7 @@
 										"api",
 										"v1",
 										"wallets",
-										"1"
+										"9"
 									]
 								}
 							},
@@ -2497,7 +2489,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n  \"amount\": 500.50,\n  \"transactionType\": \"TRANSFER\",\n  \"paymentMethod\": \"DIGITAL_WALLET\",\n  \"description\": \"Transferência entre carteiras\",\n  \"sourceWalletId\": 4,\n  \"destinationWalletId\": 2,\n  \"status\":\"COMPLETED\"\n}\n",
+									"raw": "{\n  \"amount\": 5000000.50,\n  \"transactionType\": \"TRANSFER\",\n  \"paymentMethod\": \"DIGITAL_WALLET\",\n  \"description\": \"Transferência entre carteiras\",\n  \"sourceWalletId\": 11,\n  \"destinationWalletId\": 13,\n  \"status\":\"COMPLETED\"\n}\n",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -2529,7 +2521,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"sourceWalletId\": 4,\n    \"destinationWalletId\": 1,\n    \"amount\": 1000.00,\n    \"transactionType\": \"PAYMENT\",\n    \"paymentMethod\": \"DIGITAL_WALLET\",\n    \"description\": \"Pagamento de Serviço\",\n    \"status\": \"COMPLETED\"\n}",
+									"raw": "{\n    \"sourceWalletId\": 11,\n    \"destinationWalletId\": 6,\n    \"amount\": 100.00,\n    \"transactionType\": \"PAYMENT\",\n    \"paymentMethod\": \"DIGITAL_WALLET\",\n    \"description\": \"Pagamento de Serviço\",\n    \"status\": \"COMPLETED\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -2561,7 +2553,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"amount\": 500123.00,\n    \"cardNumber\": \"4111111111111111\",\n    \"expiryDate\": \"12/25\",\n    \"cvv\": \"123\",\n    \"walletCode\": \"SKA-12-38CA93C6\"\n}",
+									"raw": "{\n    \"amount\": 8000.00,\n    \"cardNumber\": \"4111111111111111\",\n    \"expiryDate\": \"12/25\",\n    \"cvv\": \"123\",\n    \"walletCode\": \"SKA-9-1EB013EA\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -2593,7 +2585,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n  \"amount\": 500.00,\n  \"transactionType\": \"WITHDRAWAL\",\n  \"paymentMethod\": \"DIGITAL_WALLET\",\n  \"description\": \"Retirada para uso pessoal\",\n  \"sourceWalletId\": 4,\n  \"status\":\"COMPLETED\"\n}\n",
+									"raw": "{\n  \"amount\": 500.00,\n  \"transactionType\": \"WITHDRAWAL\",\n  \"paymentMethod\": \"DIGITAL_WALLET\",\n  \"description\": \"Retirada para uso pessoal\",\n  \"sourceWalletId\": 11,\n  \"status\":\"COMPLETED\"\n}\n",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -2807,7 +2799,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n  \"idDocument\": \"003456789LA045\",\n  \"amount\": 2470,\n  \"installments\": 4,\n  \"partnerId\": 4,\n  \"description\": \"Compra de eletrodoméstico\",\n  \"walletCode\":\"SKA-11-857B257F\"\n}\n",
+									"raw": "{\n  \"idDocument\": \"123456789LA045\",\n  \"amount\": 7500,\n  \"installments\": 4,\n  \"partnerId\": 1,\n  \"description\": \"Compra de eletrodoméstico\",\n  \"walletCode\": \"SKA-66-94D1F538\",\n  \"productId\": 2                  // ID do produto (deve estar vinculado ao partner)\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -2838,7 +2830,7 @@
 								"method": "POST",
 								"header": [],
 								"url": {
-									"raw": "https://skawallet-backend-api.onrender.com/api/v1/installments/pay?installmentId=2&walletCode=SKA-1-BE489D03&amount=100",
+									"raw": "https://skawallet-backend-api.onrender.com/api/v1/installments/pay?installmentId=11&walletCode=SKA-6-28730FDA&amount=100",
 									"protocol": "https",
 									"host": [
 										"skawallet-backend-api",
@@ -2854,11 +2846,11 @@
 									"query": [
 										{
 											"key": "installmentId",
-											"value": "2"
+											"value": "11"
 										},
 										{
 											"key": "walletCode",
-											"value": "SKA-1-BE489D03"
+											"value": "SKA-6-28730FDA"
 										},
 										{
 											"key": "amount",
@@ -2875,7 +2867,7 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "https://skawallet-backend-api.onrender.com/api/v1/installments/user/3",
+									"raw": "https://skawallet-backend-api.onrender.com/api/v1/installments/user/11",
 									"protocol": "https",
 									"host": [
 										"skawallet-backend-api",
@@ -2887,7 +2879,7 @@
 										"v1",
 										"installments",
 										"user",
-										"3"
+										"11"
 									]
 								}
 							},
@@ -2911,6 +2903,165 @@
 										"v1",
 										"installments",
 										"installments"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "List Installments By User",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://skawallet-backend-api.onrender.com/api/v1/installments/history/2",
+									"protocol": "https",
+									"host": [
+										"skawallet-backend-api",
+										"onrender",
+										"com"
+									],
+									"path": [
+										"api",
+										"v1",
+										"installments",
+										"history",
+										"2"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Product",
+					"item": [
+						{
+							"name": "Create a Product",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"nome\": \"Produto Teste\",\r\n    \"descricao\": \"Descrição do produto\",\r\n    \"valor\": 1500.00,\r\n    \"partner\": {\r\n        \"pkPartners\": 1\r\n    }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/produtos/",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"produtos",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "List All",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"nome\": \"Produto Teste\",\r\n    \"descricao\": \"Descrição do produto\",\r\n    \"valor\": 1500.00,\r\n    \"partner\": {\r\n        \"pkPartners\": 1\r\n    }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/produtos/",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"produtos",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "List By ID",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"nome\": \"Produto Teste\",\r\n    \"descricao\": \"Descrição do produto\",\r\n    \"valor\": 1500.00,\r\n    \"partner\": {\r\n        \"pkPartners\": 1\r\n    }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/produtos/2",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"produtos",
+										"2"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "List Product By Partner",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"nome\": \"Produto Teste\",\r\n    \"descricao\": \"Descrição do produto\",\r\n    \"valor\": 1500.00,\r\n    \"partner\": {\r\n        \"pkPartners\": 1\r\n    }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/produtos/partner/1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"produtos",
+										"partner",
+										"1"
 									]
 								}
 							},
@@ -3231,7 +3382,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/api/v1/wallets/user/2",
+							"raw": "http://localhost:8080/api/v1/wallets/user/66",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -3242,7 +3393,7 @@
 								"v1",
 								"wallets",
 								"user",
-								"2"
+								"66"
 							]
 						}
 					},
@@ -3643,7 +3794,38 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"idDocument\": \"987456321LA045\",\n  \"amount\": 7500,\n  \"installments\": 4,\n  \"partnerId\": 2,\n  \"description\": \"Compra de eletrodoméstico\",\n  \"walletCode\": \"SKA-2-32F897BB\"\n}\n",
+							"raw": "{\n  \"idDocument\": \"123456789LA045\",\n  \"amount\": 7500,\n  \"installments\": 4,\n  \"partnerId\": 1,\n  \"description\": \"Compra de eletrodoméstico\",\n  \"walletCode\": \"SKA-66-94D1F538\",\n  \"productId\": 2                  // ID do produto (deve estar vinculado ao partner)\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/installments/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"installments",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Parcelamento Copy",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"installmentId\": 2,\n    \"walletCode\": \"SKA-2-32F897BB\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -3672,8 +3854,17 @@
 					"request": {
 						"method": "POST",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"installmentId\":22,\n    \"walletCode\": \"SKA-66-94D1F538\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
-							"raw": "http://localhost:8080/api/v1/installments/pay?installmentId=2&walletCode=SKA-1-BE489D03&amount=50000",
+							"raw": "http://localhost:8080/api/v1/installments/pay",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -3684,20 +3875,6 @@
 								"v1",
 								"installments",
 								"pay"
-							],
-							"query": [
-								{
-									"key": "installmentId",
-									"value": "2"
-								},
-								{
-									"key": "walletCode",
-									"value": "SKA-1-BE489D03"
-								},
-								{
-									"key": "amount",
-									"value": "50000"
-								}
 							]
 						}
 					},
@@ -3743,6 +3920,167 @@
 								"v1",
 								"installments",
 								"installments"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Installments By User",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/installments/history/66",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"installments",
+								"history",
+								"66"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Product",
+			"item": [
+				{
+					"name": "Create a Product",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\": \"Produto Teste\",\r\n    \"descricao\": \"Descrição do produto\",\r\n    \"valor\": 1500.00,\r\n    \"partner\": {\r\n        \"pkPartners\": 1\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/produtos/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"produtos",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List All",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\": \"Produto Teste\",\r\n    \"descricao\": \"Descrição do produto\",\r\n    \"valor\": 1500.00,\r\n    \"partner\": {\r\n        \"pkPartners\": 1\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://skawallet-backend-api.onrender.com/api/produtos/",
+							"protocol": "https",
+							"host": [
+								"skawallet-backend-api",
+								"onrender",
+								"com"
+							],
+							"path": [
+								"api",
+								"produtos",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List By ID",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\": \"Produto Teste\",\r\n    \"descricao\": \"Descrição do produto\",\r\n    \"valor\": 1500.00,\r\n    \"partner\": {\r\n        \"pkPartners\": 1\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://skawallet-backend-api.onrender.com/api/produtos/2",
+							"protocol": "https",
+							"host": [
+								"skawallet-backend-api",
+								"onrender",
+								"com"
+							],
+							"path": [
+								"api",
+								"produtos",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Product By Partner",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\": \"Produto Teste\",\r\n    \"descricao\": \"Descrição do produto\",\r\n    \"valor\": 1500.00,\r\n    \"partner\": {\r\n        \"pkPartners\": 1\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://skawallet-backend-api.onrender.com/api/produtos/partner/1",
+							"protocol": "https",
+							"host": [
+								"skawallet-backend-api",
+								"onrender",
+								"com"
+							],
+							"path": [
+								"api",
+								"produtos",
+								"partner",
+								"1"
 							]
 						}
 					},
