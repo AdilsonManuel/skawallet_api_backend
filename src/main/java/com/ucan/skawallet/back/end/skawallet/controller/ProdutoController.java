@@ -4,6 +4,7 @@
  */
 package com.ucan.skawallet.back.end.skawallet.controller;
 
+import com.ucan.skawallet.back.end.skawallet.dto.ProdutoResponse;
 import com.ucan.skawallet.back.end.skawallet.model.Produto;
 import com.ucan.skawallet.back.end.skawallet.service.ProdutoService;
 import java.util.List;
@@ -56,7 +57,7 @@ public class ProdutoController
     }
 
     @GetMapping("/partner/{partnerId}")
-    public ResponseEntity<List<Produto>> listarPorPartner (@PathVariable Long partnerId)
+    public ResponseEntity<List<ProdutoResponse>> listarPorPartner (@PathVariable Long partnerId)
     {
         return ResponseEntity.ok(produtoService.listarPorParceiro(partnerId));
     }

@@ -4,9 +4,11 @@
  */
 package com.ucan.skawallet.back.end.skawallet.service;
 
+import com.ucan.skawallet.back.end.skawallet.dto.ProdutoResponse;
 import com.ucan.skawallet.back.end.skawallet.model.Produto;
 import com.ucan.skawallet.back.end.skawallet.repository.ProdutoRepository;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,11 +18,14 @@ import org.springframework.stereotype.Service;
  */
 // ProdutoService.java
 @Service
+@RequiredArgsConstructor
 public class ProdutoService
 {
 
     @Autowired
     private ProdutoRepository produtoRepository;
+
+    private final ProdutoMapper produtoMapper;
 
     public Produto salvarProduto (Produto produto)
     {
@@ -42,8 +47,11 @@ public class ProdutoService
         produtoRepository.deleteById(id);
     }
 
-    public List<Produto> listarPorParceiro (Long partnerId)
+    public List<ProdutoResponse> listarPorParceiro (Long partnerId)
     {
-        return produtoRepository.findByPartnerId(partnerId);
+        return produtoRepository.findByPartnerId(partnerId)
+                .stream()
+                .map(produtoMapper::toResponse)
+                .toList();
     }
 }

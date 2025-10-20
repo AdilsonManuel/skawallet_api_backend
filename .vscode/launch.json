@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-SkawalletApplication<skawallet>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.ucan.skawallet.back.end.skawallet.SkawalletApplication",
+            "projectName": "skawallet",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
