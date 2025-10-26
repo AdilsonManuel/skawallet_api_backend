@@ -1,7 +1,7 @@
 # -------------------------------------------------------------
-# ETAPA 1: CONSTRUÇÃO (BUILDER) - Usa JDK para compilar
+# ETAPA 1: CONSTRUÇÃO (BUILDER) - Usa uma imagem oficial do Maven com JDK 17
 # -------------------------------------------------------------
-FROM eclipse-temurin:17-jdk-jammy AS builder
+FROM maven:3.9.6-eclipse-temurin-17 AS builder
 
 # Define o diretório de trabalho dentro do contêiner
 WORKDIR /app
@@ -9,7 +9,7 @@ WORKDIR /app
 # Copia os arquivos necessários para o build
 # Otimização do Docker: Copiar pom.xml primeiro para cachear as dependências
 COPY pom.xml .
-# Baixa as dependências
+# Baixa as dependências. O comando 'mvn' agora será encontrado.
 RUN mvn dependency:go-offline
 
 # Copia o código fonte
@@ -19,7 +19,7 @@ COPY src ./src
 RUN mvn clean install -DskipTests
 
 # -------------------------------------------------------------
-# ETAPA 2: IMAGEM FINAL (PRODUÇÃO) - Usa apenas o JRE para ser leve
+# ETAPA 2: IMAGEM FINAL (PRODUÇÃO) - Usa apenas o JRE 17 para ser leve
 # -------------------------------------------------------------
 FROM eclipse-temurin:17-jre-jammy
 
