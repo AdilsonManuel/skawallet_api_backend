@@ -1,7 +1,7 @@
 # -------------------------------------------------------------
-# ETAPA 1: CONSTRUÇÃO (BUILDER) - Usa uma versão estável do Maven/JDK
+# ETAPA 1: CONSTRUÇÃO (BUILDER) - Usa JDK para compilar
 # -------------------------------------------------------------
-FROM maven:3.9.6-openjdk-17 AS builder
+FROM eclipse-temurin:17-jdk-jammy AS builder
 
 # Define o diretório de trabalho dentro do contêiner
 WORKDIR /app
@@ -21,7 +21,7 @@ RUN mvn clean install -DskipTests
 # -------------------------------------------------------------
 # ETAPA 2: IMAGEM FINAL (PRODUÇÃO) - Usa apenas o JRE para ser leve
 # -------------------------------------------------------------
-FROM openjdk:17-jre-slim
+FROM eclipse-temurin:17-jre-jammy
 
 # Define o diretório de trabalho no contêiner final
 WORKDIR /app
@@ -29,9 +29,8 @@ WORKDIR /app
 # Expor a porta que a aplicação Spring Boot usará
 EXPOSE 8080
 
-# === PONTO CRÍTICO CORRIGIDO ===
+# === PONTO CRÍTICO DA CÓPIA DO JAR ===
 # Copia o JAR do estágio de construção usando um coringa (*).
-# Isto garante que o nome do arquivo JAR (com versão ou timestamp) será capturado.
 COPY --from=builder /app/target/*.jar /app/app.jar
 
 # Define o ponto de entrada para rodar a aplicação Java
