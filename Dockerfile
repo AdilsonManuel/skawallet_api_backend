@@ -1,29 +1,38 @@
-# Etapa 1: Construção do aplicativo (build stage)
-FROM maven:latest AS builder
+# -------------------------------------------------------------
+# ETAPA 1: CONSTRUÇÃO (BUILDER) - Usa uma versão estável do Maven/JDK
+# -------------------------------------------------------------
+FROM maven:3.9.6-openjdk-17 AS builder
 
-# Diretório de trabalho
+# Define o diretório de trabalho dentro do contêiner
 WORKDIR /app
 
-# Copiar os arquivos de configuração do Maven
+# Copia os arquivos necessários para o build
+# Otimização do Docker: Copiar pom.xml primeiro para cachear as dependências
 COPY pom.xml .
+# Baixa as dependências
+RUN mvn dependency:go-offline
 
-# Copiar o código fonte
+# Copia o código fonte
 COPY src ./src
 
-# Construir o JAR
+# Executa o build final. O JAR será criado em /app/target/
 RUN mvn clean install -DskipTests
 
-# Etapa 2: Imagem final do aplicativo
-FROM openjdk:17-jdk-slim
+# -------------------------------------------------------------
+# ETAPA 2: IMAGEM FINAL (PRODUÇÃO) - Usa apenas o JRE para ser leve
+# -------------------------------------------------------------
+FROM openjdk:17-jre-slim
 
-# Diretório de trabalho no contêiner final
+# Define o diretório de trabalho no contêiner final
 WORKDIR /app
 
-# Expor a porta do aplicativo
+# Expor a porta que a aplicação Spring Boot usará
 EXPOSE 8080
 
-# Copiar apenas o arquivo JAR gerado da etapa de construção
-COPY --from=builder /app/target/skawallet-01.jar /app/app.jar
+# === PONTO CRÍTICO CORRIGIDO ===
+# Copia o JAR do estágio de construção usando um coringa (*).
+# Isto garante que o nome do arquivo JAR (com versão ou timestamp) será capturado.
+COPY --from=builder /app/target/*.jar /app/app.jar
 
-# Definir o ponto de entrada para rodar a aplicação
+# Define o ponto de entrada para rodar a aplicação Java
 ENTRYPOINT ["java", "-jar", "app.jar"]
