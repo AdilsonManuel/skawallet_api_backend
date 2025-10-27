@@ -202,6 +202,7 @@ public class InstallmentService
 
         return score;
     }
+    ///Teste
 
     private void validateUserEligibility (Users user)
     {
