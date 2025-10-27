@@ -27,6 +27,7 @@ public class ProdutoMapper
                 .id(produto.getId())
                 .nome(produto.getNome())
                 .preco(produto.getPreco())
+                // Mapeamento do Parceiro (apenas ID e Nome para quebrar a recursão)
                 .partnerId(produto.getPartner() != null ? produto.getPartner().getPkPartners() : null)
                 .partnerName(produto.getPartner() != null ? produto.getPartner().getName() : null)
                 .build();

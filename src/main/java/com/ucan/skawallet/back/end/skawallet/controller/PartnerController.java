@@ -5,6 +5,7 @@
 package com.ucan.skawallet.back.end.skawallet.controller;
 
 import com.ucan.skawallet.back.end.skawallet.dto.PartnerDTO;
+import com.ucan.skawallet.back.end.skawallet.dto.PartnerResponseDTO;
 import com.ucan.skawallet.back.end.skawallet.model.Partner;
 import com.ucan.skawallet.back.end.skawallet.service.PartnerService;
 import java.util.List;
@@ -39,11 +40,14 @@ public class PartnerController
         return ResponseEntity.status(HttpStatus.CREATED).body(partnerService.createPartner(partner));
     }
 
-    // Listar todos os parceiros
     @GetMapping("/")
-    public ResponseEntity<List<Partner>> getAllPartners ()
+    public ResponseEntity<List<PartnerResponseDTO>> getAllPartners ()
     {
-        return ResponseEntity.ok(partnerService.getAllPartners());
+
+        // Chama o serviço atualizado, que agora retorna o DTO
+        List<PartnerResponseDTO> partners = partnerService.getAllPartners();
+
+        return ResponseEntity.ok(partners); // Retorna 200 OK com a lista de DTOs
     }
 
     // Buscar parceiro por código

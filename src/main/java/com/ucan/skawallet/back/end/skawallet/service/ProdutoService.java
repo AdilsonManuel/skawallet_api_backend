@@ -8,8 +8,8 @@ import com.ucan.skawallet.back.end.skawallet.dto.ProdutoResponse;
 import com.ucan.skawallet.back.end.skawallet.model.Produto;
 import com.ucan.skawallet.back.end.skawallet.repository.ProdutoRepository;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -22,8 +22,8 @@ import org.springframework.stereotype.Service;
 public class ProdutoService
 {
 
-    @Autowired
-    private ProdutoRepository produtoRepository;
+    // @Autowired é redundante com @RequiredArgsConstructor, mas ok
+    private final ProdutoRepository produtoRepository;
 
     private final ProdutoMapper produtoMapper;
 
@@ -32,9 +32,12 @@ public class ProdutoService
         return produtoRepository.save(produto);
     }
 
-    public List<Produto> listarProdutos ()
+    // CORRIGIDO: Retorna List<ProdutoResponse> para quebrar o ciclo de recursão
+    public List<ProdutoResponse> listarProdutos ()
     {
-        return produtoRepository.findAll();
+        return produtoRepository.findAll().stream()
+                .map(produtoMapper::toResponse) // Usa o mapper
+                .collect(Collectors.toList());
     }
 
     public Produto buscarPorId (Long id)
@@ -49,9 +52,12 @@ public class ProdutoService
 
     public List<ProdutoResponse> listarPorParceiro (Long partnerId)
     {
+        // Assume que findByPartnerId retorna List<Produto>
         return produtoRepository.findByPartnerId(partnerId)
                 .stream()
-                .map(produtoMapper::toResponse)
-                .toList();
+                .map(produtoMapper::toResponse) // Usa o mapper
+                .collect(Collectors.toList()); // Usando collect(Collectors.toList()) para compatibilidade com Java 8/11
     }
+
+    // OBSERVAÇÃO: Seu repositório precisará ter um método findByPartnerId que retorne List<Produto>
 }

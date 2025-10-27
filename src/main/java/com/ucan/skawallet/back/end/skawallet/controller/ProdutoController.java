@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
  *
  * @author azm
  */
-// ProdutoController.java
 @RestController
 @RequestMapping("/api/produtos")
 public class ProdutoController
@@ -34,18 +33,22 @@ public class ProdutoController
     @PostMapping("/")
     public ResponseEntity<Produto> criar (@RequestBody Produto produto)
     {
+        // Geralmente é melhor usar DTOs aqui também (ProdutoRequestDTO), mas mantemos a Entidade para compatibilidade com o service.
         return ResponseEntity.ok(produtoService.salvarProduto(produto));
     }
 
+    // CORRIGIDO: Retorna List<ProdutoResponse> para resolver o erro de incompatibilidade de tipos
     @GetMapping
-    public ResponseEntity<List<Produto>> listarTodos ()
+    public ResponseEntity<List<ProdutoResponse>> listarTodos ()
     {
+        // O service agora retorna List<ProdutoResponse>, então o controller deve esperar isso.
         return ResponseEntity.ok(produtoService.listarProdutos());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Produto> buscarPorId (@PathVariable Long id)
     {
+        // Este método busca uma única entidade e pode retornar a Entidade, mas atenção à serialização recursiva aqui.
         return ResponseEntity.ok(produtoService.buscarPorId(id));
     }
 
@@ -59,6 +62,7 @@ public class ProdutoController
     @GetMapping("/partner/{partnerId}")
     public ResponseEntity<List<ProdutoResponse>> listarPorPartner (@PathVariable Long partnerId)
     {
+        // Já estava correto, retornando List<ProdutoResponse>
         return ResponseEntity.ok(produtoService.listarPorParceiro(partnerId));
     }
 }
