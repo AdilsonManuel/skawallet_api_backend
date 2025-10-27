@@ -70,9 +70,8 @@ public interface TransactionRepository extends JpaRepository<Transactions, Long>
         SELECT COUNT(th) 
         FROM TransactionHistory th
         JOIN th.transaction t
-        JOIN DigitalWallets dw 
-          ON dw = t.sourceWallet OR dw = t.destinationWallet
-        WHERE dw.user.pkUsers = :userId
+        WHERE t.sourceWallet.user.pkUsers = :userId
+          OR t.destinationWallet.user.pkUsers = :userId
     """)
     long countTransactionsByUserId (@Param("userId") Long userId);
 
