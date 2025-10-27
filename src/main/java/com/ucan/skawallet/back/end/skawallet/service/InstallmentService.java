@@ -65,7 +65,8 @@ public class InstallmentService
 
         // ✅ Busca o produto e valida se pertence ao parceiro
         Produto produto = produtoRepository.findById(request.getProductId())
-                .orElseThrow(() -> new RuntimeException("Produto não encontrado."));
+                // 🛑 MUDAR RuntimeException para EntityNotFoundException
+                .orElseThrow(() -> new EntityNotFoundException("Produto não encontrado."));
 
         if (!produto.getPartner().getPkPartners().equals(partner.getPkPartners()))
         {
@@ -202,6 +203,7 @@ public class InstallmentService
 
         return score;
     }
+
     ///Teste
 
     private void validateUserEligibility (Users user)

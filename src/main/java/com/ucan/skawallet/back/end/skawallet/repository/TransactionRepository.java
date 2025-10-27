@@ -66,13 +66,13 @@ public interface TransactionRepository extends JpaRepository<Transactions, Long>
 
     int countBySourceWallet_UserOrDestinationWallet_UserAndStatus (Users user1, Users user2, TransactionStatus status);
 
-    @Query("""
-        SELECT COUNT(th) 
-        FROM TransactionHistory th
-        JOIN th.transaction t
-        WHERE t.sourceWallet.user.pkUsers = :userId
-          OR t.destinationWallet.user.pkUsers = :userId
-    """)
+    @Query(value = """
+        SELECT COUNT(*) 
+        FROM transactions t
+        JOIN digital_wallets dw_source ON t.fk_source_wallet = dw_source.pk_digital_wallets
+        LEFT JOIN digital_wallets dw_dest ON t.fk_destination_wallet = dw_dest.pk_digital_wallets
+        WHERE dw_source.fk_users = :userId OR dw_dest.fk_users = :userId
+    """, nativeQuery = true)
     long countTransactionsByUserId (@Param("userId") Long userId);
 
     @Query("""
