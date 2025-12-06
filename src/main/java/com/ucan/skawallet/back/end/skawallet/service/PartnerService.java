@@ -7,12 +7,15 @@ package com.ucan.skawallet.back.end.skawallet.service;
 import com.ucan.skawallet.back.end.skawallet.dto.PartnerDTO;
 import com.ucan.skawallet.back.end.skawallet.dto.PartnerResponseDTO;
 import com.ucan.skawallet.back.end.skawallet.dto.ProdutoDTO;
+import com.ucan.skawallet.back.end.skawallet.exception.ResourceNotFoundException;
 import com.ucan.skawallet.back.end.skawallet.model.Partner;
 import com.ucan.skawallet.back.end.skawallet.repository.PartnerRepository;
 import java.util.List;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
@@ -20,66 +23,58 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @RequiredArgsConstructor
-public class PartnerService
-{
+public class PartnerService {
 
+    private static final Pattern PARTNER_CODE_PATTERN = Pattern.compile("[^A-Z0-9]+");
     private final PartnerRepository partnerRepository;
 
     // Criar um novo parceiro
-    public Partner createPartner (Partner partner)
-    {
+    @Transactional
+    public Partner createPartner(Partner partner) {
         partner.setPartnerCode(generatePartnerCode(partner.getName()));
         return partnerRepository.save(partner);
     }
 
-    // Buscar todos os parceiros e retornar como DTO (CORRIGIDO)
-    // Retorna List<PartnerResponseDTO> para evitar a recursão na serialização
-    public List<PartnerResponseDTO> getAllPartners ()
-    {
+    // Buscar todos os parceiros e retornar como DTO
+    @Transactional(readOnly = true)
+    public List<PartnerResponseDTO> getAllPartners() {
         return partnerRepository.findAll().stream()
-                .map(this::mapToPartnerResponseDTO) // Transforma a entidade no DTO
+                .map(this::mapToPartnerResponseDTO)
                 .collect(Collectors.toList());
     }
 
     // Buscar parceiro pelo código único
-    public Partner getPartnerByCode (String partnerCode)
-    {
+    @Transactional(readOnly = true)
+    public Partner getPartnerByCode(String partnerCode) {
         return partnerRepository.findByPartnerCode(partnerCode)
-                .orElseThrow(() -> new RuntimeException("Parceiro não encontrado."));
+                .orElseThrow(() -> new ResourceNotFoundException("Parceiro não encontrado com código: " + partnerCode));
     }
 
     // Gerar código único baseado no nome
-    private String generatePartnerCode (String name)
-    {
+    private String generatePartnerCode(String name) {
         // Garante que o código tem no máximo 10 caracteres e é sanitizado
-        String sanitizedName = name.toUpperCase().replaceAll("[^A-Z0-9]+", "_");
+        String sanitizedName = PARTNER_CODE_PATTERN.matcher(name.toUpperCase()).replaceAll("_");
         return sanitizedName.substring(0, Math.min(sanitizedName.length(), 10));
     }
 
     // Atualizar parcialmente um parceiro
-    public Partner updatePartner (String partnerCode, PartnerDTO partnerDTO)
-    {
+    @Transactional
+    public Partner updatePartner(String partnerCode, PartnerDTO partnerDTO) {
         Partner partner = getPartnerByCode(partnerCode);
 
-        if (partnerDTO.getName() != null)
-        {
+        if (partnerDTO.getName() != null) {
             partner.setName(partnerDTO.getName());
         }
-        if (partnerDTO.getContactInfo() != null)
-        {
+        if (partnerDTO.getContactInfo() != null) {
             partner.setContactInfo(partnerDTO.getContactInfo());
         }
-        if (partnerDTO.getDescription() != null)
-        {
+        if (partnerDTO.getDescription() != null) {
             partner.setDescription(partnerDTO.getDescription());
         }
-        // Assumindo que o PartnerDTO tem getCategory() que retorna PartnerCategory
-        if (partnerDTO.getCategory() != null)
-        {
+        if (partnerDTO.getCategory() != null) {
             partner.setCategory(partnerDTO.getCategory());
         }
-        if (partnerDTO.getPaymentSupported() != null)
-        {
+        if (partnerDTO.getPaymentSupported() != null) {
             partner.setPaymentSupported(partnerDTO.getPaymentSupported());
         }
 
@@ -87,25 +82,20 @@ public class PartnerService
     }
 
     // Deletar um parceiro
-    public void deletePartner (String partnerCode)
-    {
+    @Transactional
+    public void deletePartner(String partnerCode) {
         Partner partner = getPartnerByCode(partnerCode);
         partnerRepository.delete(partner);
     }
 
-    // --- MÉTODO DE MAPEAMENTO DA ENTIDADE PARA DTO (CORRIGIDO) ---
-    private PartnerResponseDTO mapToPartnerResponseDTO (Partner partner)
-    {
-
-        // Mapeia a lista de Produtos para ProdutoDTO (quebrando a recursão)
+    // --- MÉTODO DE MAPEAMENTO DA ENTIDADE PARA DTO ---
+    private PartnerResponseDTO mapToPartnerResponseDTO(Partner partner) {
         List<ProdutoDTO> produtosDto = partner.getProdutos().stream()
-                .map(produto ->
-                {
+                .map(produto -> {
                     ProdutoDTO dto = new ProdutoDTO();
                     dto.setId(produto.getId());
                     dto.setNome(produto.getNome());
                     dto.setPreco(produto.getPreco());
-                    // dto.setDescricao(...) - REMOVIDO: O método getDescricao() não existe na entidade Produto.
                     return dto;
                 })
                 .collect(Collectors.toList());
@@ -115,7 +105,6 @@ public class PartnerService
                 .partnerCode(partner.getPartnerCode())
                 .name(partner.getName())
                 .description(partner.getDescription())
-                // CORRIGIDO: Conversão de Enum para String (.name())
                 .category(partner.getCategory().name())
                 .paymentSupported(partner.getPaymentSupported())
                 .contactInfo(partner.getContactInfo())

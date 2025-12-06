@@ -14,8 +14,11 @@ import org.springframework.stereotype.Repository;
  * @author azm
  */
 @Repository
-public interface PartnerRepository extends JpaRepository<Partner, Long>
-{
+public interface PartnerRepository extends JpaRepository<Partner, Long> {
 
-    Optional<Partner> findByPartnerCode (String partnerCode);
+    Optional<Partner> findByPartnerCode(String partnerCode);
+
+    Optional<Partner> findByName(String name);
+
+    boolean existsByName(String name);
 }

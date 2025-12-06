@@ -4,6 +4,7 @@
  */
 package com.ucan.skawallet.back.end.skawallet.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -32,17 +33,19 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Produto
-{
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
+public class Produto {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String nome;
+    private String descricao;
     private BigDecimal preco;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "partner_id")
+    @com.fasterxml.jackson.annotation.JsonIgnore
     private Partner partner;
 }

@@ -13,19 +13,17 @@ import org.springframework.stereotype.Component;
  * @author azm
  */
 @Component
-public class ProdutoMapper
-{
+public class ProdutoMapper {
 
-    public ProdutoResponse toResponse (Produto produto)
-    {
-        if (produto == null)
-        {
+    public ProdutoResponse toResponse(Produto produto) {
+        if (produto == null) {
             return null;
         }
 
         return ProdutoResponse.builder()
                 .id(produto.getId())
                 .nome(produto.getNome())
+                .descricao(produto.getDescricao())
                 .preco(produto.getPreco())
                 // Mapeamento do Parceiro (apenas ID e Nome para quebrar a recursão)
                 .partnerId(produto.getPartner() != null ? produto.getPartner().getPkPartners() : null)

@@ -4,6 +4,7 @@
  */
 package com.ucan.skawallet.back.end.skawallet.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.ucan.skawallet.back.end.skawallet.enums.PartnerCategory;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -34,8 +35,8 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Partner
-{
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
+public class Partner {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

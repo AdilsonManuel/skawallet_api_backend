@@ -19,12 +19,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Data
 @Entity
 @Table(name = "users")
-@JsonIgnoreProperties(
-        {
-            "users"
-        })
-public class Users implements UserDetails
-{
+@JsonIgnoreProperties({
+        "users",
+        "hibernateLazyInitializer",
+        "handler"
+})
+public class Users implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -62,15 +62,14 @@ public class Users implements UserDetails
     private KYCStatus kycStatus = KYCStatus.PENDING; // Padrão: Pendente
 
     private String idDocument; // Documento de Identificação
-    private String selfieUrl;  // URL da Selfie enviada para verificação
+    private String selfieUrl; // URL da Selfie enviada para verificação
     private String verificationCode; // Código para ativação da conta
 
     @Column(nullable = false)
     private Boolean blockedByInadimplencia = false;
 
     @Override
-    public Collection<? extends GrantedAuthority> getAuthorities ()
-    {
+    public Collection<? extends GrantedAuthority> getAuthorities() {
 
         SimpleGrantedAuthority simpleGrantedAuthority = new SimpleGrantedAuthority(name);
 
@@ -78,32 +77,27 @@ public class Users implements UserDetails
     }
 
     @Override
-    public String getUsername ()
-    {
+    public String getUsername() {
         return name;
     }
 
     @Override
-    public boolean isAccountNonExpired ()
-    {
+    public boolean isAccountNonExpired() {
         return true;
     }
 
     @Override
-    public boolean isAccountNonLocked ()
-    {
+    public boolean isAccountNonLocked() {
         return locked == null;
     }
 
     @Override
-    public boolean isCredentialsNonExpired ()
-    {
+    public boolean isCredentialsNonExpired() {
         return true;
     }
 
     @Override
-    public boolean isEnabled ()
-    {
+    public boolean isEnabled() {
         return enabled;
     }
 

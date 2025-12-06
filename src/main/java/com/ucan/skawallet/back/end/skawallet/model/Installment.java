@@ -4,6 +4,7 @@
  */
 package com.ucan.skawallet.back.end.skawallet.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.ucan.skawallet.back.end.skawallet.enums.InstallmentStatus;
 import jakarta.persistence.*;
 import lombok.*;
@@ -22,8 +23,8 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Installment
-{
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
+public class Installment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

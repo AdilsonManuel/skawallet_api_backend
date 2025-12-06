@@ -17,12 +17,10 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
  * @author azm
  */
 @RestControllerAdvice
-public class GlobalExceptionHandler
-{
+public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<Map<String, String>> handleAllExceptions (Exception ex)
-    {
+    public ResponseEntity<Map<String, String>> handleAllExceptions(Exception ex) {
         Map<String, String> errorResponse = new HashMap<>();
         errorResponse.put("error", "Erro interno do servidor");
         errorResponse.put("message", ex.getMessage());
@@ -30,10 +28,18 @@ public class GlobalExceptionHandler
     }
 
     @ExceptionHandler(NoSuchElementException.class)
-    public ResponseEntity<Map<String, String>> handleNotFoundException (NoSuchElementException ex)
-    {
+    public ResponseEntity<Map<String, String>> handleNotFoundException(NoSuchElementException ex) {
         Map<String, String> errorResponse = new HashMap<>();
         errorResponse.put("error", "Não encontrado");
+        errorResponse.put("message", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+    }
+
+    @ExceptionHandler(com.ucan.skawallet.back.end.skawallet.exception.ResourceNotFoundException.class)
+    public ResponseEntity<Map<String, String>> handleResourceNotFoundException(
+            com.ucan.skawallet.back.end.skawallet.exception.ResourceNotFoundException ex) {
+        Map<String, String> errorResponse = new HashMap<>();
+        errorResponse.put("error", "Recurso não encontrado");
         errorResponse.put("message", ex.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
     }

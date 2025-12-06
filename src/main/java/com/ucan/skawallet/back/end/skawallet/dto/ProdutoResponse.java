@@ -18,11 +18,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ProdutoResponse
-{
+public class ProdutoResponse {
 
     private Long id;
     private String nome;
+    private String descricao;
     private BigDecimal preco;
     private Long partnerId;
     private String partnerName;
